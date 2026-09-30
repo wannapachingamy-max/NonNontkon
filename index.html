@@ -3,556 +3,837 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NonNon Store - ช่องทางการชำระเงิน</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>ช่องทางการชำระเงิน - NonNon Store</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Kanit & Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kanit', 'Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        pastel: {
+                            blue: '#f0f9ff',
+                            sky: '#e0f2fe',
+                            deep: '#0284c7',
+                            dark: '#0369a1',
+                            accent: '#38bdf8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        * { box-sizing: border-box; }
         body {
-            font-family: 'Prompt', sans-serif;
-            margin: 0;
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #1e293b;
+            font-family: 'Kanit', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             min-height: 100vh;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
+            overflow-x: hidden;
             position: relative;
         }
 
-        /* ปุ่มเปิดหลังบ้าน แอดมิน */
-        .admin-gear {
+        /* --- Minimal Soft Pastel Blue Background Circles (โทนฟ้า มินิมอล ละมุนๆ) --- */
+        .bg-circle {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #ffffff;
-            border: 2px solid #bae6fd;
             border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            z-index: 100;
-            transition: 0.2s;
-        }
-        .admin-gear:hover { transform: scale(1.1); background: #f0f9ff; }
-
-        .main-container {
-            max-width: 440px;
-            width: 100%;
-            background: #ffffff;
-            border-radius: 32px;
-            padding: 32px 20px;
-            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            margin-top: 20px;
-            position: relative;
+            filter: blur(25px);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.55;
         }
 
-        /* ส่วนหัวและ QR Code */
-        .store-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 16px auto;
-            display: block;
-            border: 3px solid #e0f2fe;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-        .store-title {
-            text-align: center;
-            font-size: 24px;
-            font-weight: 700;
-            color: #0369a1;
-            margin-bottom: 6px;
-        }
-        .store-subtitle {
-            text-align: center;
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 24px;
-            line-height: 1.5;
+        .circle-1 {
+            width: 360px;
+            height: 360px;
+            background: #bae6fd;
+            top: -80px;
+            left: -100px;
+            animation: bounceZigZag1 5s ease-in-out infinite alternate;
         }
 
-        .qr-section {
-            background: #f8fafc;
-            border: 2px dashed #bae6fd;
-            border-radius: 20px;
-            padding: 16px;
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .qr-img {
-            max-width: 180px;
-            width: 100%;
-            height: auto;
-            border-radius: 12px;
-            cursor: pointer;
-            display: block;
-            margin: 0 auto;
-        }
-        .qr-label {
-            font-size: 13px;
-            color: #0284c7;
-            margin-top: 8px;
-            font-weight: 500;
+        .circle-2 {
+            width: 420px;
+            height: 420px;
+            background: #7dd3fc;
+            top: 5%;
+            right: -130px;
+            animation: bounceZigZag2 6s ease-in-out infinite alternate;
         }
 
-        /* รายการธนาคาร / ช่องทางโอน */
-        .bank-card {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 20px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-            transition: 0.2s;
+        .circle-3 {
+            width: 320px;
+            height: 320px;
+            background: #e0f2fe;
+            top: 45%;
+            left: -80px;
+            animation: bounceZigZag3 4s ease-in-out infinite alternate;
         }
-        .bank-card:hover { border-color: #7dd3fc; background: #f0f9ff; }
-        .bank-left { display: flex; align-items: center; gap: 14px; }
-        .bank-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            color: #0284c7;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .bank-icon img { width: 100%; height: 100%; object-fit: cover; }
-        .bank-name { font-size: 13px; color: #64748b; font-weight: 500; }
-        .bank-number { font-size: 16px; font-weight: 700; color: #0f172a; margin-top: 2px; }
-        .bank-holder { font-size: 12px; color: #94a3b8; }
 
-        @keyframes buttonWobble {
-            0% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(2deg) scale(1.03); }
-            50% { transform: rotate(-2deg) scale(1.03); }
-            75% { transform: rotate(2deg) scale(1.03); }
-            100% { transform: rotate(0deg) scale(1); }
+        .circle-4 {
+            width: 380px;
+            height: 380px;
+            background: #bae6fd;
+            bottom: -80px;
+            right: -90px;
+            animation: bounceZigZag1 5.5s ease-in-out infinite alternate;
         }
-        .btn-copy {
-            background: #0284c7;
-            color: #ffffff;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-            transition: 0.2s;
-            animation: buttonWobble 2.5s infinite ease-in-out;
-            flex-shrink: 0;
-        }
-        .btn-copy:active { transform: scale(0.95); animation: none; }
 
-        /* โซเชียลมีเดีย */
-        .social-section {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
-            text-align: center;
+        .circle-5 {
+            width: 300px;
+            height: 300px;
+            background: #38bdf8;
+            opacity: 0.35;
+            bottom: 10%;
+            left: 5%;
+            animation: bounceZigZag2 4.5s ease-in-out infinite alternate;
         }
-        .social-title {
-            font-size: 13px;
-            color: #64748b;
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-        }
-        .social-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: 0.2s;
-        }
-        .social-btn:hover { transform: translateY(-3px); }
-        .btn-line { background: #06c755; }
-        .btn-fb { background: #1877f2; }
-        .btn-ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
 
-        /* Toast แจ้งเตือน */
-        #toast {
+        @keyframes bounceZigZag1 {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(60px, 90px) scale(1.08); }
+            66% { transform: translate(-30px, 120px) scale(0.95); }
+            100% { transform: translate(40px, 50px) scale(1.02); }
+        }
+
+        @keyframes bounceZigZag2 {
+            0% { transform: translate(0, 0) scale(0.95); }
+            33% { transform: translate(-70px, 110px) scale(1.1); }
+            66% { transform: translate(50px, -60px) scale(0.98); }
+            100% { transform: translate(-40px, 80px) scale(1.05); }
+        }
+
+        @keyframes bounceZigZag3 {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(90px, -80px) scale(1.15); }
+            100% { transform: translate(-20px, 90px) scale(0.9); }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(186, 230, 253, 0.6);
+        }
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* Cute Animated White Bears Background */
+        .cute-bear {
             position: fixed;
-            top: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #10b981;
-            color: white;
-            padding: 12px 28px;
-            border-radius: 999px;
-            font-weight: 600;
-            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.9;
+            filter: drop-shadow(0 4px 6px rgba(2, 132, 199, 0.08));
         }
-
-        /* Modal หลังบ้าน แอดมิน (ตัวหนังสือใหญ่ ชัดเจน) */
-        #adminModal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
+        .bear-wave {
+            animation: wave 2.5s ease-in-out infinite alternate;
+            transform-origin: bottom center;
         }
-        .admin-box {
-            background: #ffffff;
-            width: 100%;
-            max-width: 550px;
-            max-height: 90vh;
-            overflow-y: auto;
-            border-radius: 28px;
-            padding: 28px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        .bear-blink {
+            animation: float-bear 4s ease-in-out infinite;
         }
-        .admin-box h2 {
-            margin-top: 0;
-            font-size: 22px;
-            color: #0369a1;
-            border-bottom: 2px solid #e0f2fe;
-            padding-bottom: 12px;
+        @keyframes wave {
+            0% { transform: rotate(0deg) translateY(0); }
+            100% { transform: rotate(12deg) translateY(-4px); }
         }
-        .admin-group {
-            margin-bottom: 20px;
-        }
-        .admin-group label {
-            display: block;
-            font-size: 15px;
-            font-weight: 600;
-            color: #334155;
-            margin-bottom: 8px;
-        }
-        .admin-group input {
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 16px;
-            border: 2px solid #cbd5e1;
-            border-radius: 12px;
-            font-family: 'Prompt', sans-serif;
-            outline: none;
-            transition: 0.2s;
-        }
-        .admin-group input:focus { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15); }
-        
-        .admin-bank-item {
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-        .admin-btn-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-        }
-        .btn-save {
-            flex: 1;
-            background: #0284c7;
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-        .btn-close-modal {
-            flex: 1;
-            background: #64748b;
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-        .btn-add {
-            background: #10b981;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-bottom: 16px;
-        }
-        .btn-del {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            cursor: pointer;
-            margin-top: 8px;
+        @keyframes float-bear {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
         }
     </style>
 </head>
-<body>
+<body class="text-sky-950 flex flex-col min-h-screen relative selection:bg-sky-200">
 
-    <!-- ปุ่มเปิดหลังบ้าน (ฟันเฟือง) -->
-    <div class="admin-gear" onclick="openAdmin()" title="ตั้งค่าหลังบ้าน">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:24px; height:24px; color:#0284c7;"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87l1.218.666c.328.18.723.14 1.01-.104l1.036-.884c.433-.37 1.07-.318 1.439.115l1.835 2.188c.37.433.318 1.07-.115 1.439l-.884 1.036c-.244.287-.284.682-.104 1.01l.666 1.218c.184.332.496.582.87.645l1.281.213c.542.09.94.56.94 1.11v2.593c0 .55-.398 1.02-.94 1.11l-1.281.213c-.374.063-.686.313-.87.645l-.666 1.218c-.18.328-.14.723.104 1.01l.884 1.036c.37.433.318 1.07-.115 1.439l-1.835 2.188c-.433.37-1.07.318-1.439-.115l-1.036-.884c-.287-.244-.682-.284-1.01-.104l-1.218.666c-.332.184-.582.496-.645.87l-.213 1.281c-.09.542-.56.94-1.11.94h-2.593c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.063-.374-.313-.686-.645-.87l-1.218-.666c-.328-.18-.723-.14-1.01.104l-1.036.884c-.433.37-1.07.318-1.439-.115l-1.835-2.188c-.37-.433-.318-1.07.115-1.439l.884-1.036c.244-.287.284-.682.104-1.01l-.666-1.218c-.184-.332-.496-.582-.87-.645l-1.281-.213c-.542-.09-.94-.56-.94-1.11v-2.593c0-.55.398-1.02.94-1.11l1.281-.213c.374-.063.686-.313.87-.645l.666-1.218c.18-.328.14-.723-.104-1.01l-.884-1.036c-.37-.433-.318-1.07.115-1.439l1.835-2.188c.433-.37 1.07-.318 1.439.115l1.036.884c.287.244.682.284 1.01.104l1.218-.666c.332-.184.582-.496.645-.87l.213-1.281z" /><circle cx="12" cy="12" r="3" /></svg>
+    <!-- Minimal Soft Pastel Background Circles -->
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+    <div class="bg-circle circle-3"></div>
+    <div class="bg-circle circle-4"></div>
+    <div class="bg-circle circle-5"></div>
+
+    <!-- Background Cute Animated White Bears (Top Only) -->
+    <div class="cute-bear top-4 left-4 bear-blink">
+        <svg width="70" height="70" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="55" r="30" fill="white" stroke="#bae6fd" stroke-width="2"/>
+            <circle cx="35" cy="35" r="12" fill="white" stroke="#bae6fd" stroke-width="2"/>
+            <circle cx="65" cy="35" r="12" fill="white" stroke="#bae6fd" stroke-width="2"/>
+            <circle cx="35" cy="35" r="6" fill="#e0f2fe"/>
+            <circle cx="65" cy="35" r="6" fill="#e0f2fe"/>
+            <circle cx="42" cy="52" r="3" fill="#0284c7"/>
+            <circle cx="58" cy="52" r="3" fill="#0284c7"/>
+            <ellipse cx="50" cy="58" rx="6" ry="4" fill="#0284c7"/>
+            <path d="M45 65 Q50 70 55 65" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
+            <path class="bear-wave" d="M22 60 Q15 50 20 42" stroke="white" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="18" cy="42" r="6" fill="white" stroke="#bae6fd" stroke-width="2"/>
+        </svg>
     </div>
 
-    <div id="toast">คัดลอกสำเร็จ ✨</div>
+    <div class="cute-bear top-6 right-6 bear-blink" style="animation-delay: 1s;">
+        <svg width="65" height="65" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="55" r="30" fill="white" stroke="#bae6fd" stroke-width="2"/>
+            <circle cx="35" cy="35" r="12" fill="white" stroke="#bae6fd" stroke-width="2"/>
+            <circle cx="65" cy="35" r="12" fill="white" stroke="#bae6fd" stroke-width="2"/>
+            <circle cx="35" cy="35" r="6" fill="#e0f2fe"/>
+            <circle cx="65" cy="35" r="6" fill="#e0f2fe"/>
+            <circle cx="42" cy="52" r="3" fill="#0284c7"/>
+            <circle cx="58" cy="52" r="3" fill="#0284c7"/>
+            <ellipse cx="50" cy="58" rx="6" ry="4" fill="#0284c7"/>
+            <path d="M47 65 Q50 68 53 65" stroke="#0284c7" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </div>
 
-    <!-- หน้าเว็บหลัก -->
-    <div class="main-container">
-        <img id="viewLogo" src="" class="store-logo" alt="Logo">
-        <div id="viewTitle" class="store-title">NonNon Store</div>
-        <div id="viewSubtitle" class="store-subtitle">รวมช่องทางชำระเงิน สะดวก ปลอดภัย</div>
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-200%] transition-all duration-300 bg-sky-900 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center space-x-3 text-sm font-medium border border-sky-700">
+        <i class="fa-solid fa-circle-check text-sky-400 text-lg"></i>
+        <span id="toast-message">คัดลอกสำเร็จแล้วค่ะ!</span>
+    </div>
 
-        <div class="qr-section">
-            <img id="viewQr" src="" class="qr-img" alt="QR Code">
-            <div class="qr-label">✨ สแกน QR Code เพื่อชำระเงิน</div>
+    <!-- Header / Top Section -->
+    <header class="w-full max-w-md mx-auto pt-10 pb-4 px-4 text-center relative z-10">
+        <button onclick="handleAdminAccess()" class="absolute top-8 right-4 bg-white/90 hover:bg-white text-sky-600 hover:text-sky-700 p-2.5 rounded-full shadow-sm transition-all duration-200 border border-sky-100 flex items-center justify-center text-sm" title="จัดการหลังบ้าน">
+            <i class="fa-solid fa-gear"></i>
+        </button>
+
+        <div class="relative w-28 h-28 mx-auto mb-4 float-animation">
+            <div class="absolute inset-0 bg-gradient-to-tr from-sky-200 to-blue-300 rounded-full blur-md opacity-60"></div>
+            <img id="store-logo" src="https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon" alt="Store Logo" class="relative w-28 h-28 rounded-full object-cover border-4 border-white shadow-md mx-auto" onerror="this.src='https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon'">
         </div>
 
-        <div id="viewBankList"></div>
+        <h1 id="store-name" class="text-2xl font-bold text-sky-950 tracking-wide">NonNon Store</h1>
+        <p id="store-subtitle" class="text-sm text-sky-600 font-medium mt-1">✨ รวมช่องทางชำระเงิน สะดวก ปลอดภัย ✨</p>
+    </header>
 
-        <div class="social-section">
-            <div class="social-title">ช่องทางติดต่อสอบถามร้านค้า</div>
-            <div class="social-icons">
-                <a id="linkLine" href="#" target="_blank" class="social-btn btn-line" title="LINE">💬</a>
-                <a id="linkFb" href="#" target="_blank" class="social-btn btn-fb" title="Facebook">f</a>
-                <a id="linkIg" href="#" target="_blank" class="social-btn btn-ig" title="Instagram">📷</a>
+    <!-- Main Content -->
+    <main class="w-full max-w-md mx-auto px-4 flex-grow pb-12 relative z-10">
+        <div id="payment-list" class="space-y-4">
+            <!-- Dynamically populated via JavaScript -->
+        </div>
+
+        <!-- Contact / Social Links Section -->
+        <div class="mt-8 pt-6 border-t border-sky-200/60 text-center">
+            <p class="text-xs text-sky-500 font-medium mb-3">💬 ช่องทางติดต่อสอบถามร้านค้า</p>
+            <div class="flex justify-center items-center space-x-4">
+                <a href="https://lin.ee/NNKqu9g" target="_blank" class="w-12 h-12 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center shadow-sm hover:scale-105 transition-all text-xl" title="Line">
+                    <i class="fa-brands fa-line"></i>
+                </a>
+                <a href="https://www.facebook.com/share/19fLAacTiP/" target="_blank" class="w-12 h-12 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-sm hover:scale-105 transition-all text-xl" title="Facebook">
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="https://www.instagram.com/nonnon_store06?stkn=MXV2ZHJhdGF6MHF1aQ==" target="_blank" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 hover:opacity-90 text-white flex items-center justify-center shadow-sm hover:scale-105 transition-all text-xl" title="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- Modal หลังบ้าน แอดมิน -->
-    <div id="adminModal">
-        <div class="admin-box">
-            <h2>⚙️ ระบบหลังบ้านแอดมิน</h2>
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="fixed inset-0 z-50 bg-sky-950/30 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-xl w-full max-w-sm p-6 border border-sky-100 flex flex-col text-center">
+            <div class="w-16 h-16 bg-sky-50 text-sky-600 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-4 border border-sky-100">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 class="text-lg font-bold text-sky-950 mb-1">เข้าสู่ระบบหลังบ้าน</h2>
+            <p class="text-xs text-sky-500 mb-5">กรุณากรอกรหัสผ่านแอดมินเพื่อจัดการระบบ</p>
             
-            <div class="admin-group">
-                <label>ชื่อร้านค้า</label>
-                <input type="text" id="inputTitle" placeholder="เช่น NonNon Store">
+            <form onsubmit="verifyAdminLogin(event)" class="space-y-4">
+                <div class="relative">
+                    <input type="password" id="admin-password" placeholder="รหัสผ่าน (ค่าเริ่มต้น: 1234)" class="w-full text-sm px-4 py-3 rounded-2xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-sky-50/50 text-center tracking-widest text-sky-950">
+                </div>
+                <div class="flex space-x-2 pt-2">
+                    <button type="button" onclick="toggleLoginModal()" class="w-1/2 py-2.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-xl text-xs font-medium transition-all">
+                        ยกเลิก
+                    </button>
+                    <button type="submit" class="w-1/2 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-medium transition-all shadow-sm">
+                        เข้าสู่ระบบ
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Modal Panel -->
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-sky-950/30 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto p-6 border border-sky-100 flex flex-col">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center pb-4 border-b border-sky-100 mb-5">
+                <div class="flex items-center space-x-2.5">
+                    <div class="bg-sky-500 text-white p-2.5 rounded-2xl shadow-sm">
+                        <i class="fa-solid fa-sliders text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-sky-950">ระบบจัดการหลังบ้าน (Admin Dashboard)</h2>
+                        <p class="text-[11px] text-sky-500">จัดการข้อมูลร้านค้าและช่องทางชำระเงินของคุณ</p>
+                    </div>
+                </div>
+                <button onclick="toggleAdminModal()" class="text-sky-400 hover:text-sky-600 p-2 rounded-full transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
 
-            <div class="admin-group">
-                <label>คำโปรย</label>
-                <input type="text" id="inputSubtitle" placeholder="คำโปรยร้านค้า">
+            <div class="space-y-6">
+                <!-- ================= BLOCK 1: ตั้งค่าข้อมูลร้านค้า ================= -->
+                <div class="bg-sky-50/70 p-4 rounded-3xl border border-sky-200/80 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-sky-200 text-sky-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">
+                        บล็อกที่ 1
+                    </div>
+                    <h3 class="text-sm font-bold text-sky-900 mb-3 flex items-center">
+                        <i class="fa-solid fa-store mr-2 text-sky-600"></i> ตั้งค่าข้อมูลร้านค้า
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-sky-700 mb-1">ชื่อร้านค้า</label>
+                            <input type="text" id="admin-store-name" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white text-sky-950">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-sky-700 mb-1">คำโปรย / สโลแกน</label>
+                            <input type="text" id="admin-store-subtitle" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white text-sky-950">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-sky-700 mb-1">อัปโหลดรูปโลโก้าร้าน</label>
+                            <input type="file" id="admin-store-logo-file" accept="image/*" onchange="previewStoreLogo(event)" class="w-full text-xs text-sky-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-sky-100 file:text-sky-700 hover:file:bg-sky-200 bg-white border border-sky-200 rounded-xl cursor-pointer">
+                            <input type="hidden" id="admin-store-logo">
+                        </div>
+                        <button onclick="saveStoreInfo()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center justify-center space-x-1.5">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span>บันทึกข้อมูลร้านค้า</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ================= BLOCK 2: เพิ่ม / แก้ไขช่องทางชำระเงิน ================= -->
+                <div class="bg-blue-50/55 p-4 rounded-3xl border border-blue-200/80 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-200 text-blue-900 text-[10px] font-bold px-3 py-1 rounded-bl-xl">
+                        บล็อกที่ 2
+                    </div>
+
+                    <!-- Action Status Banner -->
+                    <div id="form-status-banner" class="mb-3 p-2.5 rounded-xl bg-sky-100/90 border border-sky-300 text-sky-900 text-xs flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-circle-plus text-sky-600 text-sm" id="banner-icon"></i>
+                            <span id="banner-text" class="font-semibold">สถานะ: กำลังอยู่ในโหมดเพิ่มช่องทางใหม่</span>
+                        </div>
+                        <span id="status-badge" class="px-2 py-0.5 rounded-full bg-sky-600 text-white text-[10px] font-bold">MODE: ADD</span>
+                    </div>
+
+                    <h3 id="form-title" class="text-sm font-bold text-sky-900 mb-3 flex items-center">
+                        <i class="fa-solid fa-circle-plus mr-2 text-sky-600"></i> เพิ่มช่องทางชำระเงินใหม่
+                    </h3>
+
+                    <input type="hidden" id="edit-index" value="-1">
+                    <input type="hidden" id="pay-icon">
+                    
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-sky-700 mb-1">ชื่อธนาคาร / แอป <span class="text-rose-500">*</span></label>
+                                <input type="text" id="pay-name" placeholder="เช่น กสิกรไทย" class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white text-sky-950">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-sky-700 mb-1">รูปไอคอนธนาคาร</label>
+                                <input type="file" id="pay-icon-file" accept="image/*" onchange="previewPayIcon(event)" class="w-full text-xs text-sky-600 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-semibold file:bg-sky-100 file:text-sky-700 hover:file:bg-sky-200 bg-white border border-sky-200 rounded-xl cursor-pointer">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-sky-700 mb-1">ชื่อบัญชี</label>
+                                <input type="text" id="pay-acc-name" placeholder="นาย นนท์ นนท์" class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white text-sky-950">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-sky-700 mb-1">เลขบัญชี / เบอร์โทร <span class="text-rose-500">*</span></label>
+                                <input type="text" id="pay-acc-num" placeholder="123-4-56789-0" class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white text-sky-950 font-mono">
+                            </div>
+                        </div>
+
+                        <!-- สถานะการเปิด/ปิด -->
+                        <div class="border-t border-sky-200/60 pt-3 space-y-3 bg-white/60 p-3 rounded-2xl border">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-semibold text-sky-900">สถานะการแสดงผล:</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="pay-active" class="sr-only peer" checked>
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                                    <span class="ml-2 text-xs font-bold text-emerald-700 peer-checked:text-emerald-700" id="active-status-label">เปิดใช้งานปกติ</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-sky-700 mb-1">ข้อความแจ้งเตือนลูกค้า (กรณีปิดชั่วคราว)</label>
+                                <input type="text" id="pay-closed-message" placeholder="เช่น ปิดปรับปรุงชั่วคราว / เปิด 12:00 น." class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white text-sky-950">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 pt-2">
+                            <button onclick="savePaymentMethod()" class="py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center justify-center space-x-1.5">
+                                <i class="fa-solid fa-check"></i>
+                                <span id="save-btn-text">บันทึกช่องทางนี้</span>
+                            </button>
+                            <button onclick="resetForm()" class="py-2.5 bg-white hover:bg-sky-50 text-sky-700 rounded-xl text-xs font-medium transition-all border border-sky-200 flex items-center justify-center space-x-1">
+                                <i class="fa-solid fa-rotate-right"></i>
+                                <span>ล้างฟอร์ม / ยกเลิก</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= BLOCK 3: รายการช่องทางทั้งหมด ================= -->
+                <div class="bg-sky-50/70 p-4 rounded-3xl border border-sky-200/80 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-sky-200 text-sky-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">
+                        บล็อกที่ 3
+                    </div>
+                    <h3 class="text-sm font-bold text-sky-900 mb-3 flex items-center">
+                        <i class="fa-solid fa-list-check mr-2 text-sky-600"></i> รายการช่องทางชำระเงินทั้งหมดในระบบ
+                    </h3>
+                    <div id="admin-payment-list" class="space-y-2.5 max-h-56 overflow-y-auto pr-1">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
             </div>
 
-            <div class="admin-group">
-                <label>ลิงก์รูปโลโก้ร้าน (URL)</label>
-                <input type="text" id="inputLogo" placeholder="วางลิงก์รูปโลโก้">
-            </div>
-
-            <div class="admin-group">
-                <label>ลิงก์รูป QR Code (URL)</label>
-                <input type="text" id="inputQr" placeholder="วางลิงก์รูป QR Code">
-            </div>
-
-            <div class="admin-group">
-                <label>ลิงก์ LINE</label>
-                <input type="text" id="inputLine" placeholder="https://lin.ee/...">
-            </div>
-
-            <div class="admin-group">
-                <label>ลิงก์ Facebook</label>
-                <input type="text" id="inputFb" placeholder="https://www.facebook.com/...">
-            </div>
-
-            <div class="admin-group">
-                <label>ลิงก์ Instagram</label>
-                <input type="text" id="inputIg" placeholder="https://www.instagram.com/...">
-            </div>
-
-            <hr style="border:0; border-top:1px solid #cbd5e1; margin: 20px 0;">
-
-            <label style="font-size: 16px; font-weight: 700; color: #334155; margin-bottom: 12px; display:block;">💳 จัดการช่องทางชำระเงิน</label>
-            <button class="btn-add" onclick="addBankItem()">+ เพิ่มช่องทางชำระเงิน</button>
-            <div id="adminBankList"></div>
-
-            <div class="admin-btn-row">
-                <button class="btn-save" onclick="saveAdminData()">บันทึกข้อมูล</button>
-                <button class="btn-close-modal" onclick="closeAdmin()">ปิด</button>
+            <!-- Modal Footer Controls -->
+            <div class="mt-6 pt-4 border-t border-sky-100 flex justify-between items-center">
+                <button onclick="resetToDefaultData()" class="text-xs text-rose-500 hover:text-rose-700 font-medium underline flex items-center space-x-1">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>รีเซ็ตเป็นค่าเริ่มต้น</span>
+                </button>
+                <button onclick="toggleAdminModal()" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-semibold transition-all shadow-sm">
+                    เสร็จสิ้น / ปิดหน้าต่าง
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        // ข้อมูลเริ่มต้น
-        const defaultData = {
-            title: "NonNon Store",
-            subtitle: "รวมช่องทางชำระเงิน สะดวก ปลอดภัย",
-            logo: "https://i.imgur.com/8Q958Uo.png",
-            qr: "https://i.imgur.com/2Y4v3p3.png",
-            line: "https://lin.ee/NNKqu9g",
-            fb: "https://www.facebook.com/share/19fLAacTiP/",
-            ig: "https://www.instagram.com/nonnon_store06?stkn=MXV2ZHJhdGF6MHF1aQ==",
-            banks: [
-                { name: "TrueMoney Wallet", number: "089-123-4567", holder: "นาย นนทวัฒน์ ใจดี", icon: "W", active: true },
-                { name: "ธนาคารไทยพาณิชย์ (SCB)", number: "987-6-54321-0", holder: "นาย นนทวัฒน์ ใจดี", icon: "SCB", active: true }
-            ]
+        const ADMIN_PASSWORD = "1234"; // รหัสผ่านแอดมิน (สามารถเปลี่ยนรหัสผ่านตรงนี้ได้ครับ)
+
+        const defaultStoreInfo = {
+            name: "NonNon Store",
+            subtitle: "✨ รวมช่องทางชำระเงิน สะดวก ปลอดภัย ✨",
+            logo: "https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon"
         };
 
-        let appData = JSON.parse(localStorage.getItem('nonnon_pay_data')) || defaultData;
+        const defaultPaymentMethods = [
+            {
+                name: "ธนาคารกสิกรไทย (KBANK)",
+                icon: "https://images.seeklogo.com/logo-png/52/2/kasikornbank-k-bank-logo-png_seeklogo-526435.png",
+                accountName: "นาย นนทวัฒน์ ใจดี",
+                accountNumber: "123-4-56789-0",
+                active: true,
+                closedMessage: "ปิดปรับปรุงระบบชั่วคราว"
+            },
+            {
+                name: "TrueMoney Wallet",
+                icon: "https://images.seeklogo.com/logo-png/44/1/truemoney-wallet-logo-png_seeklogo-446755.png",
+                accountName: "นาย นนทวัฒน์ ใจดี",
+                accountNumber: "089-123-4567",
+                active: true,
+                closedMessage: "ปิดปรับปรุงระบบชั่วคราว"
+            },
+            {
+                name: "ธนาคารไทยพาณิชย์ (SCB)",
+                icon: "https://images.seeklogo.com/logo-png/43/1/siam-commercial-bank-scb-logo-png_seeklogo-434032.png",
+                accountName: "นาย นนทวัฒน์ ใจดี",
+                accountNumber: "987-6-54321-0",
+                active: true,
+                closedMessage: "ปิดปรับปรุงระบบชั่วคราว"
+            }
+        ];
 
-        function renderApp() {
-            document.getElementById('viewTitle').innerText = appData.title;
-            document.getElementById('viewSubtitle').innerText = appData.subtitle;
-            document.getElementById('viewLogo').src = appData.logo;
-            document.getElementById('viewQr').src = appData.qr;
+        let storeInfo = JSON.parse(localStorage.getItem('nonnon_store_info')) || defaultStoreInfo;
+        let paymentMethods = JSON.parse(localStorage.getItem('nonnon_payment_methods')) || defaultPaymentMethods;
+
+        window.onload = function() {
+            renderStoreInfo();
+            renderFrontPaymentList();
+            renderAdminPaymentList();
+            setupActiveToggleLabel();
+        };
+
+        function setupActiveToggleLabel() {
+            const checkbox = document.getElementById('pay-active');
+            const label = document.getElementById('active-status-label');
+            checkbox.onchange = function() {
+                if (checkbox.checked) {
+                    label.innerText = "เปิดใช้งานปกติ";
+                    label.className = "ml-2 text-xs font-bold text-emerald-700";
+                } else {
+                    label.innerText = "ปิดใช้งานชั่วคราว";
+                    label.className = "ml-2 text-xs font-bold text-amber-700";
+                }
+            }
+        }
+
+        function renderStoreInfo() {
+            document.getElementById('store-name').innerText = storeInfo.name;
+            document.getElementById('store-subtitle').innerText = storeInfo.subtitle;
+            document.getElementById('store-logo').src = storeInfo.logo;
             
-            document.getElementById('linkLine').href = appData.line;
-            document.getElementById('linkFb').href = appData.fb;
-            document.getElementById('linkIg').href = appData.ig;
+            document.getElementById('admin-store-name').value = storeInfo.name;
+            document.getElementById('admin-store-subtitle').value = storeInfo.subtitle;
+            document.getElementById('admin-store-logo').value = storeInfo.logo;
+        }
 
-            const bankListEl = document.getElementById('viewBankList');
-            bankListEl.innerHTML = '';
+        function compressImage(file, callback) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 300;
+                    const MAX_HEIGHT = 300;
+                    let width = img.width;
+                    let height = img.height;
 
-            appData.banks.forEach(bank => {
-                if (!bank.active) return;
-                bankListEl.innerHTML += `
-                    <div class="bank-card">
-                        <div class="bank-left">
-                            <div class="bank-icon">${bank.icon}</div>
-                            <div>
-                                <div class="bank-name">${bank.name} (${bank.holder})</div>
-                                <div class="bank-number">${bank.number}</div>
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.clearRect(0, 0, width, height);
+                    ctx.drawImage(img, 0, 0, width, height);
+                    callback(canvas.toDataURL('image/png'));
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function previewStoreLogo(event) {
+            const file = event.target.files[0];
+            if (file) {
+                compressImage(file, function(base64String) {
+                    document.getElementById('admin-store-logo').value = base64String;
+                    showToast("อัปโหลดโลโก้สำเร็จ! (กดปุ่มบันทึกข้อมูลร้านค้าด้านบนเพื่อยืนยัน)");
+                });
+            }
+        }
+
+        function previewPayIcon(event) {
+            const file = event.target.files[0];
+            if (file) {
+                compressImage(file, function(base64String) {
+                    document.getElementById('pay-icon').value = base64String;
+                    showToast("อัปโหลดรูปไอคอนสำเร็จ!");
+                });
+            }
+        }
+
+        function saveStoreInfo() {
+            storeInfo.name = document.getElementById('admin-store-name').value || "NonNon Store";
+            storeInfo.subtitle = document.getElementById('admin-store-subtitle').value || "";
+            const customLogo = document.getElementById('admin-store-logo').value;
+            if (customLogo) {
+                storeInfo.logo = customLogo;
+            }
+            
+            localStorage.setItem('nonnon_store_info', JSON.stringify(storeInfo));
+            renderStoreInfo();
+            showToast("บันทึกข้อมูลร้านค้าเรียบร้อยแล้วค่ะ! ✨");
+        }
+
+        function renderFrontPaymentList() {
+            const container = document.getElementById('payment-list');
+            container.innerHTML = '';
+
+            if (paymentMethods.length === 0) {
+                container.innerHTML = `
+                    <div class="glass-card rounded-3xl p-8 text-center shadow-md border border-sky-100">
+                        <div class="text-4xl text-sky-300 mb-3"><i class="fa-solid fa-mug-hot"></i></div>
+                        <p class="text-sky-600 text-sm">ยังไม่มีช่องทางการชำระเงินในระบบค่ะ</p>
+                    </div>
+                `;
+                return;
+            }
+
+            paymentMethods.forEach((item, index) => {
+                const card = document.createElement('div');
+                const logoHtml = item.icon 
+                    ? `<img src="${item.icon}" alt="${item.name}" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='https://placehold.co/100x100/e0f2fe/0284c7?text=Logo';">`
+                    : `<i class="fa-solid fa-wallet text-sky-600 text-xl"></i>`;
+
+                if (item.active) {
+                    card.className = "glass-card rounded-3xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 border border-white relative overflow-hidden group";
+                    card.innerHTML = `
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-sky-100/60 to-transparent rounded-bl-full pointer-events-none"></div>
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center border border-sky-100 flex-shrink-0 overflow-hidden group-hover:scale-105 transition-transform">
+                                ${logoHtml}
+                            </div>
+                            <div class="flex-grow min-w-0">
+                                <h2 class="font-bold text-sky-950 text-base truncate">${item.name}</h2>
+                                <p class="text-xs text-sky-600 truncate mt-0.5"><i class="fa-regular fa-user mr-1 text-sky-400"></i> ${item.accountName}</p>
                             </div>
                         </div>
-                        <button class="btn-copy" onclick="copyText('${bank.number}', this)">คัดลอก</button>
+                        
+                        <div class="bg-white/95 rounded-2xl p-3.5 flex items-center justify-between border border-sky-100 shadow-inner">
+                            <div class="min-w-0 mr-2">
+                                <span class="block text-[10px] text-sky-400 font-medium uppercase tracking-wider">เลขบัญชี / เบอร์โทร</span>
+                                <span class="text-base font-bold text-sky-900 tracking-wide font-mono">${item.accountNumber}</span>
+                            </div>
+                            <button onclick="copyToClipboard('${item.accountNumber}', '${item.name}')" class="bg-sky-600 hover:bg-sky-700 active:scale-95 text-white text-xs font-medium px-4 py-2.5 rounded-xl shadow-sm transition-all flex items-center space-x-1.5 flex-shrink-0">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>คัดลอก</span>
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    card.className = "glass-card rounded-3xl p-5 shadow-sm border border-amber-200/60 relative overflow-hidden opacity-90";
+                    const closedMsg = item.closedMessage || "ปิดปรับปรุงชั่วคราว";
+                    card.innerHTML = `
+                        <div class="flex items-center space-x-4 mb-3">
+                            <div class="w-14 h-14 rounded-2xl bg-gray-100 shadow-sm flex items-center justify-center border border-gray-200 flex-shrink-0 overflow-hidden grayscale opacity-70">
+                                ${logoHtml}
+                            </div>
+                            <div class="flex-grow min-w-0">
+                                <h2 class="font-bold text-gray-700 text-base truncate">${item.name}</h2>
+                                <p class="text-xs text-gray-500 truncate mt-0.5"><i class="fa-regular fa-user mr-1 text-gray-400"></i> ${item.accountName}</p>
+                            </div>
+                        </div>
+                        <div class="bg-amber-50/90 rounded-2xl p-3 border border-amber-200/80 flex items-start space-x-2.5">
+                            <div class="text-amber-500 text-sm mt-0.5 flex-shrink-0">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <div class="text-xs text-amber-800 font-medium">
+                                <span class="font-bold block mb-0.5">ปิดให้บริการชั่วคราว</span>
+                                <span>${closedMsg}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                container.appendChild(card);
+            });
+        }
+
+        function renderAdminPaymentList() {
+            const container = document.getElementById('admin-payment-list');
+            container.innerHTML = '';
+
+            if (paymentMethods.length === 0) {
+                container.innerHTML = `<p class="text-xs text-sky-400 text-center py-3">ยังไม่มีข้อมูลช่องทางชำระเงิน</p>`;
+                return;
+            }
+
+            paymentMethods.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between p-3 rounded-2xl bg-white border border-sky-100 shadow-sm text-xs";
+                
+                const thumbHtml = item.icon
+                    ? `<img src="${item.icon}" class="w-8 h-8 rounded-xl object-contain bg-sky-50 p-0.5 border border-sky-100" onerror="this.src='https://placehold.co/100x100/e0f2fe/0284c7?text=Logo'">`
+                    : `<div class="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center"><i class="fa-solid fa-wallet"></i></div>`;
+
+                row.innerHTML = `
+                    <div class="flex items-center space-x-3 min-w-0">
+                        ${thumbHtml}
+                        <div class="min-w-0">
+                            <p class="font-semibold text-sky-950 truncate">${item.name}</p>
+                            <p class="text-sky-500 font-mono text-[11px]">${item.accountNumber}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 flex-shrink-0">
+                        <span class="px-2 py-1 rounded-lg font-bold text-[10px] ${item.active ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                            ${item.active ? '● ปกติ' : '● ปิดชั่วคราว'}
+                        </span>
+                        <button onclick="editPaymentMethod(${index})" class="px-2.5 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg transition-all font-medium flex items-center space-x-1" title="แก้ไข">
+                            <i class="fa-solid fa-pen text-[10px]"></i>
+                            <span>แก้ไข</span>
+                        </button>
+                        <button onclick="deletePaymentMethod(${index})" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-all" title="ลบ">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
                     </div>
                 `;
+                container.appendChild(row);
             });
         }
 
-        function openAdmin() {
-            document.getElementById('inputTitle').value = appData.title;
-            document.getElementById('inputSubtitle').value = appData.subtitle;
-            document.getElementById('inputLogo').value = appData.logo;
-            document.getElementById('inputQr').value = appData.qr;
-            document.getElementById('inputLine').value = appData.line;
-            document.getElementById('inputFb').value = appData.fb;
-            document.getElementById('inputIg').value = appData.ig;
-
-            renderAdminBanks();
-            document.getElementById('adminModal').style.display = 'flex';
+        function copyToClipboard(text, label) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(`คัดลอก ${label} สำเร็จแล้วค่ะ! ✨`);
+                });
+            }
         }
 
-        function closeAdmin() {
-            document.getElementById('adminModal').style.display = 'none';
-        }
-
-        function renderAdminBanks() {
-            const listEl = document.getElementById('adminBankList');
-            listEl.innerHTML = '';
-            appData.banks.forEach((bank, index) => {
-                listEl.innerHTML += `
-                    <div class="admin-bank-item">
-                        <div class="admin-group" style="margin-bottom:10px;">
-                            <label>ชื่อช่องทาง / ธนาคาร</label>
-                            <input type="text" id="bName_${index}" value="${bank.name}">
-                        </div>
-                        <div class="admin-group" style="margin-bottom:10px;">
-                            <label>เลขบัญชี / เบอร์</label>
-                            <input type="text" id="bNum_${index}" value="${bank.number}">
-                        </div>
-                        <div class="admin-group" style="margin-bottom:10px;">
-                            <label>ชื่อบัญชี / เจ้าของ</label>
-                            <input type="text" id="bHold_${index}" value="${bank.holder}">
-                        </div>
-                        <div class="admin-group" style="margin-bottom:10px;">
-                            <label>ไอคอนสั้น (เช่น KTB, W, SCB)</label>
-                            <input type="text" id="bIcon_${index}" value="${bank.icon}">
-                        </div>
-                        <div style="display:flex; align-items:center; gap:10px; margin-top:10px;">
-                            <label><input type="checkbox" id="bActive_${index}" ${bank.active ? 'checked' : ''}> เปิดใช้งาน</label>
-                        </div>
-                        <button class="btn-del" onclick="removeBankItem(${index})">ลบช่องทางนี้</button>
-                    </div>
-                `;
-            });
-        }
-
-        function addBankItem() {
-            appData.banks.push({ name: "ธนาคารใหม่", number: "XXX-X-XXXXX-X", holder: "ชื่อ นามสกุล", icon: "B", active: true });
-            renderAdminBanks();
-        }
-
-        function removeBankItem(index) {
-            appData.banks.splice(index, 1);
-            renderAdminBanks();
-        }
-
-        function saveAdminData() {
-            appData.title = document.getElementById('inputTitle').value;
-            appData.subtitle = document.getElementById('inputSubtitle').value;
-            appData.logo = document.getElementById('inputLogo').value;
-            appData.qr = document.getElementById('inputQr').value;
-            appData.line = document.getElementById('inputLine').value;
-            appData.fb = document.getElementById('inputFb').value;
-            appData.ig = document.getElementById('inputIg').value;
-
-            appData.banks.forEach((bank, index) => {
-                bank.name = document.getElementById(`bName_${index}`).value;
-                bank.number = document.getElementById(`bNum_${index}`).value;
-                bank.holder = document.getElementById(`bHold_${index}`).value;
-                bank.icon = document.getElementById(`bIcon_${index}`).value;
-                bank.active = document.getElementById(`bActive_${index}`).checked;
-            });
-
-            localStorage.setItem('nonnon_pay_data', JSON.stringify(appData));
-            renderApp();
-            closeAdmin();
-            alert("บันทึกข้อมูลเรียบร้อยแล้วค่ะ ✨");
-        }
-
-        function copyText(text, btn) {
-            const el = document.createElement('textarea');
-            el.value = text;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-
+        function showToast(message) {
             const toast = document.getElementById('toast');
-            toast.style.top = '25px';
-            const orig = btn.innerText;
-            btn.innerText = '✔ สำเร็จ';
+            const messageEl = document.getElementById('toast-message');
+            messageEl.innerText = message;
             
+            toast.classList.remove('translate-y-[-200%]');
+            toast.classList.add('translate-y-0');
+
             setTimeout(() => {
-                toast.style.top = '-60px';
-                btn.innerText = orig;
-            }, 2000);
+                toast.classList.remove('translate-y-0');
+                toast.classList.add('translate-y-[-200%]');
+            }, 2500);
         }
 
-        renderApp();
+        // ระบบตรวจสอบการเข้าสู่ระบบ
+        function handleAdminAccess() {
+            if (sessionStorage.getItem('is_admin_logged_in') === 'true') {
+                toggleAdminModal();
+            } else {
+                toggleLoginModal();
+            }
+        }
+
+        function toggleLoginModal() {
+            const modal = document.getElementById('admin-login-modal');
+            modal.classList.toggle('hidden');
+            document.getElementById('admin-password').value = '';
+        }
+
+        function verifyAdminLogin(event) {
+            event.preventDefault();
+            const passInput = document.getElementById('admin-password').value;
+
+            if (passInput === ADMIN_PASSWORD) {
+                sessionStorage.setItem('is_admin_logged_in', 'true');
+                toggleLoginModal();
+                toggleAdminModal();
+                showToast("เข้าสู่ระบบหลังบ้านสำเร็จ! 🎉");
+            } else {
+                showToast("รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง ❌");
+                document.getElementById('admin-password').value = '';
+            }
+        }
+
+        function toggleAdminModal() {
+            const modal = document.getElementById('admin-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function savePaymentMethod() {
+            const name = document.getElementById('pay-name').value.trim();
+            const icon = document.getElementById('pay-icon').value.trim();
+            const accountName = document.getElementById('pay-acc-name').value.trim();
+            const accountNumber = document.getElementById('pay-acc-num').value.trim();
+            const active = document.getElementById('pay-active').checked;
+            const closedMessage = document.getElementById('pay-closed-message').value.trim();
+            const editIndex = parseInt(document.getElementById('edit-index').value);
+
+            if (!name || !accountNumber) {
+                showToast("กรุณากรอกชื่อและเลขบัญชีให้ครบถ้วนด้วยนะคะ 📝");
+                return;
+            }
+
+            if (editIndex >= 0) {
+                paymentMethods[editIndex].name = name;
+                if (icon) {
+                    paymentMethods[editIndex].icon = icon;
+                }
+                paymentMethods[editIndex].accountName = accountName;
+                paymentMethods[editIndex].accountNumber = accountNumber;
+                paymentMethods[editIndex].active = active;
+                paymentMethods[editIndex].closedMessage = closedMessage || "ปิดปรับปรุงระบบชั่วคราว";
+                showToast("อัปเดตข้อมูลสำเร็จเรียบร้อยค่ะ! ✅");
+            } else {
+                paymentMethods.push({
+                    name,
+                    icon: icon || 'https://placehold.co/100x100/e0f2fe/0284c7?text=Logo',
+                    accountName: accountName || storeInfo.name,
+                    accountNumber,
+                    active: active,
+                    closedMessage: closedMessage || "ปิดปรับปรุงระบบชั่วคราว"
+                });
+                showToast("เพิ่มช่องทางใหม่สำเร็จเรียบร้อยค่ะ! 🎉");
+            }
+
+            localStorage.setItem('nonnon_payment_methods', JSON.stringify(paymentMethods));
+            renderFrontPaymentList();
+            renderAdminPaymentList();
+            resetForm();
+        }
+
+        function editPaymentMethod(index) {
+            const item = paymentMethods[index];
+            document.getElementById('pay-name').value = item.name;
+            document.getElementById('pay-icon').value = item.icon || '';
+            document.getElementById('pay-acc-name').value = item.accountName;
+            document.getElementById('pay-acc-num').value = item.accountNumber;
+            document.getElementById('pay-active').checked = item.active !== false;
+            document.getElementById('pay-active').dispatchEvent(new Event('change'));
+            document.getElementById('pay-closed-message').value = item.closedMessage || "";
+            document.getElementById('edit-index').value = index;
+
+            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen-to-square mr-2 text-blue-600"></i> แก้ไขข้อมูล: <span class="text-blue-700 underline">${item.name}</span>`;
+            document.getElementById('save-btn-text').innerText = "บันทึกการแก้ไขข้อมูลนี้";
+            document.getElementById('banner-text').innerText = `สถานะ: กำลังแก้ไขข้อมูล (${item.name})`;
+            document.getElementById('banner-icon').className = "fa-solid fa-pen-to-square text-blue-600 text-sm";
+            document.getElementById('form-status-banner').className = "mb-3 p-2.5 rounded-xl bg-blue-100/90 border border-blue-300 text-blue-900 text-xs flex items-center justify-between";
+            
+            const badge = document.getElementById('status-badge');
+            badge.innerText = "MODE: EDIT";
+            badge.className = "px-2 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-bold";
+
+            document.getElementById('form-title').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function deletePaymentMethod(index) {
+            if (confirm("คุณต้องการลบช่องทางนี้ใช่หรือไม่?")) {
+                paymentMethods.splice(index, 1);
+                localStorage.setItem('nonnon_payment_methods', JSON.stringify(paymentMethods));
+                renderFrontPaymentList();
+                renderAdminPaymentList();
+                showToast("ลบข้อมูลเรียบร้อยแล้วค่ะ");
+                resetForm();
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('pay-name').value = '';
+            document.getElementById('pay-icon').value = '';
+            document.getElementById('pay-icon-file').value = '';
+            document.getElementById('pay-acc-name').value = '';
+            document.getElementById('pay-acc-num').value = '';
+            document.getElementById('pay-active').checked = true;
+            document.getElementById('pay-active').dispatchEvent(new Event('change'));
+            document.getElementById('pay-closed-message').value = '';
+            document.getElementById('edit-index').value = -1;
+
+            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-circle-plus mr-2 text-sky-600"></i> เพิ่มช่องทางชำระเงินใหม่`;
+            document.getElementById('save-btn-text').innerText = "บันทึกช่องทางนี้";
+            document.getElementById('banner-text').innerText = "สถานะ: กำลังอยู่ในโหมดเพิ่มช่องทางใหม่";
+            document.getElementById('banner-icon').className = "fa-solid fa-circle-plus text-sky-600 text-sm";
+            document.getElementById('form-status-banner').className = "mb-3 p-2.5 rounded-xl bg-sky-100/90 border border-sky-300 text-sky-900 text-xs flex items-center justify-between";
+            
+            const badge = document.getElementById('status-badge');
+            badge.innerText = "MODE: ADD";
+            badge.className = "px-2 py-0.5 rounded-full bg-sky-600 text-white text-[10px] font-bold";
+        }
+
+        function resetToDefaultData() {
+            if (confirm("ต้องการรีเซ็ตข้อมูลทั้งหมดกลับเป็นค่าเริ่มต้นหรือไม่?")) {
+                storeInfo = defaultStoreInfo;
+                paymentMethods = defaultPaymentMethods;
+                localStorage.setItem('nonnon_store_info', JSON.stringify(storeInfo));
+                localStorage.setItem('nonnon_payment_methods', JSON.stringify(paymentMethods));
+                renderStoreInfo();
+                renderFrontPaymentList();
+                renderAdminPaymentList();
+                resetForm();
+                showToast("รีเซ็ตข้อมูลเรียบร้อยแล้วค่ะ!");
+            }
+        }
     </script>
 </body>
 </html>
