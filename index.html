@@ -229,6 +229,15 @@
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-8px) rotate(2deg); }
         }
+
+        /* --- สไตล์พิเศษสำหรับหัวข้อร้านค้าให้โดดเด่นและสวยงาม --- */
+        .store-title-badge {
+            background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+            letter-spacing: 0.05em;
+        }
     </style>
 </head>
 <body class="text-slate-900 flex flex-col min-h-screen relative selection:bg-sky-200">
@@ -291,7 +300,8 @@
             <img id="store-logo" src="https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon" alt="Store Logo" class="relative w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg mx-auto" onerror="this.src='https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon'">
         </div>
 
-        <h1 id="store-name" class="text-3xl font-extrabold text-slate-900 tracking-wide drop-shadow-sm">NonNon Store</h1>
+        <!-- หัวข้อหลักที่ปรับให้สวยงาม โดดเด่น และถูกล็อกค่าไว้ถาวร -->
+        <h1 id="store-name" class="text-4xl font-black store-title-badge tracking-wide drop-shadow-md py-1">NonNon Store</h1>
         <p id="store-subtitle" class="text-sm font-bold text-sky-800 mt-1 bg-white/60 inline-block px-3 py-0.5 rounded-full shadow-xs border border-sky-100">✨ รวมช่องทางชำระเงิน สะดวก ปลอดภัย ✨</p>
     </header>
 
@@ -373,7 +383,7 @@
                     </h3>
                     
                     <div class="space-y-3">
-                        <div>
+                        <div class="hidden">
                             <label class="block text-xs font-bold text-slate-800 mb-1">ชื่อร้านค้า</label>
                             <input type="text" id="admin-store-name" class="w-full text-sm font-medium px-3.5 py-2.5 rounded-xl border border-sky-300 bg-white text-slate-900">
                         </div>
@@ -580,6 +590,8 @@
                     window.dbSet(storeRef, defaultStoreInfo);
                     storeInfo = defaultStoreInfo;
                 }
+                // ล็อกค่าชื่อร้านให้เป็น NonNon Store เสมอ และไม่สามารถเปลี่ยนแปลงผ่านระบบแก้ไขได้
+                storeInfo.name = "NonNon Store";
                 renderStoreInfo();
                 renderFeaturedImage();
             });
@@ -612,11 +624,11 @@
         }
 
         function renderStoreInfo() {
-            document.getElementById('store-name').innerText = storeInfo.name || "NonNon Store";
+            document.getElementById('store-name').innerText = "NonNon Store";
             document.getElementById('store-subtitle').innerText = storeInfo.subtitle || "";
             document.getElementById('store-logo').src = storeInfo.logo || "https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon";
             
-            document.getElementById('admin-store-name').value = storeInfo.name || "";
+            document.getElementById('admin-store-name').value = "NonNon Store";
             document.getElementById('admin-store-subtitle').value = storeInfo.subtitle || "";
             document.getElementById('admin-store-logo').value = storeInfo.logo || "";
             document.getElementById('admin-featured-img').value = storeInfo.featuredImage || "";
@@ -678,7 +690,7 @@
         }
 
         function saveStoreInfo() {
-            storeInfo.name = document.getElementById('admin-store-name').value || "NonNon Store";
+            storeInfo.name = "NonNon Store"; // ล็อกชื่อร้านตายตัว ห้ามเปลี่ยนแปลง
             storeInfo.subtitle = document.getElementById('admin-store-subtitle').value || "";
             storeInfo.featuredActive = document.getElementById('admin-featured-active').checked;
             
@@ -843,7 +855,7 @@
             const newData = {
                 name,
                 icon: icon || existingIcon || 'https://placehold.co/100x100/e0f2fe/0284c7?text=Logo',
-                accountName: accountName || storeInfo.name,
+                accountName: accountName || "NonNon Store",
                 accountNumber,
                 active,
                 closedMessage: closedMessage || "ปิดปรับปรุงระบบชั่วคราว"
