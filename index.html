@@ -348,5 +348,24 @@ reader.readAsDataURL(file);
 }
 }
 </script>
+
+<!-- 🌟 โค้ดดึงข้อมูลจาก Google Sheets (ใส่ลิงก์ให้เรียบร้อยแล้ว) -->
+<script>
+    const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycbxRcvLuyrlyk_ylTszdC5_JTeYHbVLwsoZXX46IsQ7TPxuzwZH_KSrwJLsPZ1Un9ssB/exec";
+
+    fetch(GOOGLE_SHEET_API, { method: 'GET', mode: 'cors' })
+        .then(response => response.json())
+        .then(data => {
+            console.log("ดึงข้อมูลสำเร็จ:", data);
+            if (data.length > 0 && data[0].image) {
+                const qrImage = document.getElementById('qr-preview');
+                if (qrImage) {
+                    qrImage.src = data[0].image;
+                }
+            }
+        })
+        .catch(error => console.error('เกิดข้อผิดพลาด:', error));
+</script>
+
 </body>
 </html>
