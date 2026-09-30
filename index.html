@@ -67,7 +67,7 @@
             position: relative;
         }
 
-        /* --- Minimal Soft Pastel Blue Background Circles (โทนฟ้า มินิมอล ละมุนๆ) --- */
+        /* --- Minimal Soft Pastel Blue Background Circles --- */
         .bg-circle {
             position: fixed;
             border-radius: 50%;
@@ -244,6 +244,11 @@
 
     <!-- Main Content -->
     <main class="w-full max-w-md mx-auto px-4 flex-grow pb-12 relative z-10">
+        <!-- Banner / Featured Image Container (แสดงผลรูปใหญ่อยู่ด้านบนสุดของรายการชำระเงิน) -->
+        <div id="featured-image-container" class="mb-4 hidden">
+            <!-- จะถูกเติมข้อมูลด้วย JavaScript อัตโนมัติ -->
+        </div>
+
         <div id="payment-list" class="space-y-4">
             <!-- Dynamically populated via JavaScript -->
         </div>
@@ -310,13 +315,13 @@
             </div>
 
             <div class="space-y-6">
-                <!-- ================= BLOCK 1: ตั้งค่าข้อมูลร้านค้า ================= -->
+                <!-- ================= BLOCK 1: ตั้งค่าข้อมูลร้านค้า & รูปภาพพิเศษด้านบน ================= -->
                 <div class="bg-sky-50/70 p-4 rounded-3xl border border-sky-200/80 shadow-sm relative overflow-hidden">
                     <div class="absolute top-0 right-0 bg-sky-200 text-sky-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">
                         บล็อกที่ 1
                     </div>
                     <h3 class="text-sm font-bold text-sky-900 mb-3 flex items-center">
-                        <i class="fa-solid fa-store mr-2 text-sky-600"></i> ตั้งค่าข้อมูลร้านค้า
+                        <i class="fa-solid fa-store mr-2 text-sky-600"></i> ตั้งค่าข้อมูลร้านค้า & รูปภาพด้านบน
                     </h3>
                     
                     <div class="space-y-3">
@@ -333,9 +338,25 @@
                             <input type="file" id="admin-store-logo-file" accept="image/*" onchange="previewStoreLogo(event)" class="w-full text-xs text-sky-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-sky-100 file:text-sky-700 hover:file:bg-sky-200 bg-white border border-sky-200 rounded-xl cursor-pointer">
                             <input type="hidden" id="admin-store-logo">
                         </div>
-                        <button onclick="saveStoreInfo()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center justify-center space-x-1.5">
+
+                        <!-- เพิ่มช่องอัปโหลดรูปภาพใหญ่ด้านบนรายการธนาคาร -->
+                        <div class="pt-2 border-t border-sky-200/60">
+                            <label class="block text-xs font-medium text-sky-700 mb-1">รูปภาพพิเศษด้านบน (เช่น QR Code รวม หรือป้ายประกาศใหญ่)</label>
+                            <input type="file" id="admin-featured-img-file" accept="image/*" onchange="previewFeaturedImage(event)" class="w-full text-xs text-sky-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-sky-100 file:text-sky-700 hover:file:bg-sky-200 bg-white border border-sky-200 rounded-xl cursor-pointer">
+                            <input type="hidden" id="admin-featured-img">
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-[11px] text-sky-600">แสดงรูปภาพนี้ไว้ด้านบนช่องธนาคารอันแรก</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="admin-featured-active" class="sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                                    <span class="ml-2 text-[11px] font-bold text-emerald-700">เปิดแสดงรูป</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button onclick="saveStoreInfo()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center justify-center space-x-1.5 mt-2">
                             <i class="fa-solid fa-floppy-disk"></i>
-                            <span>บันทึกข้อมูลร้านค้า</span>
+                            <span>บันทึกข้อมูลร้านค้า & รูปภาพด้านบน</span>
                         </button>
                     </div>
                 </div>
@@ -446,7 +467,9 @@
         const defaultStoreInfo = {
             name: "NonNon Store",
             subtitle: "✨ รวมช่องทางชำระเงิน สะดวก ปลอดภัย ✨",
-            logo: "https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon"
+            logo: "https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon",
+            featuredImage: "",
+            featuredActive: false
         };
 
         const defaultPaymentMethods = {
@@ -479,11 +502,9 @@
         let storeInfo = defaultStoreInfo;
         let paymentMethods = {};
 
-        // รอให้ Firebase โหลดเสร็จแล้วดึงข้อมูลจาก Realtime Database
         window.addEventListener('DOMContentLoaded', () => {
             setupActiveToggleLabel();
             
-            // เช็คว่า Firebase โหลดเสร็จหรือยังแล้วดึงข้อมูลแบบ Realtime
             const checkFirebaseInterval = setInterval(() => {
                 if (window.db) {
                     clearInterval(checkFirebaseInterval);
@@ -493,7 +514,6 @@
         });
 
         function initFirebaseRealtimeSync() {
-            // ซิงค์ข้อมูลร้านค้า
             const storeRef = window.dbRef(window.db, 'storeInfo');
             window.dbOnValue(storeRef, (snapshot) => {
                 if (snapshot.exists()) {
@@ -503,9 +523,9 @@
                     storeInfo = defaultStoreInfo;
                 }
                 renderStoreInfo();
+                renderFeaturedImage();
             });
 
-            // ซิงค์ข้อมูลช่องทางชำระเงิน
             const payRef = window.dbRef(window.db, 'paymentMethods');
             window.dbOnValue(payRef, (snapshot) => {
                 if (snapshot.exists()) {
@@ -541,28 +561,43 @@
             document.getElementById('admin-store-name').value = storeInfo.name || "";
             document.getElementById('admin-store-subtitle').value = storeInfo.subtitle || "";
             document.getElementById('admin-store-logo').value = storeInfo.logo || "";
+            document.getElementById('admin-featured-img').value = storeInfo.featuredImage || "";
+            document.getElementById('admin-featured-active').checked = storeInfo.featuredActive !== false;
         }
 
-        function compressImage(file, callback) {
+        function renderFeaturedImage() {
+            const container = document.getElementById('featured-image-container');
+            if (storeInfo.featuredActive && storeInfo.featuredImage) {
+                container.innerHTML = `
+                    <div class="glass-card rounded-3xl p-3 shadow-lg border border-white relative overflow-hidden group">
+                        <img src="${storeInfo.featuredImage}" alt="Featured Image" class="w-full h-auto rounded-2xl object-cover shadow-sm max-h-96 mx-auto" onerror="this.src='https://placehold.co/600x400/e0f2fe/0284c7?text=Featured+Image'">
+                    </div>
+                `;
+                container.classList.remove('hidden');
+            } else {
+                container.innerHTML = '';
+                container.classList.add('hidden');
+            }
+        }
+
+        function compressImage(file, callback, maxWidth = 600, maxHeight = 600) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 300;
-                    const MAX_HEIGHT = 300;
                     let width = img.width;
                     let height = img.height;
 
                     if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
                         }
                     } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
                         }
                     }
 
@@ -584,7 +619,17 @@
                 compressImage(file, function(base64String) {
                     document.getElementById('admin-store-logo').value = base64String;
                     showToast("อัปโหลดโลโก้สำเร็จ! (กดปุ่มบันทึกข้อมูลร้านค้าเพื่อยืนยัน)");
-                });
+                }, 300, 300);
+            }
+        }
+
+        function previewFeaturedImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                compressImage(file, function(base64String) {
+                    document.getElementById('admin-featured-img').value = base64String;
+                    showToast("อัปโหลดรูปภาพด้านบนสำเร็จ! (กดปุ่มบันทึกข้อมูลเพื่อยืนยัน)");
+                }, 800, 800);
             }
         }
 
@@ -594,21 +639,29 @@
                 compressImage(file, function(base64String) {
                     document.getElementById('pay-icon').value = base64String;
                     showToast("อัปโหลดรูปไอคอนสำเร็จ!");
-                });
+                }, 200, 200);
             }
         }
 
         function saveStoreInfo() {
             storeInfo.name = document.getElementById('admin-store-name').value || "NonNon Store";
             storeInfo.subtitle = document.getElementById('admin-store-subtitle').value || "";
+            storeInfo.featuredActive = document.getElementById('admin-featured-active').checked;
+            
             const customLogo = document.getElementById('admin-store-logo').value;
             if (customLogo) {
                 storeInfo.logo = customLogo;
+            }
+
+            const customFeatured = document.getElementById('admin-featured-img').value;
+            if (customFeatured !== undefined) {
+                storeInfo.featuredImage = customFeatured;
             }
             
             const storeRef = window.dbRef(window.db, 'storeInfo');
             window.dbSet(storeRef, storeInfo).then(() => {
                 renderStoreInfo();
+                renderFeaturedImage();
                 showToast("บันทึกข้อมูลร้านค้าลง Firebase เรียบร้อยแล้วค่ะ! ✨");
             }).catch((error) => {
                 showToast("เกิดข้อผิดพลาดในการบันทึกข้อมูล ❌");
