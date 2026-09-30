@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th"> 
+<html lang="th">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -262,17 +262,17 @@ TUM STUDIO BANK
 
 ชื่อบัญชี <span style="color: #2563eb; font-weight: bold;">วรรณภา</span> เท่านั้นน้า!!✅☁️
 </p>
-<!-- ส่วน QR Code และปุ่มอัปโหลดรูปภาพ -->
+<!-- ส่วน QR Code ของคุณ (เชื่อมต่อดึงข้อมูลจาก Google Sheets อัตโนมัติแล้ว) -->
 <div class="qr-section">
 <div class="qr-title">
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:18px; height:18px;"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5z" /></svg>
 <span>QR CODE สำหรับสแกนจ่าย</span>
 </div>
 <div class="qr-frame">
-<!-- รูป QR Code เริ่มต้น -->
-<img id="qr-preview" src="https://placehold.co/300x300/ffffff/3b82f6?text=Scan+QR+Code" alt="QR Code Payment">
+<!-- รูป QR Code ที่จะถูกเปลี่ยนเป็นรูปจาก Google Sheets อัตโนมัติ -->
+<img id="qr-preview" src="https://placehold.co/300x300/ffffff/3b82f6?text=Loading..." alt="QR Code Payment">
 </div>
-<div class="upload-btn-container">
+<div class="upload-btn-container" style="display:none;">
 <label for="qr-input" class="custom-file-upload">
 📁 อัปโหลดภาพ QR Code
 </label>
@@ -336,20 +336,9 @@ btn.innerText = originalText;
 btn.style.animation = 'buttonWobble 2s infinite ease-in-out';
 }, 2000);
 }
-/* ฟังก์ชันอัปโหลดและแสดงพรีวิว QR Code ทันที */
-function previewQRCode(event) {
-const file = event.target.files[0];
-if (file) {
-const reader = new FileReader();
-reader.onload = function(e) {
-document.getElementById('qr-preview').src = e.target.result;
-}
-reader.readAsDataURL(file);
-}
-}
 </script>
 
-<!-- 🌟 โค้ดดึงข้อมูลจาก Google Sheets (ใส่ลิงก์ให้เรียบร้อยแล้ว) -->
+<!-- 🌟 โค้ดดึงรูป QR Code จาก Google Sheets มาใส่ในช่อง id="qr-preview" ของคุณ -->
 <script>
     const GOOGLE_SHEET_API = "https://script.google.com/macros/s/AKfycbxRcvLuyrlyk_ylTszdC5_JTeYHbVLwsoZXX46IsQ7TPxuzwZH_KSrwJLsPZ1Un9ssB/exec";
 
