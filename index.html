@@ -61,7 +61,7 @@
     <style>
         body {
             font-family: 'Kanit', sans-serif;
-            background: linear-gradient(135deg, #1e3a8a 0%, #0284c7 50%, #38bdf8 100%);
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
@@ -71,16 +71,16 @@
         .bg-circle {
             position: fixed;
             border-radius: 50%;
-            filter: blur(35px);
+            filter: blur(25px);
             z-index: 0;
             pointer-events: none;
-            opacity: 0.5;
+            opacity: 0.85;
         }
 
         .circle-1 {
             width: 380px;
             height: 380px;
-            background: #60a5fa;
+            background: #93c5fd;
             top: -80px;
             left: -100px;
             animation: moveCircle1 7s ease-in-out infinite alternate;
@@ -98,7 +98,7 @@
         .circle-3 {
             width: 340px;
             height: 340px;
-            background: #93c5fd;
+            background: #bae6fd;
             top: 45%;
             left: -80px;
             animation: moveCircle3 8s ease-in-out infinite alternate;
@@ -107,7 +107,7 @@
         .circle-4 {
             width: 400px;
             height: 400px;
-            background: #2563eb;
+            background: #60a5fa;
             bottom: -80px;
             right: -90px;
             animation: moveCircle4 10s ease-in-out infinite alternate;
@@ -117,7 +117,7 @@
             width: 320px;
             height: 320px;
             background: #0ea5e9;
-            opacity: 0.4;
+            opacity: 0.6;
             bottom: 10%;
             left: 5%;
             animation: moveCircle5 6s ease-in-out infinite alternate;
@@ -154,11 +154,10 @@
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(186, 230, 253, 0.8);
+            box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.12), 0 8px 10px -6px rgba(2, 132, 199, 0.12);
         }
         .float-animation {
             animation: float 3s ease-in-out infinite;
@@ -174,7 +173,7 @@
             z-index: 1;
             pointer-events: none;
             opacity: 0.9;
-            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+            filter: drop-shadow(0 4px 6px rgba(2, 132, 199, 0.08));
         }
         .bear-wave {
             animation: wave 2.5s ease-in-out infinite alternate;
@@ -193,7 +192,7 @@
         }
     </style>
 </head>
-<body class="text-white flex flex-col min-h-screen relative selection:bg-sky-400 selection:text-sky-950">
+<body class="text-slate-900 flex flex-col min-h-screen relative selection:bg-sky-200">
 
     <!-- Minimal Soft Pastel Background Circles -->
     <div class="bg-circle circle-1"></div>
@@ -234,24 +233,24 @@
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-200%] transition-all duration-300 bg-sky-900/95 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 text-sm font-medium border border-sky-400/40 backdrop-blur-md">
-        <i class="fa-solid fa-circle-check text-sky-300 text-lg"></i>
+    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-200%] transition-all duration-300 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl flex items-center space-x-3 text-sm font-semibold border border-slate-700">
+        <i class="fa-solid fa-circle-check text-sky-400 text-lg"></i>
         <span id="toast-message">คัดลอกสำเร็จแล้วค่ะ!</span>
     </div>
 
     <!-- Header / Top Section -->
     <header class="w-full max-w-md mx-auto pt-10 pb-4 px-4 text-center relative z-10">
-        <button onclick="handleAdminAccess()" class="absolute top-8 right-4 bg-white/20 hover:bg-white/30 text-white p-2.5 rounded-full shadow-lg transition-all duration-200 border border-white/30 backdrop-blur-md flex items-center justify-center text-sm" title="จัดการหลังบ้าน">
+        <button onclick="handleAdminAccess()" class="absolute top-8 right-4 bg-white/95 hover:bg-white text-sky-700 hover:text-sky-900 p-2.5 rounded-full shadow-md transition-all duration-200 border border-sky-200 flex items-center justify-center text-sm font-bold" title="จัดการหลังบ้าน">
             <i class="fa-solid fa-gear"></i>
         </button>
 
         <div class="relative w-28 h-28 mx-auto mb-4 float-animation">
-            <div class="absolute inset-0 bg-gradient-to-tr from-sky-400 to-blue-500 rounded-full blur-lg opacity-80"></div>
-            <img id="store-logo" src="https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon" alt="Store Logo" class="relative w-28 h-28 rounded-full object-cover border-4 border-white/80 shadow-xl mx-auto" onerror="this.src='https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon'">
+            <div class="absolute inset-0 bg-gradient-to-tr from-sky-300 to-blue-400 rounded-full blur-md opacity-70"></div>
+            <img id="store-logo" src="https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon" alt="Store Logo" class="relative w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg mx-auto" onerror="this.src='https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon'">
         </div>
 
-        <h1 id="store-name" class="text-3xl font-extrabold text-white tracking-wide drop-shadow-md">NonNon Store</h1>
-        <p id="store-subtitle" class="text-sm text-sky-100 font-medium mt-1 drop-shadow">✨ รวมช่องทางชำระเงิน สะดวก ปลอดภัย ✨</p>
+        <h1 id="store-name" class="text-3xl font-extrabold text-slate-900 tracking-wide drop-shadow-sm">NonNon Store</h1>
+        <p id="store-subtitle" class="text-sm font-bold text-sky-800 mt-1 bg-white/60 inline-block px-3 py-0.5 rounded-full shadow-xs border border-sky-100">✨ รวมช่องทางชำระเงิน สะดวก ปลอดภัย ✨</p>
     </header>
 
     <!-- Main Content -->
@@ -264,16 +263,16 @@
         </div>
 
         <!-- Contact / Social Links Section -->
-        <div class="mt-8 pt-6 border-t border-white/20 text-center">
-            <p class="text-xs text-sky-200 font-medium mb-3 drop-shadow">💬 ช่องทางติดต่อสอบถามร้านค้า</p>
+        <div class="mt-8 pt-6 border-t border-sky-300/80 text-center">
+            <p class="text-xs font-bold text-sky-900 mb-3">💬 ช่องทางติดต่อสอบถามร้านค้า</p>
             <div class="flex justify-center items-center space-x-4">
-                <a href="https://lin.ee/NNKqu9g" target="_blank" class="w-12 h-12 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center shadow-lg hover:scale-105 transition-all text-xl border border-white/20" title="Line">
+                <a href="https://lin.ee/NNKqu9g" target="_blank" class="w-12 h-12 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center shadow-md hover:scale-105 transition-all text-xl" title="Line">
                     <i class="fa-brands fa-line"></i>
                 </a>
-                <a href="https://www.facebook.com/share/19fLAacTiP/" target="_blank" class="w-12 h-12 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-lg hover:scale-105 transition-all text-xl border border-white/20" title="Facebook">
+                <a href="https://www.facebook.com/share/19fLAacTiP/" target="_blank" class="w-12 h-12 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white flex items-center justify-center shadow-md hover:scale-105 transition-all text-xl" title="Facebook">
                     <i class="fa-brands fa-facebook-f"></i>
                 </a>
-                <a href="https://www.instagram.com/nonnon_store06?stkn=MXV2ZHJhdGF6MHF1aQ==" target="_blank" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 hover:opacity-90 text-white flex items-center justify-center shadow-lg hover:scale-105 transition-all text-xl border border-white/20" title="Instagram">
+                <a href="https://www.instagram.com/nonnon_store06?stkn=MXV2ZHJhdGF6MHF1aQ==" target="_blank" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-600 to-purple-700 hover:opacity-95 text-white flex items-center justify-center shadow-md hover:scale-105 transition-all text-xl" title="Instagram">
                     <i class="fa-brands fa-instagram"></i>
                 </a>
             </div>
@@ -281,23 +280,23 @@
     </main>
 
     <!-- Admin Login Modal -->
-    <div id="admin-login-modal" class="fixed inset-0 z-50 bg-sky-950/60 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900/90 backdrop-blur-xl rounded-3xl shadow-2xl w-full max-w-sm p-6 border border-sky-500/30 flex flex-col text-center text-white">
-            <div class="w-16 h-16 bg-sky-500/20 text-sky-400 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-4 border border-sky-400/30">
+    <div id="admin-login-modal" class="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6 border border-sky-200 flex flex-col text-center">
+            <div class="w-16 h-16 bg-sky-100 text-sky-700 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-4 border border-sky-200 shadow-xs">
                 <i class="fa-solid fa-lock"></i>
             </div>
-            <h2 class="text-lg font-bold text-white mb-1">เข้าสู่ระบบหลังบ้าน</h2>
-            <p class="text-xs text-sky-200 mb-5">กรุณากรอกรหัสผ่านแอดมินเพื่อจัดการระบบ</p>
+            <h2 class="text-lg font-bold text-slate-900 mb-1">เข้าสู่ระบบหลังบ้าน</h2>
+            <p class="text-xs font-medium text-slate-600 mb-5">กรุณากรอกรหัสผ่านแอดมินเพื่อจัดการระบบ</p>
             
             <form onsubmit="verifyAdminLogin(event)" class="space-y-4">
                 <div class="relative">
-                    <input type="password" id="admin-password" placeholder="รหัสผ่าน (ค่าเริ่มต้น: 1234)" class="w-full text-sm px-4 py-3 rounded-2xl border border-sky-400/30 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-slate-800/80 text-center tracking-widest text-white placeholder-sky-300/50">
+                    <input type="password" id="admin-password" placeholder="รหัสผ่าน (ค่าเริ่มต้น: 1234)" class="w-full text-sm font-medium px-4 py-3 rounded-2xl border border-sky-300 focus:outline-none focus:ring-2 focus:ring-sky-500 bg-sky-50 text-center tracking-widest text-slate-900 placeholder:font-normal">
                 </div>
                 <div class="flex space-x-2 pt-2">
-                    <button type="button" onclick="toggleLoginModal()" class="w-1/2 py-2.5 bg-slate-800 hover:bg-slate-700 text-sky-200 rounded-xl text-xs font-medium transition-all border border-sky-400/20">
+                    <button type="button" onclick="toggleLoginModal()" class="w-1/2 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">
                         ยกเลิก
                     </button>
-                    <button type="submit" class="w-1/2 py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-medium transition-all shadow-lg">
+                    <button type="submit" class="w-1/2 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">
                         เข้าสู่ระบบ
                     </button>
                 </div>
@@ -306,77 +305,77 @@
     </div>
 
     <!-- Admin Modal Panel -->
-    <div id="admin-modal" class="fixed inset-0 z-50 bg-sky-950/60 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900/95 backdrop-blur-2xl rounded-3xl shadow-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto p-6 border border-sky-400/30 flex flex-col text-white">
-            <div class="flex justify-between items-center pb-4 border-b border-white/10 mb-5">
+    <div id="admin-modal" class="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto p-6 border border-sky-200 flex flex-col">
+            <div class="flex justify-between items-center pb-4 border-b border-sky-200 mb-5">
                 <div class="flex items-center space-x-2.5">
-                    <div class="bg-sky-500 text-white p-2.5 rounded-2xl shadow-lg">
+                    <div class="bg-sky-600 text-white p-2.5 rounded-2xl shadow-md">
                         <i class="fa-solid fa-sliders text-sm"></i>
                     </div>
                     <div>
-                        <h2 class="text-base font-bold text-white">ระบบจัดการหลังบ้าน (Admin Dashboard)</h2>
-                        <p class="text-[11px] text-sky-300">จัดการข้อมูลร้านค้าและช่องทางชำระเงินของคุณ</p>
+                        <h2 class="text-base font-bold text-slate-900">ระบบจัดการหลังบ้าน (Admin Dashboard)</h2>
+                        <p class="text-[11px] font-semibold text-sky-700">จัดการข้อมูลร้านค้าและช่องทางชำระเงินของคุณ</p>
                     </div>
                 </div>
-                <button onclick="toggleAdminModal()" class="text-sky-300 hover:text-white p-2 rounded-full transition-colors">
+                <button onclick="toggleAdminModal()" class="text-slate-400 hover:text-slate-700 p-2 rounded-full transition-colors font-bold">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
             <div class="space-y-6">
                 <!-- BLOCK 1 -->
-                <div class="bg-white/10 p-4 rounded-3xl border border-white/15 shadow-inner relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-sky-400 text-sky-950 text-[10px] font-bold px-3 py-1 rounded-bl-xl">บล็อกที่ 1</div>
-                    <h3 class="text-sm font-bold text-white mb-3 flex items-center">
-                        <i class="fa-solid fa-store mr-2 text-sky-400"></i> ตั้งค่าข้อมูลร้านค้า & รูปภาพด้านบน
+                <div class="bg-sky-50/90 p-4 rounded-3xl border border-sky-300 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-sky-300 text-sky-950 text-[10px] font-extrabold px-3 py-1 rounded-bl-xl">บล็อกที่ 1</div>
+                    <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center">
+                        <i class="fa-solid fa-store mr-2 text-sky-700"></i> ตั้งค่าข้อมูลร้านค้า & รูปภาพด้านบน
                     </h3>
                     
                     <div class="space-y-3">
                         <div>
-                            <label class="block text-xs font-medium text-sky-200 mb-1">ชื่อร้านค้า</label>
-                            <input type="text" id="admin-store-name" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-white/20 bg-slate-800/90 text-white">
+                            <label class="block text-xs font-bold text-slate-800 mb-1">ชื่อร้านค้า</label>
+                            <input type="text" id="admin-store-name" class="w-full text-sm font-medium px-3.5 py-2.5 rounded-xl border border-sky-300 bg-white text-slate-900">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-sky-200 mb-1">คำโปรย / สโลแกน</label>
-                            <input type="text" id="admin-store-subtitle" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-white/20 bg-slate-800/90 text-white">
+                            <label class="block text-xs font-bold text-slate-800 mb-1">คำโปรย / สโลแกน</label>
+                            <input type="text" id="admin-store-subtitle" class="w-full text-sm font-medium px-3.5 py-2.5 rounded-xl border border-sky-300 bg-white text-slate-900">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-sky-200 mb-1">อัปโหลดรูปโลโก้าร้าน</label>
-                            <input type="file" id="admin-store-logo-file" accept="image/*" onchange="previewStoreLogo(event)" class="w-full text-xs text-sky-200 bg-slate-800/90 border border-white/20 rounded-xl cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-600 file:text-white hover:file:bg-sky-500">
+                            <label class="block text-xs font-bold text-slate-800 mb-1">อัปโหลดรูปโลโก้าร้าน</label>
+                            <input type="file" id="admin-store-logo-file" accept="image/*" onchange="previewStoreLogo(event)" class="w-full text-xs font-medium text-slate-700 bg-white border border-sky-300 rounded-xl cursor-pointer">
                             <input type="hidden" id="admin-store-logo">
                         </div>
-                        <div class="pt-2 border-t border-white/15">
-                            <label class="block text-xs font-medium text-sky-200 mb-1">รูปภาพพิเศษด้านบน</label>
-                            <input type="file" id="admin-featured-img-file" accept="image/*" onchange="previewFeaturedImage(event)" class="w-full text-xs text-sky-200 bg-slate-800/90 border border-white/20 rounded-xl cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-600 file:text-white hover:file:bg-sky-500">
+                        <div class="pt-2 border-t border-sky-200">
+                            <label class="block text-xs font-bold text-slate-800 mb-1">รูปภาพพิเศษด้านบน</label>
+                            <input type="file" id="admin-featured-img-file" accept="image/*" onchange="previewFeaturedImage(event)" class="w-full text-xs font-medium text-slate-700 bg-white border border-sky-300 rounded-xl cursor-pointer">
                             <input type="hidden" id="admin-featured-img">
                             <div class="flex items-center justify-between mt-2">
-                                <span class="text-[11px] text-sky-300">แสดงรูปภาพนี้ไว้ด้านบนช่องธนาคาร</span>
+                                <span class="text-[11px] font-semibold text-slate-700">แสดงรูปภาพนี้ไว้ด้านบนช่องธนาคาร</span>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" id="admin-featured-active" class="sr-only peer" checked>
-                                    <div class="w-9 h-5 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
-                                    <span class="ml-2 text-[11px] font-bold text-emerald-400">เปิดแสดงรูป</span>
+                                    <div class="w-9 h-5 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                                    <span class="ml-2 text-[11px] font-bold text-emerald-800">เปิดแสดงรูป</span>
                                 </label>
                             </div>
                         </div>
-                        <button onclick="saveStoreInfo()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold shadow-lg mt-2">
+                        <button onclick="saveStoreInfo()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold shadow-md mt-2">
                             <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึกข้อมูลร้านค้า
                         </button>
                     </div>
                 </div>
 
                 <!-- BLOCK 2 -->
-                <div class="bg-white/10 p-4 rounded-3xl border border-white/15 shadow-inner relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-blue-400 text-slate-950 text-[10px] font-bold px-3 py-1 rounded-bl-xl">บล็อกที่ 2</div>
-                    <div id="form-status-banner" class="mb-3 p-2.5 rounded-xl bg-sky-900/60 border border-sky-400/30 text-sky-200 text-xs flex items-center justify-between">
+                <div class="bg-blue-50/90 p-4 rounded-3xl border border-blue-300 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-300 text-blue-950 text-[10px] font-extrabold px-3 py-1 rounded-bl-xl">บล็อกที่ 2</div>
+                    <div id="form-status-banner" class="mb-3 p-2.5 rounded-xl bg-sky-100 border border-sky-300 text-slate-900 text-xs flex items-center justify-between shadow-xs">
                         <div class="flex items-center space-x-2">
-                            <i class="fa-solid fa-circle-plus text-sky-400 text-sm" id="banner-icon"></i>
-                            <span id="banner-text" class="font-semibold">สถานะ: กำลังอยู่ในโหมดเพิ่มช่องทางใหม่</span>
+                            <i class="fa-solid fa-circle-plus text-sky-700 text-sm font-bold" id="banner-icon"></i>
+                            <span id="banner-text" class="font-bold">สถานะ: กำลังอยู่ในโหมดเพิ่มช่องทางใหม่</span>
                         </div>
-                        <span id="status-badge" class="px-2 py-0.5 rounded-full bg-sky-600 text-white text-[10px] font-bold">MODE: ADD</span>
+                        <span id="status-badge" class="px-2 py-0.5 rounded-full bg-sky-700 text-white text-[10px] font-extrabold">MODE: ADD</span>
                     </div>
 
-                    <h3 id="form-title" class="text-sm font-bold text-white mb-3 flex items-center">
-                        <i class="fa-solid fa-circle-plus mr-2 text-sky-400"></i> เพิ่มช่องทางชำระเงินใหม่
+                    <h3 id="form-title" class="text-sm font-bold text-slate-900 mb-3 flex items-center">
+                        <i class="fa-solid fa-circle-plus mr-2 text-sky-700"></i> เพิ่มช่องทางชำระเงินใหม่
                     </h3>
 
                     <input type="hidden" id="edit-id" value="">
@@ -385,45 +384,45 @@
                     <div class="space-y-3">
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-medium text-sky-200 mb-1">ชื่อธนาคาร / แอป *</label>
-                                <input type="text" id="pay-name" placeholder="เช่น กสิกรไทย" class="w-full text-sm px-3 py-2 rounded-xl border border-white/20 bg-slate-800/90 text-white placeholder-slate-400">
+                                <label class="block text-xs font-bold text-slate-800 mb-1">ชื่อธนาคาร / แอป *</label>
+                                <input type="text" id="pay-name" placeholder="เช่น กสิกรไทย" class="w-full text-sm font-medium px-3 py-2 rounded-xl border border-sky-300 bg-white text-slate-900">
                             </div>
                             <div>
-                                <label class="block text-xs font-medium text-sky-200 mb-1">รูปไอคอนธนาคาร</label>
-                                <input type="file" id="pay-icon-file" accept="image/*" onchange="previewPayIcon(event)" class="w-full text-xs text-sky-200 bg-slate-800/90 border border-white/20 rounded-xl cursor-pointer">
+                                <label class="block text-xs font-bold text-slate-800 mb-1">รูปไอคอนธนาคาร</label>
+                                <input type="file" id="pay-icon-file" accept="image/*" onchange="previewPayIcon(event)" class="w-full text-xs font-medium text-slate-700 bg-white border border-sky-300 rounded-xl cursor-pointer">
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-medium text-sky-200 mb-1">ชื่อบัญชี</label>
-                                <input type="text" id="pay-acc-name" placeholder="นาย นนท์ นนท์" class="w-full text-sm px-3 py-2 rounded-xl border border-white/20 bg-slate-800/90 text-white placeholder-slate-400">
+                                <label class="block text-xs font-bold text-slate-800 mb-1">ชื่อบัญชี</label>
+                                <input type="text" id="pay-acc-name" placeholder="นาย นนท์ นนท์" class="w-full text-sm font-medium px-3 py-2 rounded-xl border border-sky-300 bg-white text-slate-900">
                             </div>
                             <div>
-                                <label class="block text-xs font-medium text-sky-200 mb-1">เลขบัญชี / เบอร์โทร *</label>
-                                <input type="text" id="pay-acc-num" placeholder="123-4-56789-0" class="w-full text-sm px-3 py-2 rounded-xl border border-white/20 bg-slate-800/90 text-white font-mono placeholder-slate-400">
+                                <label class="block text-xs font-bold text-slate-800 mb-1">เลขบัญชี / เบอร์โทร *</label>
+                                <input type="text" id="pay-acc-num" placeholder="123-4-56789-0" class="w-full text-sm font-bold px-3 py-2 rounded-xl border border-sky-300 bg-white text-slate-900 font-mono">
                             </div>
                         </div>
 
-                        <div class="border-t border-white/15 pt-3 space-y-3 bg-slate-800/50 p-3 rounded-2xl border border-white/10">
+                        <div class="border-t border-sky-200 pt-3 space-y-3 bg-white/90 p-3 rounded-2xl border shadow-xs">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-semibold text-sky-200">สถานะการแสดงผล:</span>
+                                <span class="text-xs font-bold text-slate-900">สถานะการแสดงผล:</span>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" id="pay-active" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
-                                    <span class="ml-2 text-xs font-bold text-emerald-400" id="active-status-label">เปิดใช้งานปกติ</span>
+                                    <div class="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                                    <span class="ml-2 text-xs font-bold text-emerald-800" id="active-status-label">เปิดใช้งานปกติ</span>
                                 </label>
                             </div>
                             <div>
-                                <label class="block text-xs font-medium text-sky-200 mb-1">ข้อความแจ้งเตือนลูกค้า (กรณีปิด)</label>
-                                <input type="text" id="pay-closed-message" placeholder="ปิดปรับปรุงชั่วคราว" class="w-full text-sm px-3 py-2 rounded-xl border border-white/20 bg-slate-800/90 text-white placeholder-slate-400">
+                                <label class="block text-xs font-bold text-slate-800 mb-1">ข้อความแจ้งเตือนลูกค้า (กรณีปิด)</label>
+                                <input type="text" id="pay-closed-message" placeholder="ปิดปรับปรุงชั่วคราว" class="w-full text-sm font-medium px-3 py-2 rounded-xl border border-sky-300 bg-white text-slate-900">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-2 pt-2">
-                            <button onclick="savePaymentMethod()" class="py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-semibold shadow-lg">
+                            <button onclick="savePaymentMethod()" class="py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md">
                                 <i class="fa-solid fa-check mr-1"></i> <span id="save-btn-text">บันทึกช่องทางนี้</span>
                             </button>
-                            <button onclick="resetForm()" class="py-2.5 bg-slate-800 hover:bg-slate-700 text-sky-200 rounded-xl text-xs font-medium border border-white/20">
+                            <button onclick="resetForm()" class="py-2.5 bg-white hover:bg-sky-50 text-slate-700 rounded-xl text-xs font-bold border border-sky-300 shadow-xs">
                                 <i class="fa-solid fa-rotate-right mr-1"></i> ล้างฟอร์ม
                             </button>
                         </div>
@@ -431,20 +430,20 @@
                 </div>
 
                 <!-- BLOCK 3 -->
-                <div class="bg-white/10 p-4 rounded-3xl border border-white/15 shadow-inner relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-sky-400 text-sky-950 text-[10px] font-bold px-3 py-1 rounded-bl-xl">บล็อกที่ 3</div>
-                    <h3 class="text-sm font-bold text-white mb-3 flex items-center">
-                        <i class="fa-solid fa-list-check mr-2 text-sky-400"></i> รายการช่องทางชำระเงินทั้งหมด
+                <div class="bg-sky-50/90 p-4 rounded-3xl border border-sky-300 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-sky-300 text-sky-950 text-[10px] font-extrabold px-3 py-1 rounded-bl-xl">บล็อกที่ 3</div>
+                    <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center">
+                        <i class="fa-solid fa-list-check mr-2 text-sky-700"></i> รายการช่องทางชำระเงินทั้งหมด
                     </h3>
                     <div id="admin-payment-list" class="space-y-2.5 max-h-56 overflow-y-auto pr-1"></div>
                 </div>
             </div>
 
-            <div class="mt-6 pt-4 border-t border-white/15 flex justify-between items-center">
-                <button onclick="resetToDefaultData()" class="text-xs text-rose-400 hover:text-rose-300 font-medium underline">
+            <div class="mt-6 pt-4 border-t border-sky-200 flex justify-between items-center">
+                <button onclick="resetToDefaultData()" class="text-xs font-bold text-rose-600 hover:text-rose-800 underline">
                     รีเซ็ตเป็นค่าเริ่มต้น
                 </button>
-                <button onclick="toggleAdminModal()" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-semibold shadow-lg">
+                <button onclick="toggleAdminModal()" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold shadow-md">
                     ปิดหน้าต่าง
                 </button>
             </div>
@@ -534,10 +533,10 @@
             checkbox.onchange = function() {
                 if (checkbox.checked) {
                     label.innerText = "เปิดใช้งานปกติ";
-                    label.className = "ml-2 text-xs font-bold text-emerald-400";
+                    label.className = "ml-2 text-xs font-bold text-emerald-800";
                 } else {
                     label.innerText = "ปิดใช้งานชั่วคราว";
-                    label.className = "ml-2 text-xs font-bold text-amber-400";
+                    label.className = "ml-2 text-xs font-bold text-amber-800";
                 }
             }
         }
@@ -558,8 +557,8 @@
             const container = document.getElementById('featured-image-container');
             if (storeInfo.featuredActive && storeInfo.featuredImage) {
                 container.innerHTML = `
-                    <div class="glass-card rounded-3xl p-3 shadow-xl border border-white/30 relative overflow-hidden">
-                        <img src="${storeInfo.featuredImage}" alt="Featured Image" class="w-full h-auto rounded-2xl object-cover shadow-sm max-h-96 mx-auto">
+                    <div class="glass-card rounded-3xl p-3 shadow-lg border border-white relative overflow-hidden">
+                        <img src="${storeInfo.featuredImage}" alt="Featured Image" class="w-full h-auto rounded-2xl object-cover shadow-md max-h-96 mx-auto">
                     </div>
                 `;
                 container.classList.remove('hidden');
@@ -632,47 +631,47 @@
             const keys = Object.keys(paymentMethods || {});
 
             if (keys.length === 0) {
-                container.innerHTML = `<div class="glass-card rounded-3xl p-8 text-center shadow-lg"><p class="text-sky-200 text-sm">ยังไม่มีช่องทางการชำระเงิน</p></div>`;
+                container.innerHTML = `<div class="glass-card rounded-3xl p-8 text-center shadow-md"><p class="text-slate-800 font-bold text-sm">ยังไม่มีช่องทางการชำระเงิน</p></div>`;
                 return;
             }
 
             keys.forEach((key) => {
                 const item = paymentMethods[key];
                 const card = document.createElement('div');
-                const logoHtml = item.icon ? `<img src="${item.icon}" class="w-full h-full object-contain p-1">` : `<i class="fa-solid fa-wallet text-sky-600 text-xl"></i>`;
+                const logoHtml = item.icon ? `<img src="${item.icon}" class="w-full h-full object-contain p-1">` : `<i class="fa-solid fa-wallet text-sky-700 text-xl font-bold"></i>`;
 
                 if (item.active !== false) {
-                    card.className = "glass-card rounded-3xl p-5 shadow-xl border border-white/30 relative overflow-hidden group";
+                    card.className = "glass-card rounded-3xl p-5 shadow-xl border border-white relative overflow-hidden group";
                     card.innerHTML = `
                         <div class="flex items-center space-x-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-white shadow-md flex items-center justify-center border border-white/50 overflow-hidden">${logoHtml}</div>
+                            <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center border border-sky-200 overflow-hidden">${logoHtml}</div>
                             <div class="flex-grow min-w-0">
-                                <h2 class="font-bold text-white text-base truncate drop-shadow-sm">${item.name}</h2>
-                                <p class="text-xs text-sky-200 truncate mt-0.5 drop-shadow"><i class="fa-regular fa-user mr-1 text-sky-300"></i> ${item.accountName}</p>
+                                <h2 class="font-bold text-slate-900 text-base truncate tracking-wide">${item.name}</h2>
+                                <p class="text-xs font-semibold text-slate-700 truncate mt-0.5"><i class="fa-regular fa-user mr-1 text-sky-600 font-bold"></i> ${item.accountName}</p>
                             </div>
                         </div>
-                        <div class="bg-slate-900/60 backdrop-blur-md rounded-2xl p-3.5 flex items-center justify-between border border-white/20 shadow-inner">
+                        <div class="bg-white rounded-2xl p-3.5 flex items-center justify-between border border-sky-200 shadow-sm">
                             <div class="min-w-0 mr-2">
-                                <span class="block text-[10px] text-sky-300 font-medium uppercase">เลขบัญชี / เบอร์โทร</span>
-                                <span class="text-base font-bold text-white font-mono tracking-wide drop-shadow-sm">${item.accountNumber}</span>
+                                <span class="block text-[10px] text-slate-500 font-bold uppercase">เลขบัญชี / เบอร์โทร</span>
+                                <span class="text-base font-extrabold text-slate-900 font-mono tracking-wider">${item.accountNumber}</span>
                             </div>
-                            <button onclick="copyToClipboard('${item.accountNumber}', '${item.name}')" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-medium px-4 py-2.5 rounded-xl shadow-lg border border-white/20 transition-all active:scale-95">
+                            <button onclick="copyToClipboard('${item.accountNumber}', '${item.name}')" class="bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition-all active:scale-95">
                                 <i class="fa-regular fa-copy mr-1"></i> คัดลอก
                             </button>
                         </div>
                     `;
                 } else {
-                    card.className = "glass-card rounded-3xl p-5 shadow-sm border border-amber-400/40 opacity-85";
+                    card.className = "glass-card rounded-3xl p-5 shadow-md border border-amber-300 opacity-95";
                     card.innerHTML = `
                         <div class="flex items-center space-x-4 mb-3">
-                            <div class="w-14 h-14 rounded-2xl bg-slate-800 flex items-center justify-center grayscale opacity-70 border border-white/20">${logoHtml}</div>
+                            <div class="w-14 h-14 rounded-2xl bg-gray-200 flex items-center justify-center grayscale opacity-80">${logoHtml}</div>
                             <div class="flex-grow min-w-0">
-                                <h2 class="font-bold text-gray-200 text-base truncate">${item.name}</h2>
-                                <p class="text-xs text-gray-400 truncate">${item.accountName}</p>
+                                <h2 class="font-bold text-slate-800 text-base truncate">${item.name}</h2>
+                                <p class="text-xs font-semibold text-slate-600 truncate">${item.accountName}</p>
                             </div>
                         </div>
-                        <div class="bg-amber-950/60 backdrop-blur-md rounded-2xl p-3 border border-amber-400/40 text-xs text-amber-200">
-                            <span class="font-bold block mb-0.5"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ปิดให้บริการชั่วคราว</span>
+                        <div class="bg-amber-100/90 rounded-2xl p-3 border border-amber-300 text-xs text-amber-900 font-semibold shadow-xs">
+                            <span class="font-extrabold block mb-0.5"><i class="fa-solid fa-triangle-exclamation mr-1 text-amber-700"></i> ปิดให้บริการชั่วคราว</span>
                             <span>${item.closedMessage || "ปิดปรับปรุงชั่วคราว"}</span>
                         </div>
                     `;
@@ -689,24 +688,24 @@
             keys.forEach((key) => {
                 const item = paymentMethods[key];
                 const row = document.createElement('div');
-                row.className = "flex items-center justify-between p-3 rounded-2xl bg-slate-800/80 border border-white/10 shadow-sm text-xs text-white";
-                const thumbHtml = item.icon ? `<img src="${item.icon}" class="w-8 h-8 rounded-xl object-contain bg-white/10 p-0.5">` : `<div class="w-8 h-8 rounded-xl bg-white/10 text-sky-400 flex items-center justify-center"><i class="fa-solid fa-wallet"></i></div>`;
+                row.className = "flex items-center justify-between p-3 rounded-2xl bg-white border border-sky-200 shadow-xs text-xs";
+                const thumbHtml = item.icon ? `<img src="${item.icon}" class="w-8 h-8 rounded-xl object-contain bg-sky-50 p-0.5">` : `<div class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center font-bold"><i class="fa-solid fa-wallet"></i></div>`;
                 const isActive = item.active !== false;
 
                 row.innerHTML = `
                     <div class="flex items-center space-x-3 min-w-0">
                         ${thumbHtml}
                         <div class="min-w-0">
-                            <p class="font-semibold text-white truncate">${item.name}</p>
-                            <p class="text-sky-300 font-mono text-[11px]">${item.accountNumber}</p>
+                            <p class="font-bold text-slate-900 truncate">${item.name}</p>
+                            <p class="text-slate-700 font-mono font-semibold text-[11px]">${item.accountNumber}</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-2 flex-shrink-0">
-                        <span class="px-2 py-1 rounded-lg font-bold text-[10px] ${isActive ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'}">
+                        <span class="px-2 py-1 rounded-lg font-bold text-[10px] ${isActive ? 'bg-emerald-100 text-emerald-900' : 'bg-amber-100 text-amber-900'}">
                             ${isActive ? '● ปกติ' : '● ปิด'}
                         </span>
-                        <button onclick="editPaymentMethod('${key}')" class="px-2.5 py-1.5 bg-sky-600/50 hover:bg-sky-600 text-white rounded-lg transition-colors"><i class="fa-solid fa-pen text-[10px]"></i> แก้ไข</button>
-                        <button onclick="deletePaymentMethod('${key}')" class="p-1.5 text-rose-400 hover:bg-rose-500/20 rounded-lg transition-colors"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="editPaymentMethod('${key}')" class="px-2.5 py-1.5 bg-sky-100 hover:bg-sky-200 text-sky-900 rounded-lg font-bold"><i class="fa-solid fa-pen text-[10px]"></i> แก้ไข</button>
+                        <button onclick="deletePaymentMethod('${key}')" class="p-1.5 text-rose-600 hover:bg-rose-100 rounded-lg font-bold"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
                 container.appendChild(row);
@@ -797,7 +796,7 @@
             document.getElementById('pay-active').dispatchEvent(new Event('change'));
             document.getElementById('pay-closed-message').value = item.closedMessage || "";
             document.getElementById('edit-id').value = key;
-            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen-to-square mr-2 text-sky-400"></i> แก้ไขข้อมูล: <span class="text-sky-300">${item.name}</span>`;
+            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen-to-square mr-2 text-blue-700"></i> แก้ไขข้อมูล: <span class="text-blue-800 font-bold">${item.name}</span>`;
             document.getElementById('save-btn-text').innerText = "บันทึกการแก้ไข";
             document.getElementById('form-title').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
@@ -821,7 +820,7 @@
             document.getElementById('pay-active').dispatchEvent(new Event('change'));
             document.getElementById('pay-closed-message').value = '';
             document.getElementById('edit-id').value = '';
-            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-circle-plus mr-2 text-sky-400"></i> เพิ่มช่องทางชำระเงินใหม่`;
+            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-circle-plus mr-2 text-sky-700"></i> เพิ่มช่องทางชำระเงินใหม่`;
             document.getElementById('save-btn-text').innerText = "บันทึกช่องทางนี้";
         }
 
