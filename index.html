@@ -153,6 +153,48 @@
             100% { transform: translate(-30px, -50px) scale(0.9); }
         }
 
+        /* --- Sparkling Floating Stars Background Effect --- */
+        .star-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .sparkle-star {
+            position: absolute;
+            background: #ffffff;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: sparkleFloat 6s ease-in-out infinite, sparkleTwinkle 2s ease-in-out infinite alternate;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes sparkleFloat {
+            0% {
+                transform: translateY(105vh) translateX(0) scale(0.8);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.9;
+            }
+            80% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(40px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        @keyframes sparkleTwinkle {
+            0% { transform: scale(0.7) rotate(0deg); opacity: 0.3; filter: drop-shadow(0 0 2px #38bdf8); }
+            100% { transform: scale(1.3) rotate(15deg); opacity: 1; filter: drop-shadow(0 0 10px #ffffff); }
+        }
+
         .glass-card {
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(12px);
@@ -170,7 +212,7 @@
         /* Cute Animated White Bears Background */
         .cute-bear {
             position: fixed;
-            z-index: 1;
+            z-index: 2;
             pointer-events: none;
             opacity: 0.9;
             filter: drop-shadow(0 4px 6px rgba(2, 132, 199, 0.08));
@@ -200,6 +242,9 @@
     <div class="bg-circle circle-3"></div>
     <div class="bg-circle circle-4"></div>
     <div class="bg-circle circle-5"></div>
+
+    <!-- Sparkling Floating Stars Container -->
+    <div class="star-container" id="star-container"></div>
 
     <!-- Background Cute Animated White Bears (Top Only) -->
     <div class="cute-bear top-4 left-4 bear-blink">
@@ -493,6 +538,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             setupActiveToggleLabel();
+            createFloatingStars(); // สร้างดวงดาวระยิบระยับลอยไปมา
             const checkFirebaseInterval = setInterval(() => {
                 if (window.db) {
                     clearInterval(checkFirebaseInterval);
@@ -500,6 +546,23 @@
                 }
             }, 200);
         });
+
+        // ฟังก์ชันสร้างดวงดาวระยิบระยับลอยไปทั่วพื้นหลัง
+        function createFloatingStars() {
+            const container = document.getElementById('star-container');
+            const starCount = 25; // จำนวนดวงดาว
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'sparkle-star';
+                const size = Math.floor(Math.random() * 10) + 8; // ขนาด 8px - 18px
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.animationDuration = `${Math.random() * 5 + 4}s`; // ความเร็วในการลอย (4 - 9 วินาที)
+                star.style.animationDelay = `${Math.random() * 5}s`; // ดีเลย์เริ่มต้นไม่พร้อมกัน
+                container.appendChild(star);
+            }
+        }
 
         function initFirebaseRealtimeSync() {
             const storeRef = window.dbRef(window.db, 'storeInfo');
