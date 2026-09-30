@@ -10,6 +10,34 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts: Kanit & Prompt -->
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, get, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBRY3l382TXz_1xclmCiam00anTJq_Hv4o",
+            authDomain: "nonnon-43cb6.firebaseapp.com",
+            databaseURL: "https://nonnon-43cb6-default-rtdb.firebaseio.com",
+            projectId: "nonnon-43cb6",
+            storageBucket: "nonnon-43cb6.firebasestorage.app",
+            messagingSenderId: "231537988132",
+            appId: "1:231537988132:web:c2f06014d6d88ebca07eb1",
+            measurementId: "G-GT5YNJJSLQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        window.db = db;
+        window.dbRef = ref;
+        window.dbSet = set;
+        window.dbGet = get;
+        window.dbUpdate = update;
+        window.dbRemove = remove;
+        window.dbOnValue = onValue;
+    </script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -273,7 +301,7 @@
                     </div>
                     <div>
                         <h2 class="text-base font-bold text-sky-950">ระบบจัดการหลังบ้าน (Admin Dashboard)</h2>
-                        <p class="text-[11px] text-sky-500">จัดการข้อมูลร้านค้าและช่องทางชำระเงินของคุณ</p>
+                        <p class="text-[11px] text-sky-500">จัดการข้อมูลร้านค้าและช่องทางชำระเงินของคุณ (เชื่อมต่อ Firebase)</p>
                     </div>
                 </div>
                 <button onclick="toggleAdminModal()" class="text-sky-400 hover:text-sky-600 p-2 rounded-full transition-colors">
@@ -331,7 +359,7 @@
                         <i class="fa-solid fa-circle-plus mr-2 text-sky-600"></i> เพิ่มช่องทางชำระเงินใหม่
                     </h3>
 
-                    <input type="hidden" id="edit-index" value="-1">
+                    <input type="hidden" id="edit-id" value="">
                     <input type="hidden" id="pay-icon">
                     
                     <div class="space-y-3">
@@ -413,7 +441,7 @@
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "1234"; // รหัสผ่านแอดมิน (สามารถเปลี่ยนรหัสผ่านตรงนี้ได้ครับ)
+        const ADMIN_PASSWORD = "1234"; // รหัสผ่านแอดมิน
 
         const defaultStoreInfo = {
             name: "NonNon Store",
@@ -421,8 +449,8 @@
             logo: "https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon"
         };
 
-        const defaultPaymentMethods = [
-            {
+        const defaultPaymentMethods = {
+            "kbank": {
                 name: "ธนาคารกสิกรไทย (KBANK)",
                 icon: "https://images.seeklogo.com/logo-png/52/2/kasikornbank-k-bank-logo-png_seeklogo-526435.png",
                 accountName: "นาย นนทวัฒน์ ใจดี",
@@ -430,7 +458,7 @@
                 active: true,
                 closedMessage: "ปิดปรับปรุงระบบชั่วคราว"
             },
-            {
+            "true": {
                 name: "TrueMoney Wallet",
                 icon: "https://images.seeklogo.com/logo-png/44/1/truemoney-wallet-logo-png_seeklogo-446755.png",
                 accountName: "นาย นนทวัฒน์ ใจดี",
@@ -438,7 +466,7 @@
                 active: true,
                 closedMessage: "ปิดปรับปรุงระบบชั่วคราว"
             },
-            {
+            "scb": {
                 name: "ธนาคารไทยพาณิชย์ (SCB)",
                 icon: "https://images.seeklogo.com/logo-png/43/1/siam-commercial-bank-scb-logo-png_seeklogo-434032.png",
                 accountName: "นาย นนทวัฒน์ ใจดี",
@@ -446,17 +474,50 @@
                 active: true,
                 closedMessage: "ปิดปรับปรุงระบบชั่วคราว"
             }
-        ];
-
-        let storeInfo = JSON.parse(localStorage.getItem('nonnon_store_info')) || defaultStoreInfo;
-        let paymentMethods = JSON.parse(localStorage.getItem('nonnon_payment_methods')) || defaultPaymentMethods;
-
-        window.onload = function() {
-            renderStoreInfo();
-            renderFrontPaymentList();
-            renderAdminPaymentList();
-            setupActiveToggleLabel();
         };
+
+        let storeInfo = defaultStoreInfo;
+        let paymentMethods = {};
+
+        // รอให้ Firebase โหลดเสร็จแล้วดึงข้อมูลจาก Realtime Database
+        window.addEventListener('DOMContentLoaded', () => {
+            setupActiveToggleLabel();
+            
+            // เช็คว่า Firebase โหลดเสร็จหรือยังแล้วดึงข้อมูลแบบ Realtime
+            const checkFirebaseInterval = setInterval(() => {
+                if (window.db) {
+                    clearInterval(checkFirebaseInterval);
+                    initFirebaseRealtimeSync();
+                }
+            }, 200);
+        });
+
+        function initFirebaseRealtimeSync() {
+            // ซิงค์ข้อมูลร้านค้า
+            const storeRef = window.dbRef(window.db, 'storeInfo');
+            window.dbOnValue(storeRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    storeInfo = snapshot.val();
+                } else {
+                    window.dbSet(storeRef, defaultStoreInfo);
+                    storeInfo = defaultStoreInfo;
+                }
+                renderStoreInfo();
+            });
+
+            // ซิงค์ข้อมูลช่องทางชำระเงิน
+            const payRef = window.dbRef(window.db, 'paymentMethods');
+            window.dbOnValue(payRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    paymentMethods = snapshot.val();
+                } else {
+                    window.dbSet(payRef, defaultPaymentMethods);
+                    paymentMethods = defaultPaymentMethods;
+                }
+                renderFrontPaymentList();
+                renderAdminPaymentList();
+            });
+        }
 
         function setupActiveToggleLabel() {
             const checkbox = document.getElementById('pay-active');
@@ -473,13 +534,13 @@
         }
 
         function renderStoreInfo() {
-            document.getElementById('store-name').innerText = storeInfo.name;
-            document.getElementById('store-subtitle').innerText = storeInfo.subtitle;
-            document.getElementById('store-logo').src = storeInfo.logo;
+            document.getElementById('store-name').innerText = storeInfo.name || "NonNon Store";
+            document.getElementById('store-subtitle').innerText = storeInfo.subtitle || "";
+            document.getElementById('store-logo').src = storeInfo.logo || "https://placehold.co/200x200/e0f2fe/0284c7?text=NonNon";
             
-            document.getElementById('admin-store-name').value = storeInfo.name;
-            document.getElementById('admin-store-subtitle').value = storeInfo.subtitle;
-            document.getElementById('admin-store-logo').value = storeInfo.logo;
+            document.getElementById('admin-store-name').value = storeInfo.name || "";
+            document.getElementById('admin-store-subtitle').value = storeInfo.subtitle || "";
+            document.getElementById('admin-store-logo').value = storeInfo.logo || "";
         }
 
         function compressImage(file, callback) {
@@ -522,7 +583,7 @@
             if (file) {
                 compressImage(file, function(base64String) {
                     document.getElementById('admin-store-logo').value = base64String;
-                    showToast("อัปโหลดโลโก้สำเร็จ! (กดปุ่มบันทึกข้อมูลร้านค้าด้านบนเพื่อยืนยัน)");
+                    showToast("อัปโหลดโลโก้สำเร็จ! (กดปุ่มบันทึกข้อมูลร้านค้าเพื่อยืนยัน)");
                 });
             }
         }
@@ -545,16 +606,21 @@
                 storeInfo.logo = customLogo;
             }
             
-            localStorage.setItem('nonnon_store_info', JSON.stringify(storeInfo));
-            renderStoreInfo();
-            showToast("บันทึกข้อมูลร้านค้าเรียบร้อยแล้วค่ะ! ✨");
+            const storeRef = window.dbRef(window.db, 'storeInfo');
+            window.dbSet(storeRef, storeInfo).then(() => {
+                renderStoreInfo();
+                showToast("บันทึกข้อมูลร้านค้าลง Firebase เรียบร้อยแล้วค่ะ! ✨");
+            }).catch((error) => {
+                showToast("เกิดข้อผิดพลาดในการบันทึกข้อมูล ❌");
+            });
         }
 
         function renderFrontPaymentList() {
             const container = document.getElementById('payment-list');
             container.innerHTML = '';
 
-            if (paymentMethods.length === 0) {
+            const keys = Object.keys(paymentMethods || {});
+            if (keys.length === 0) {
                 container.innerHTML = `
                     <div class="glass-card rounded-3xl p-8 text-center shadow-md border border-sky-100">
                         <div class="text-4xl text-sky-300 mb-3"><i class="fa-solid fa-mug-hot"></i></div>
@@ -564,13 +630,14 @@
                 return;
             }
 
-            paymentMethods.forEach((item, index) => {
+            keys.forEach((key) => {
+                const item = paymentMethods[key];
                 const card = document.createElement('div');
                 const logoHtml = item.icon 
                     ? `<img src="${item.icon}" alt="${item.name}" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='https://placehold.co/100x100/e0f2fe/0284c7?text=Logo';">`
                     : `<i class="fa-solid fa-wallet text-sky-600 text-xl"></i>`;
 
-                if (item.active) {
+                if (item.active !== false) {
                     card.className = "glass-card rounded-3xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 border border-white relative overflow-hidden group";
                     card.innerHTML = `
                         <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-sky-100/60 to-transparent rounded-bl-full pointer-events-none"></div>
@@ -627,18 +694,22 @@
             const container = document.getElementById('admin-payment-list');
             container.innerHTML = '';
 
-            if (paymentMethods.length === 0) {
+            const keys = Object.keys(paymentMethods || {});
+            if (keys.length === 0) {
                 container.innerHTML = `<p class="text-xs text-sky-400 text-center py-3">ยังไม่มีข้อมูลช่องทางชำระเงิน</p>`;
                 return;
             }
 
-            paymentMethods.forEach((item, index) => {
+            keys.forEach((key) => {
+                const item = paymentMethods[key];
                 const row = document.createElement('div');
                 row.className = "flex items-center justify-between p-3 rounded-2xl bg-white border border-sky-100 shadow-sm text-xs";
                 
                 const thumbHtml = item.icon
                     ? `<img src="${item.icon}" class="w-8 h-8 rounded-xl object-contain bg-sky-50 p-0.5 border border-sky-100" onerror="this.src='https://placehold.co/100x100/e0f2fe/0284c7?text=Logo'">`
                     : `<div class="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center"><i class="fa-solid fa-wallet"></i></div>`;
+
+                const isActive = item.active !== false;
 
                 row.innerHTML = `
                     <div class="flex items-center space-x-3 min-w-0">
@@ -649,14 +720,14 @@
                         </div>
                     </div>
                     <div class="flex items-center space-x-2 flex-shrink-0">
-                        <span class="px-2 py-1 rounded-lg font-bold text-[10px] ${item.active ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
-                            ${item.active ? '● ปกติ' : '● ปิดชั่วคราว'}
+                        <span class="px-2 py-1 rounded-lg font-bold text-[10px] ${isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                            ${isActive ? '● ปกติ' : '● ปิดชั่วคราว'}
                         </span>
-                        <button onclick="editPaymentMethod(${index})" class="px-2.5 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg transition-all font-medium flex items-center space-x-1" title="แก้ไข">
+                        <button onclick="editPaymentMethod('${key}')" class="px-2.5 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg transition-all font-medium flex items-center space-x-1" title="แก้ไข">
                             <i class="fa-solid fa-pen text-[10px]"></i>
                             <span>แก้ไข</span>
                         </button>
-                        <button onclick="deletePaymentMethod(${index})" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-all" title="ลบ">
+                        <button onclick="deletePaymentMethod('${key}')" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-all" title="ลบ">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
@@ -687,7 +758,6 @@
             }, 2500);
         }
 
-        // ระบบตรวจสอบการเข้าสู่ระบบ
         function handleAdminAccess() {
             if (sessionStorage.getItem('is_admin_logged_in') === 'true') {
                 toggleAdminModal();
@@ -729,43 +799,38 @@
             const accountNumber = document.getElementById('pay-acc-num').value.trim();
             const active = document.getElementById('pay-active').checked;
             const closedMessage = document.getElementById('pay-closed-message').value.trim();
-            const editIndex = parseInt(document.getElementById('edit-index').value);
+            const editId = document.getElementById('edit-id').value;
 
             if (!name || !accountNumber) {
                 showToast("กรุณากรอกชื่อและเลขบัญชีให้ครบถ้วนด้วยนะคะ 📝");
                 return;
             }
 
-            if (editIndex >= 0) {
-                paymentMethods[editIndex].name = name;
-                if (icon) {
-                    paymentMethods[editIndex].icon = icon;
-                }
-                paymentMethods[editIndex].accountName = accountName;
-                paymentMethods[editIndex].accountNumber = accountNumber;
-                paymentMethods[editIndex].active = active;
-                paymentMethods[editIndex].closedMessage = closedMessage || "ปิดปรับปรุงระบบชั่วคราว";
-                showToast("อัปเดตข้อมูลสำเร็จเรียบร้อยค่ะ! ✅");
-            } else {
-                paymentMethods.push({
-                    name,
-                    icon: icon || 'https://placehold.co/100x100/e0f2fe/0284c7?text=Logo',
-                    accountName: accountName || storeInfo.name,
-                    accountNumber,
-                    active: active,
-                    closedMessage: closedMessage || "ปิดปรับปรุงระบบชั่วคราว"
-                });
-                showToast("เพิ่มช่องทางใหม่สำเร็จเรียบร้อยค่ะ! 🎉");
-            }
+            const paymentId = editId || 'pay_' + Date.now();
+            const existingIcon = editId && paymentMethods[editId] ? paymentMethods[editId].icon : '';
 
-            localStorage.setItem('nonnon_payment_methods', JSON.stringify(paymentMethods));
-            renderFrontPaymentList();
-            renderAdminPaymentList();
-            resetForm();
+            const newData = {
+                name,
+                icon: icon || existingIcon || 'https://placehold.co/100x100/e0f2fe/0284c7?text=Logo',
+                accountName: accountName || storeInfo.name,
+                accountNumber,
+                active,
+                closedMessage: closedMessage || "ปิดปรับปรุงระบบชั่วคราว"
+            };
+
+            const payItemRef = window.dbRef(window.db, 'paymentMethods/' + paymentId);
+            window.dbSet(payItemRef, newData).then(() => {
+                showToast(editId ? "อัปเดตข้อมูลสำเร็จเรียบร้อยค่ะ! ✅" : "เพิ่มช่องทางใหม่สำเร็จเรียบร้อยค่ะ! 🎉");
+                resetForm();
+            }).catch((error) => {
+                showToast("เกิดข้อผิดพลาดในการบันทึกข้อมูล ❌");
+            });
         }
 
-        function editPaymentMethod(index) {
-            const item = paymentMethods[index];
+        function editPaymentMethod(key) {
+            const item = paymentMethods[key];
+            if (!item) return;
+
             document.getElementById('pay-name').value = item.name;
             document.getElementById('pay-icon').value = item.icon || '';
             document.getElementById('pay-acc-name').value = item.accountName;
@@ -773,7 +838,7 @@
             document.getElementById('pay-active').checked = item.active !== false;
             document.getElementById('pay-active').dispatchEvent(new Event('change'));
             document.getElementById('pay-closed-message').value = item.closedMessage || "";
-            document.getElementById('edit-index').value = index;
+            document.getElementById('edit-id').value = key;
 
             document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen-to-square mr-2 text-blue-600"></i> แก้ไขข้อมูล: <span class="text-blue-700 underline">${item.name}</span>`;
             document.getElementById('save-btn-text').innerText = "บันทึกการแก้ไขข้อมูลนี้";
@@ -788,14 +853,15 @@
             document.getElementById('form-title').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        function deletePaymentMethod(index) {
+        function deletePaymentMethod(key) {
             if (confirm("คุณต้องการลบช่องทางนี้ใช่หรือไม่?")) {
-                paymentMethods.splice(index, 1);
-                localStorage.setItem('nonnon_payment_methods', JSON.stringify(paymentMethods));
-                renderFrontPaymentList();
-                renderAdminPaymentList();
-                showToast("ลบข้อมูลเรียบร้อยแล้วค่ะ");
-                resetForm();
+                const payItemRef = window.dbRef(window.db, 'paymentMethods/' + key);
+                window.dbRemove(payItemRef).then(() => {
+                    showToast("ลบข้อมูลเรียบร้อยแล้วค่ะ");
+                    resetForm();
+                }).catch(() => {
+                    showToast("เกิดข้อผิดพลาดในการลบข้อมูล ❌");
+                });
             }
         }
 
@@ -808,7 +874,7 @@
             document.getElementById('pay-active').checked = true;
             document.getElementById('pay-active').dispatchEvent(new Event('change'));
             document.getElementById('pay-closed-message').value = '';
-            document.getElementById('edit-index').value = -1;
+            document.getElementById('edit-id').value = '';
 
             document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-circle-plus mr-2 text-sky-600"></i> เพิ่มช่องทางชำระเงินใหม่`;
             document.getElementById('save-btn-text').innerText = "บันทึกช่องทางนี้";
@@ -823,15 +889,16 @@
 
         function resetToDefaultData() {
             if (confirm("ต้องการรีเซ็ตข้อมูลทั้งหมดกลับเป็นค่าเริ่มต้นหรือไม่?")) {
-                storeInfo = defaultStoreInfo;
-                paymentMethods = defaultPaymentMethods;
-                localStorage.setItem('nonnon_store_info', JSON.stringify(storeInfo));
-                localStorage.setItem('nonnon_payment_methods', JSON.stringify(paymentMethods));
-                renderStoreInfo();
-                renderFrontPaymentList();
-                renderAdminPaymentList();
-                resetForm();
-                showToast("รีเซ็ตข้อมูลเรียบร้อยแล้วค่ะ!");
+                const storeRef = window.dbRef(window.db, 'storeInfo');
+                const payRef = window.dbRef(window.db, 'paymentMethods');
+                
+                Promise.all([
+                    window.dbSet(storeRef, defaultStoreInfo),
+                    window.dbSet(payRef, defaultPaymentMethods)
+                ]).then(() => {
+                    resetForm();
+                    showToast("รีเซ็ตข้อมูลเรียบร้อยแล้วค่ะ!");
+                });
             }
         }
     </script>
