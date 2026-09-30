@@ -74,13 +74,13 @@
             filter: blur(25px);
             z-index: 0;
             pointer-events: none;
-            opacity: 0.85; /* ปรับให้ชัดขึ้นจากเดิม */
+            opacity: 0.85;
         }
 
         .circle-1 {
             width: 380px;
             height: 380px;
-            background: #93c5fd; /* ปรับสีให้เข้มขึ้นเล็กน้อย */
+            background: #93c5fd;
             top: -80px;
             left: -100px;
             animation: moveCircle1 7s ease-in-out infinite alternate;
@@ -89,7 +89,7 @@
         .circle-2 {
             width: 440px;
             height: 440px;
-            background: #38bdf8; /* ปรับสีให้ชัดเจนขึ้น */
+            background: #38bdf8;
             top: 5%;
             right: -130px;
             animation: moveCircle2 9s ease-in-out infinite alternate;
@@ -107,7 +107,7 @@
         .circle-4 {
             width: 400px;
             height: 400px;
-            background: #60a5fa; /* ปรับสีให้เข้มชัดขึ้น */
+            background: #60a5fa;
             bottom: -80px;
             right: -90px;
             animation: moveCircle4 10s ease-in-out infinite alternate;
@@ -116,7 +116,7 @@
         .circle-5 {
             width: 320px;
             height: 320px;
-            background: #0ea5e9; /* ปรับสีให้สดและชัดขึ้น */
+            background: #0ea5e9;
             opacity: 0.6;
             bottom: 10%;
             left: 5%;
@@ -729,8 +729,8 @@
         }
 
         function handleAdminAccess() {
-            if (sessionStorage.getItem('is_admin_logged_in') === 'true') toggleAdminModal();
-            else toggleLoginModal();
+            // บังคับเปิดหน้าต่างกรอกรหัสผ่านทุกครั้งที่กดปุ่มเฟือง
+            toggleLoginModal();
         }
 
         function toggleLoginModal() {
@@ -741,7 +741,6 @@
         function verifyAdminLogin(event) {
             event.preventDefault();
             if (document.getElementById('admin-password').value === ADMIN_PASSWORD) {
-                sessionStorage.setItem('is_admin_logged_in', 'true');
                 toggleLoginModal();
                 toggleAdminModal();
                 showToast("เข้าสู่ระบบหลังบ้านสำเร็จ! 🎉");
