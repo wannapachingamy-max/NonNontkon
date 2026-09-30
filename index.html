@@ -67,92 +67,97 @@
             position: relative;
         }
 
-        /* --- Dynamic Bouncing Circles Background --- */
+        /* --- Minimal Soft Pastel Blue Background Circles (Fixed Animation) --- */
         .bg-circle {
             position: fixed;
             border-radius: 50%;
-            filter: blur(35px);
+            filter: blur(30px);
             z-index: 0;
             pointer-events: none;
-            opacity: 0.65;
-            transition: transform 0.5s ease;
+            opacity: 0.6;
         }
 
         .circle-1 {
-            width: 450px;
-            height: 450px;
-            background: rgba(255, 255, 255, 0.9);
-            top: -100px;
-            left: -120px;
-            animation: bounceCircle1 8s ease-in-out infinite alternate;
+            width: 360px;
+            height: 360px;
+            background: #bae6fd;
+            top: -80px;
+            left: -100px;
+            animation: moveCircle1 7s ease-in-out infinite alternate;
         }
 
         .circle-2 {
-            width: 500px;
-            height: 500px;
-            background: #38bdf8;
-            top: 10%;
-            right: -150px;
-            animation: bounceCircle2 10s ease-in-out infinite alternate;
+            width: 420px;
+            height: 420px;
+            background: #7dd3fc;
+            top: 5%;
+            right: -130px;
+            animation: moveCircle2 9s ease-in-out infinite alternate;
         }
 
         .circle-3 {
-            width: 400px;
-            height: 400px;
-            background: #0284c7;
-            opacity: 0.3;
-            top: 50%;
-            left: -100px;
-            animation: bounceCircle3 9s ease-in-out infinite alternate;
+            width: 320px;
+            height: 320px;
+            background: #e0f2fe;
+            top: 45%;
+            left: -80px;
+            animation: moveCircle3 8s ease-in-out infinite alternate;
         }
 
         .circle-4 {
-            width: 480px;
-            height: 480px;
-            background: rgba(255, 255, 255, 0.8);
-            bottom: -100px;
-            right: -100px;
-            animation: bounceCircle1 11s ease-in-out infinite alternate;
+            width: 380px;
+            height: 380px;
+            background: #bae6fd;
+            bottom: -80px;
+            right: -90px;
+            animation: moveCircle4 10s ease-in-out infinite alternate;
         }
 
         .circle-5 {
-            width: 380px;
-            height: 380px;
-            background: #7dd3fc;
-            bottom: 5%;
-            left: 10%;
-            animation: bounceCircle2 7s ease-in-out infinite alternate;
+            width: 300px;
+            height: 300px;
+            background: #38bdf8;
+            opacity: 0.4;
+            bottom: 10%;
+            left: 5%;
+            animation: moveCircle5 6s ease-in-out infinite alternate;
         }
 
-        @keyframes bounceCircle1 {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(80px, 120px) scale(1.12); }
-            100% { transform: translate(-50px, 80px) scale(0.95); }
+        @keyframes moveCircle1 {
+            0% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(80px, 100px) scale(1.1); }
+            100% { transform: translate(30px, 60px) scale(0.95); }
         }
 
-        @keyframes bounceCircle2 {
-            0% { transform: translate(0, 0) scale(0.95); }
-            50% { transform: translate(-100px, 140px) scale(1.15); }
-            100% { transform: translate(70px, -90px) scale(1.02); }
+        @keyframes moveCircle2 {
+            0% { transform: translate(0px, 0px) scale(0.95); }
+            50% { transform: translate(-90px, 120px) scale(1.05); }
+            100% { transform: translate(-40px, 40px) scale(1); }
         }
 
-        @keyframes bounceCircle3 {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(120px, -100px) scale(1.2); }
-            100% { transform: translate(-40px, 110px) scale(0.9); }
+        @keyframes moveCircle3 {
+            0% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(110px, -70px) scale(1.15); }
+            100% { transform: translate(40px, 80px) scale(0.9); }
+        }
+
+        @keyframes moveCircle4 {
+            0% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(-100px, -90px) scale(1.08); }
+            100% { transform: translate(-50px, -30px) scale(0.95); }
+        }
+
+        @keyframes moveCircle5 {
+            0% { transform: translate(0px, 0px) scale(1); }
+            50% { transform: translate(70px, -110px) scale(1.2); }
+            100% { transform: translate(-30px, -50px) scale(0.9); }
         }
 
         .glass-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(186, 230, 253, 0.6);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .glass-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px -10px rgba(2, 132, 199, 0.2);
-        }
-
         .float-animation {
             animation: float 3s ease-in-out infinite;
         }
@@ -184,19 +189,11 @@
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-8px) rotate(2deg); }
         }
-
-        /* Interactive Cute Button Pulse */
-        .interactive-btn {
-            transition: all 0.2s ease;
-        }
-        .interactive-btn:active {
-            transform: scale(0.95);
-        }
     </style>
 </head>
 <body class="text-sky-950 flex flex-col min-h-screen relative selection:bg-sky-200">
 
-    <!-- Dynamic Bouncing Background Circles -->
+    <!-- Minimal Soft Pastel Background Circles -->
     <div class="bg-circle circle-1"></div>
     <div class="bg-circle circle-2"></div>
     <div class="bg-circle circle-3"></div>
@@ -242,7 +239,7 @@
 
     <!-- Header / Top Section -->
     <header class="w-full max-w-md mx-auto pt-10 pb-4 px-4 text-center relative z-10">
-        <button onclick="handleAdminAccess()" class="absolute top-8 right-4 bg-white/90 hover:bg-white text-sky-600 hover:text-sky-700 p-2.5 rounded-full shadow-sm transition-all duration-200 border border-sky-100 flex items-center justify-center text-sm interactive-btn" title="จัดการหลังบ้าน">
+        <button onclick="handleAdminAccess()" class="absolute top-8 right-4 bg-white/90 hover:bg-white text-sky-600 hover:text-sky-700 p-2.5 rounded-full shadow-sm transition-all duration-200 border border-sky-100 flex items-center justify-center text-sm" title="จัดการหลังบ้าน">
             <i class="fa-solid fa-gear"></i>
         </button>
 
@@ -257,10 +254,8 @@
 
     <!-- Main Content -->
     <main class="w-full max-w-md mx-auto px-4 flex-grow pb-12 relative z-10">
-        <!-- Banner / Featured Image Container (แสดงผลรูปใหญ่อยู่ด้านบนสุดของรายการชำระเงิน) -->
-        <div id="featured-image-container" class="mb-4 hidden">
-            <!-- จะถูกเติมข้อมูลด้วย JavaScript อัตโนมัติ -->
-        </div>
+        <!-- Banner / Featured Image Container -->
+        <div id="featured-image-container" class="mb-4 hidden"></div>
 
         <div id="payment-list" class="space-y-4">
             <!-- Dynamically populated via JavaScript -->
@@ -270,13 +265,13 @@
         <div class="mt-8 pt-6 border-t border-sky-200/60 text-center">
             <p class="text-xs text-sky-500 font-medium mb-3">💬 ช่องทางติดต่อสอบถามร้านค้า</p>
             <div class="flex justify-center items-center space-x-4">
-                <a href="https://lin.ee/NNKqu9g" target="_blank" class="w-12 h-12 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center shadow-sm hover:scale-110 transition-all text-xl interactive-btn" title="Line">
+                <a href="https://lin.ee/NNKqu9g" target="_blank" class="w-12 h-12 rounded-2xl bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center shadow-sm hover:scale-105 transition-all text-xl" title="Line">
                     <i class="fa-brands fa-line"></i>
                 </a>
-                <a href="https://www.facebook.com/share/19fLAacTiP/" target="_blank" class="w-12 h-12 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-sm hover:scale-110 transition-all text-xl interactive-btn" title="Facebook">
+                <a href="https://www.facebook.com/share/19fLAacTiP/" target="_blank" class="w-12 h-12 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center shadow-sm hover:scale-105 transition-all text-xl" title="Facebook">
                     <i class="fa-brands fa-facebook-f"></i>
                 </a>
-                <a href="https://www.instagram.com/nonnon_store06?stkn=MXV2ZHJhdGF6MHF1aQ==" target="_blank" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 hover:opacity-90 text-white flex items-center justify-center shadow-sm hover:scale-110 transition-all text-xl interactive-btn" title="Instagram">
+                <a href="https://www.instagram.com/nonnon_store06?stkn=MXV2ZHJhdGF6MHF1aQ==" target="_blank" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 hover:opacity-90 text-white flex items-center justify-center shadow-sm hover:scale-105 transition-all text-xl" title="Instagram">
                     <i class="fa-brands fa-instagram"></i>
                 </a>
             </div>
@@ -297,10 +292,10 @@
                     <input type="password" id="admin-password" placeholder="รหัสผ่าน (ค่าเริ่มต้น: 1234)" class="w-full text-sm px-4 py-3 rounded-2xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-sky-50/50 text-center tracking-widest text-sky-950">
                 </div>
                 <div class="flex space-x-2 pt-2">
-                    <button type="button" onclick="toggleLoginModal()" class="w-1/2 py-2.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-xl text-xs font-medium transition-all interactive-btn">
+                    <button type="button" onclick="toggleLoginModal()" class="w-1/2 py-2.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-xl text-xs font-medium transition-all">
                         ยกเลิก
                     </button>
-                    <button type="submit" class="w-1/2 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-medium transition-all shadow-sm interactive-btn">
+                    <button type="submit" class="w-1/2 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-medium transition-all shadow-sm">
                         เข้าสู่ระบบ
                     </button>
                 </div>
@@ -311,7 +306,6 @@
     <!-- Admin Modal Panel -->
     <div id="admin-modal" class="fixed inset-0 z-50 bg-sky-950/30 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto p-6 border border-sky-100 flex flex-col">
-            <!-- Modal Header -->
             <div class="flex justify-between items-center pb-4 border-b border-sky-100 mb-5">
                 <div class="flex items-center space-x-2.5">
                     <div class="bg-sky-500 text-white p-2.5 rounded-2xl shadow-sm">
@@ -319,7 +313,7 @@
                     </div>
                     <div>
                         <h2 class="text-base font-bold text-sky-950">ระบบจัดการหลังบ้าน (Admin Dashboard)</h2>
-                        <p class="text-[11px] text-sky-500">จัดการข้อมูลร้านค้าและช่องทางชำระเงินของคุณ (เชื่อมต่อ Firebase)</p>
+                        <p class="text-[11px] text-sky-500">จัดการข้อมูลร้านค้าและช่องทางชำระเงินของคุณ</p>
                     </div>
                 </div>
                 <button onclick="toggleAdminModal()" class="text-sky-400 hover:text-sky-600 p-2 rounded-full transition-colors">
@@ -328,76 +322,49 @@
             </div>
 
             <div class="space-y-6">
-                <!-- ================= BLOCK 1: จัดการรูปภาพแบนเนอร์/รูปภาพพิเศษด้านบน ================= -->
-                <div class="bg-indigo-50/70 p-4 rounded-3xl border border-indigo-200/80 shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-indigo-200 text-indigo-900 text-[10px] font-bold px-3 py-1 rounded-bl-xl">
-                        บล็อกที่ 1 (จัดการรูปแบนเนอร์)
-                    </div>
-                    <h3 class="text-sm font-bold text-indigo-950 mb-3 flex items-center">
-                        <i class="fa-solid fa-image mr-2 text-indigo-600"></i> อัปโหลดรูปภาพแบนเนอร์ / QR Code ด้านบน
-                    </h3>
-                    
-                    <div class="space-y-3">
-                        <div>
-                            <label class="block text-xs font-medium text-indigo-900 mb-1">รูปภาพพิเศษด้านบน (เช่น QR Code รวม หรือป้ายประกาศใหญ่)</label>
-                            <input type="file" id="admin-featured-img-file" accept="image/*" onchange="previewFeaturedImage(event)" class="w-full text-xs text-indigo-700 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200 bg-white border border-indigo-200 rounded-xl cursor-pointer">
-                            <input type="hidden" id="admin-featured-img">
-                            
-                            <div class="flex items-center justify-between mt-3 bg-white/80 p-2.5 rounded-xl border border-indigo-100">
-                                <span class="text-[11px] text-indigo-900 font-medium">เปิด/ปิด การแสดงผลแบนเนอร์ที่หน้าแรก</span>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="admin-featured-active" class="sr-only peer" checked>
-                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
-                                    <span class="ml-2 text-[11px] font-bold text-emerald-700">แสดงรูป</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <button onclick="saveFeaturedBanner()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center justify-center space-x-1.5 mt-2 interactive-btn">
-                            <i class="fa-solid fa-floppy-disk"></i>
-                            <span>บันทึกรูปภาพแบนเนอร์</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- ================= BLOCK 2: ตั้งค่าข้อมูลร้านค้า & โลโก้ ================= -->
-                <div class="bg-sky-50/70 p-4 rounded-3xl border border-sky-200/80 shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-sky-200 text-sky-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">
-                        บล็อกที่ 2
-                    </div>
+                <!-- BLOCK 1 -->
+                <div class="bg-sky-50/70 p-4 rounded-3xl border border-sky-200/85 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-sky-200 text-sky-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">บล็อกที่ 1</div>
                     <h3 class="text-sm font-bold text-sky-900 mb-3 flex items-center">
-                        <i class="fa-solid fa-store mr-2 text-sky-600"></i> ตั้งค่าข้อมูลร้านค้า & โลโก้
+                        <i class="fa-solid fa-store mr-2 text-sky-600"></i> ตั้งค่าข้อมูลร้านค้า & รูปภาพด้านบน
                     </h3>
                     
                     <div class="space-y-3">
                         <div>
                             <label class="block text-xs font-medium text-sky-700 mb-1">ชื่อร้านค้า</label>
-                            <input type="text" id="admin-store-name" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white text-sky-950">
+                            <input type="text" id="admin-store-name" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-sky-200 bg-white text-sky-950">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-sky-700 mb-1">คำโปรย / สโลแกน</label>
-                            <input type="text" id="admin-store-subtitle" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white text-sky-950">
+                            <input type="text" id="admin-store-subtitle" class="w-full text-sm px-3.5 py-2.5 rounded-xl border border-sky-200 bg-white text-sky-950">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-sky-700 mb-1">อัปโหลดรูปโลโก้าร้าน</label>
-                            <input type="file" id="admin-store-logo-file" accept="image/*" onchange="previewStoreLogo(event)" class="w-full text-xs text-sky-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-sky-100 file:text-sky-700 hover:file:bg-sky-200 bg-white border border-sky-200 rounded-xl cursor-pointer">
+                            <input type="file" id="admin-store-logo-file" accept="image/*" onchange="previewStoreLogo(event)" class="w-full text-xs text-sky-600 bg-white border border-sky-200 rounded-xl cursor-pointer">
                             <input type="hidden" id="admin-store-logo">
                         </div>
-
-                        <button onclick="saveStoreInfo()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center justify-center space-x-1.5 mt-2 interactive-btn">
-                            <i class="fa-solid fa-floppy-disk"></i>
-                            <span>บันทึกข้อมูลร้านค้า & โลโก้</span>
+                        <div class="pt-2 border-t border-sky-200/60">
+                            <label class="block text-xs font-medium text-sky-700 mb-1">รูปภาพพิเศษด้านบน</label>
+                            <input type="file" id="admin-featured-img-file" accept="image/*" onchange="previewFeaturedImage(event)" class="w-full text-xs text-sky-600 bg-white border border-sky-200 rounded-xl cursor-pointer">
+                            <input type="hidden" id="admin-featured-img">
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="text-[11px] text-sky-600">แสดงรูปภาพนี้ไว้ด้านบนช่องธนาคาร</span>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="admin-featured-active" class="sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                                    <span class="ml-2 text-[11px] font-bold text-emerald-700">เปิดแสดงรูป</span>
+                                </label>
+                            </div>
+                        </div>
+                        <button onclick="saveStoreInfo()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-semibold shadow-sm mt-2">
+                            <i class="fa-solid fa-floppy-disk mr-1"></i> บันทึกข้อมูลร้านค้า
                         </button>
                     </div>
                 </div>
 
-                <!-- ================= BLOCK 3: เพิ่ม / แก้ไขช่องทางชำระเงิน ================= -->
+                <!-- BLOCK 2 -->
                 <div class="bg-blue-50/55 p-4 rounded-3xl border border-blue-200/80 shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-blue-200 text-blue-900 text-[10px] font-bold px-3 py-1 rounded-bl-xl">
-                        บล็อกที่ 3
-                    </div>
-
-                    <!-- Action Status Banner -->
+                    <div class="absolute top-0 right-0 bg-blue-200 text-blue-900 text-[10px] font-bold px-3 py-1 rounded-bl-xl">บล็อกที่ 2</div>
                     <div id="form-status-banner" class="mb-3 p-2.5 rounded-xl bg-sky-100/90 border border-sky-300 text-sky-900 text-xs flex items-center justify-between">
                         <div class="flex items-center space-x-2">
                             <i class="fa-solid fa-circle-plus text-sky-600 text-sm" id="banner-icon"></i>
@@ -416,83 +383,74 @@
                     <div class="space-y-3">
                         <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-medium text-sky-700 mb-1">ชื่อธนาคาร / แอป <span class="text-rose-500">*</span></label>
-                                <input type="text" id="pay-name" placeholder="เช่น กสิกรไทย" class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white text-sky-950">
+                                <label class="block text-xs font-medium text-sky-700 mb-1">ชื่อธนาคาร / แอป *</label>
+                                <input type="text" id="pay-name" placeholder="เช่น กสิกรไทย" class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 bg-white text-sky-950">
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-sky-700 mb-1">รูปไอคอนธนาคาร</label>
-                                <input type="file" id="pay-icon-file" accept="image/*" onchange="previewPayIcon(event)" class="w-full text-xs text-sky-600 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-semibold file:bg-sky-100 file:text-sky-700 hover:file:bg-sky-200 bg-white border border-sky-200 rounded-xl cursor-pointer">
+                                <input type="file" id="pay-icon-file" accept="image/*" onchange="previewPayIcon(event)" class="w-full text-xs text-sky-600 bg-white border border-sky-200 rounded-xl cursor-pointer">
                             </div>
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-medium text-sky-700 mb-1">ชื่อบัญชี</label>
-                                <input type="text" id="pay-acc-name" placeholder="นาย นนท์ นนท์" class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white text-sky-950">
+                                <input type="text" id="pay-acc-name" placeholder="นาย นนท์ นนท์" class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 bg-white text-sky-950">
                             </div>
                             <div>
-                                <label class="block text-xs font-medium text-sky-700 mb-1">เลขบัญชี / เบอร์โทร <span class="text-rose-500">*</span></label>
-                                <input type="text" id="pay-acc-num" placeholder="123-4-56789-0" class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white text-sky-950 font-mono">
+                                <label class="block text-xs font-medium text-sky-700 mb-1">เลขบัญชี / เบอร์โทร *</label>
+                                <input type="text" id="pay-acc-num" placeholder="123-4-56789-0" class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 bg-white text-sky-950 font-mono">
                             </div>
                         </div>
 
-                        <!-- สถานะการเปิด/ปิด -->
                         <div class="border-t border-sky-200/60 pt-3 space-y-3 bg-white/60 p-3 rounded-2xl border">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-semibold text-sky-900">สถานะการแสดงผล:</span>
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" id="pay-active" class="sr-only peer" checked>
-                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
-                                    <span class="ml-2 text-xs font-bold text-emerald-700 peer-checked:text-emerald-700" id="active-status-label">เปิดใช้งานปกติ</span>
+                                    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                                    <span class="ml-2 text-xs font-bold text-emerald-700" id="active-status-label">เปิดใช้งานปกติ</span>
                                 </label>
                             </div>
                             <div>
-                                <label class="block text-xs font-medium text-sky-700 mb-1">ข้อความแจ้งเตือนลูกค้า (กรณีปิดชั่วคราว)</label>
-                                <input type="text" id="pay-closed-message" placeholder="เช่น ปิดปรับปรุงชั่วคราว / เปิด 12:00 น." class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 focus:outline-none focus:ring-2 focus:ring-sky-400 bg-white text-sky-950">
+                                <label class="block text-xs font-medium text-sky-700 mb-1">ข้อความแจ้งเตือนลูกค้า (กรณีปิด)</label>
+                                <input type="text" id="pay-closed-message" placeholder="ปิดปรับปรุงชั่วคราว" class="w-full text-sm px-3 py-2 rounded-xl border border-sky-200 bg-white text-sky-950">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-2 gap-2 pt-2">
-                            <button onclick="savePaymentMethod()" class="py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold transition-all shadow-sm flex items-center justify-center space-x-1.5 interactive-btn">
-                                <i class="fa-solid fa-check"></i>
-                                <span id="save-btn-text">บันทึกช่องทางนี้</span>
+                            <button onclick="savePaymentMethod()" class="py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-sm">
+                                <i class="fa-solid fa-check mr-1"></i> <span id="save-btn-text">บันทึกช่องทางนี้</span>
                             </button>
-                            <button onclick="resetForm()" class="py-2.5 bg-white hover:bg-sky-50 text-sky-700 rounded-xl text-xs font-medium transition-all border border-sky-200 flex items-center justify-center space-x-1 interactive-btn">
-                                <i class="fa-solid fa-rotate-right"></i>
-                                <span>ล้างฟอร์ม / ยกเลิก</span>
+                            <button onclick="resetForm()" class="py-2.5 bg-white hover:bg-sky-50 text-sky-700 rounded-xl text-xs font-medium border border-sky-200">
+                                <i class="fa-solid fa-rotate-right mr-1"></i> ล้างฟอร์ม
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- ================= BLOCK 4: รายการช่องทางทั้งหมด ================= -->
+                <!-- BLOCK 3 -->
                 <div class="bg-sky-50/70 p-4 rounded-3xl border border-sky-200/80 shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-sky-200 text-sky-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">
-                        บล็อกที่ 4
-                    </div>
+                    <div class="absolute top-0 right-0 bg-sky-200 text-sky-800 text-[10px] font-bold px-3 py-1 rounded-bl-xl">บล็อกที่ 3</div>
                     <h3 class="text-sm font-bold text-sky-900 mb-3 flex items-center">
-                        <i class="fa-solid fa-list-check mr-2 text-sky-600"></i> รายการช่องทางชำระเงินทั้งหมดในระบบ
+                        <i class="fa-solid fa-list-check mr-2 text-sky-600"></i> รายการช่องทางชำระเงินทั้งหมด
                     </h3>
-                    <div id="admin-payment-list" class="space-y-2.5 max-h-56 overflow-y-auto pr-1">
-                        <!-- Populated dynamically -->
-                    </div>
+                    <div id="admin-payment-list" class="space-y-2.5 max-h-56 overflow-y-auto pr-1"></div>
                 </div>
             </div>
 
-            <!-- Modal Footer Controls -->
             <div class="mt-6 pt-4 border-t border-sky-100 flex justify-between items-center">
-                <button onclick="resetToDefaultData()" class="text-xs text-rose-500 hover:text-rose-700 font-medium underline flex items-center space-x-1">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    <span>รีเซ็ตเป็นค่าเริ่มต้น</span>
+                <button onclick="resetToDefaultData()" class="text-xs text-rose-500 hover:text-rose-700 font-medium underline">
+                    รีเซ็ตเป็นค่าเริ่มต้น
                 </button>
-                <button onclick="toggleAdminModal()" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-semibold transition-all shadow-sm interactive-btn">
-                    เสร็จสิ้น / ปิดหน้าต่าง
+                <button onclick="toggleAdminModal()" class="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-semibold shadow-sm">
+                    ปิดหน้าต่าง
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "1234"; // รหัสผ่านแอดมิน
+        const ADMIN_PASSWORD = "1234";
 
         const defaultStoreInfo = {
             name: "NonNon Store",
@@ -534,7 +492,6 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             setupActiveToggleLabel();
-            
             const checkFirebaseInterval = setInterval(() => {
                 if (window.db) {
                     clearInterval(checkFirebaseInterval);
@@ -599,8 +556,8 @@
             const container = document.getElementById('featured-image-container');
             if (storeInfo.featuredActive && storeInfo.featuredImage) {
                 container.innerHTML = `
-                    <div class="glass-card rounded-3xl p-3 shadow-lg border border-white relative overflow-hidden group">
-                        <img src="${storeInfo.featuredImage}" alt="Featured Image" class="w-full h-auto rounded-2xl object-cover shadow-sm max-h-96 mx-auto" onerror="this.src='https://placehold.co/600x400/e0f2fe/0284c7?text=Featured+Image'">
+                    <div class="glass-card rounded-3xl p-3 shadow-lg border border-white relative overflow-hidden">
+                        <img src="${storeInfo.featuredImage}" alt="Featured Image" class="w-full h-auto rounded-2xl object-cover shadow-sm max-h-96 mx-auto">
                     </div>
                 `;
                 container.classList.remove('hidden');
@@ -618,23 +575,14 @@
                     const canvas = document.createElement('canvas');
                     let width = img.width;
                     let height = img.height;
-
                     if (width > height) {
-                        if (width > maxWidth) {
-                            height *= maxWidth / width;
-                            width = maxWidth;
-                        }
+                        if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
                     } else {
-                        if (height > maxHeight) {
-                            width *= maxHeight / height;
-                            height = maxHeight;
-                        }
+                        if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; }
                     }
-
                     canvas.width = width;
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
-                    ctx.clearRect(0, 0, width, height);
                     ctx.drawImage(img, 0, 0, width, height);
                     callback(canvas.toDataURL('image/png'));
                 }
@@ -645,136 +593,85 @@
 
         function previewStoreLogo(event) {
             const file = event.target.files[0];
-            if (file) {
-                compressImage(file, function(base64String) {
-                    document.getElementById('admin-store-logo').value = base64String;
-                    showToast("อัปโหลดโลโก้สำเร็จ! (กดปุ่มบันทึกข้อมูลเพื่อยืนยัน)");
-                }, 300, 300);
-            }
+            if (file) compressImage(file, (base64) => { document.getElementById('admin-store-logo').value = base64; showToast("อัปโหลดโลโก้สำเร็จ!"); }, 300, 300);
         }
 
         function previewFeaturedImage(event) {
             const file = event.target.files[0];
-            if (file) {
-                compressImage(file, function(base64String) {
-                    document.getElementById('admin-featured-img').value = base64String;
-                    showToast("อัปโหลดรูปภาพแบนเนอร์สำเร็จ! (กดปุ่มบันทึกแบนเนอร์เพื่อยืนยัน)");
-                }, 800, 800);
-            }
+            if (file) compressImage(file, (base64) => { document.getElementById('admin-featured-img').value = base64; showToast("อัปโหลดรูปภาพด้านบนสำเร็จ!"); }, 800, 800);
         }
 
         function previewPayIcon(event) {
             const file = event.target.files[0];
-            if (file) {
-                compressImage(file, function(base64String) {
-                    document.getElementById('pay-icon').value = base64String;
-                    showToast("อัปโหลดรูปไอคอนสำเร็จ!");
-                }, 200, 200);
-            }
-        }
-
-        function saveFeaturedBanner() {
-            storeInfo.featuredActive = document.getElementById('admin-featured-active').checked;
-            const customFeatured = document.getElementById('admin-featured-img').value;
-            if (customFeatured !== undefined) {
-                storeInfo.featuredImage = customFeatured;
-            }
-
-            const storeRef = window.dbRef(window.db, 'storeInfo');
-            window.dbSet(storeRef, storeInfo).then(() => {
-                renderFeaturedImage();
-                showToast("บันทึกรูปภาพแบนเนอร์เรียบร้อยแล้วค่ะ! ✨");
-            }).catch((error) => {
-                showToast("เกิดข้อผิดพลาดในการบันทึกรูปภาพแบนเนอร์ ❌");
-            });
+            if (file) compressImage(file, (base64) => { document.getElementById('pay-icon').value = base64; showToast("อัปโหลดรูปไอคอนสำเร็จ!"); }, 200, 200);
         }
 
         function saveStoreInfo() {
             storeInfo.name = document.getElementById('admin-store-name').value || "NonNon Store";
             storeInfo.subtitle = document.getElementById('admin-store-subtitle').value || "";
+            storeInfo.featuredActive = document.getElementById('admin-featured-active').checked;
             
             const customLogo = document.getElementById('admin-store-logo').value;
-            if (customLogo) {
-                storeInfo.logo = customLogo;
-            }
+            if (customLogo) storeInfo.logo = customLogo;
+
+            const customFeatured = document.getElementById('admin-featured-img').value;
+            if (customFeatured !== undefined) storeInfo.featuredImage = customFeatured;
             
-            const storeRef = window.dbRef(window.db, 'storeInfo');
-            window.dbSet(storeRef, storeInfo).then(() => {
+            window.dbSet(window.dbRef(window.db, 'storeInfo'), storeInfo).then(() => {
                 renderStoreInfo();
-                showToast("บันทึกข้อมูลร้านค้าลง Firebase เรียบร้อยแล้วค่ะ! ✨");
-            }).catch((error) => {
-                showToast("เกิดข้อผิดพลาดในการบันทึกข้อมูล ❌");
+                renderFeaturedImage();
+                showToast("บันทึกข้อมูลร้านค้าเรียบร้อยแล้วค่ะ! ✨");
             });
         }
 
         function renderFrontPaymentList() {
             const container = document.getElementById('payment-list');
             container.innerHTML = '';
-
             const keys = Object.keys(paymentMethods || {});
+
             if (keys.length === 0) {
-                container.innerHTML = `
-                    <div class="glass-card rounded-3xl p-8 text-center shadow-md border border-sky-100">
-                        <div class="text-4xl text-sky-300 mb-3"><i class="fa-solid fa-mug-hot"></i></div>
-                        <p class="text-sky-600 text-sm">ยังไม่มีช่องทางการชำระเงินในระบบค่ะ</p>
-                    </div>
-                `;
+                container.innerHTML = `<div class="glass-card rounded-3xl p-8 text-center shadow-md"><p class="text-sky-600 text-sm">ยังไม่มีช่องทางการชำระเงิน</p></div>`;
                 return;
             }
 
             keys.forEach((key) => {
                 const item = paymentMethods[key];
                 const card = document.createElement('div');
-                const logoHtml = item.icon 
-                    ? `<img src="${item.icon}" alt="${item.name}" class="w-full h-full object-contain p-1" onerror="this.onerror=null; this.src='https://placehold.co/100x100/e0f2fe/0284c7?text=Logo';">`
-                    : `<i class="fa-solid fa-wallet text-sky-600 text-xl"></i>`;
+                const logoHtml = item.icon ? `<img src="${item.icon}" class="w-full h-full object-contain p-1">` : `<i class="fa-solid fa-wallet text-sky-600 text-xl"></i>`;
 
                 if (item.active !== false) {
-                    card.className = "glass-card rounded-3xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 border border-white relative overflow-hidden group";
+                    card.className = "glass-card rounded-3xl p-5 shadow-lg border border-white relative overflow-hidden group";
                     card.innerHTML = `
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-sky-100/60 to-transparent rounded-bl-full pointer-events-none"></div>
                         <div class="flex items-center space-x-4 mb-4">
-                            <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center border border-sky-100 flex-shrink-0 overflow-hidden group-hover:scale-105 transition-transform">
-                                ${logoHtml}
-                            </div>
+                            <div class="w-14 h-14 rounded-2xl bg-white shadow-sm flex items-center justify-center border border-sky-100 overflow-hidden">${logoHtml}</div>
                             <div class="flex-grow min-w-0">
                                 <h2 class="font-bold text-sky-950 text-base truncate">${item.name}</h2>
                                 <p class="text-xs text-sky-600 truncate mt-0.5"><i class="fa-regular fa-user mr-1 text-sky-400"></i> ${item.accountName}</p>
                             </div>
                         </div>
-                        
                         <div class="bg-white/95 rounded-2xl p-3.5 flex items-center justify-between border border-sky-100 shadow-inner">
                             <div class="min-w-0 mr-2">
-                                <span class="block text-[10px] text-sky-400 font-medium uppercase tracking-wider">เลขบัญชี / เบอร์โทร</span>
-                                <span class="text-base font-bold text-sky-900 tracking-wide font-mono">${item.accountNumber}</span>
+                                <span class="block text-[10px] text-sky-400 font-medium uppercase">เลขบัญชี / เบอร์โทร</span>
+                                <span class="text-base font-bold text-sky-900 font-mono">${item.accountNumber}</span>
                             </div>
-                            <button onclick="copyToClipboard('${item.accountNumber}', '${item.name}')" class="bg-sky-600 hover:bg-sky-700 active:scale-95 text-white text-xs font-medium px-4 py-2.5 rounded-xl shadow-sm transition-all flex items-center space-x-1.5 flex-shrink-0 interactive-btn">
-                                <i class="fa-regular fa-copy"></i>
-                                <span>คัดลอก</span>
+                            <button onclick="copyToClipboard('${item.accountNumber}', '${item.name}')" class="bg-sky-600 hover:bg-sky-700 text-white text-xs font-medium px-4 py-2.5 rounded-xl shadow-sm">
+                                <i class="fa-regular fa-copy mr-1"></i> คัดลอก
                             </button>
                         </div>
                     `;
                 } else {
-                    card.className = "glass-card rounded-3xl p-5 shadow-sm border border-amber-200/60 relative overflow-hidden opacity-90";
-                    const closedMsg = item.closedMessage || "ปิดปรับปรุงชั่วคราว";
+                    card.className = "glass-card rounded-3xl p-5 shadow-sm border border-amber-200/60 opacity-90";
                     card.innerHTML = `
                         <div class="flex items-center space-x-4 mb-3">
-                            <div class="w-14 h-14 rounded-2xl bg-gray-100 shadow-sm flex items-center justify-center border border-gray-200 flex-shrink-0 overflow-hidden grayscale opacity-70">
-                                ${logoHtml}
-                            </div>
+                            <div class="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center grayscale opacity-70">${logoHtml}</div>
                             <div class="flex-grow min-w-0">
                                 <h2 class="font-bold text-gray-700 text-base truncate">${item.name}</h2>
-                                <p class="text-xs text-gray-500 truncate mt-0.5"><i class="fa-regular fa-user mr-1 text-gray-400"></i> ${item.accountName}</p>
+                                <p class="text-xs text-gray-500 truncate">${item.accountName}</p>
                             </div>
                         </div>
-                        <div class="bg-amber-50/90 rounded-2xl p-3 border border-amber-200/80 flex items-start space-x-2.5">
-                            <div class="text-amber-500 text-sm mt-0.5 flex-shrink-0">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                            </div>
-                            <div class="text-xs text-amber-800 font-medium">
-                                <span class="font-bold block mb-0.5">ปิดให้บริการชั่วคราว</span>
-                                <span>${closedMsg}</span>
-                            </div>
+                        <div class="bg-amber-50/90 rounded-2xl p-3 border border-amber-200/80 text-xs text-amber-800">
+                            <span class="font-bold block mb-0.5"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ปิดให้บริการชั่วคราว</span>
+                            <span>${item.closedMessage || "ปิดปรับปรุงชั่วคราว"}</span>
                         </div>
                     `;
                 }
@@ -785,22 +682,13 @@
         function renderAdminPaymentList() {
             const container = document.getElementById('admin-payment-list');
             container.innerHTML = '';
-
             const keys = Object.keys(paymentMethods || {});
-            if (keys.length === 0) {
-                container.innerHTML = `<p class="text-xs text-sky-400 text-center py-3">ยังไม่มีข้อมูลช่องทางชำระเงิน</p>`;
-                return;
-            }
 
             keys.forEach((key) => {
                 const item = paymentMethods[key];
                 const row = document.createElement('div');
                 row.className = "flex items-center justify-between p-3 rounded-2xl bg-white border border-sky-100 shadow-sm text-xs";
-                
-                const thumbHtml = item.icon
-                    ? `<img src="${item.icon}" class="w-8 h-8 rounded-xl object-contain bg-sky-50 p-0.5 border border-sky-100" onerror="this.src='https://placehold.co/100x100/e0f2fe/0284c7?text=Logo'">`
-                    : `<div class="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center"><i class="fa-solid fa-wallet"></i></div>`;
-
+                const thumbHtml = item.icon ? `<img src="${item.icon}" class="w-8 h-8 rounded-xl object-contain bg-sky-50 p-0.5">` : `<div class="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center"><i class="fa-solid fa-wallet"></i></div>`;
                 const isActive = item.active !== false;
 
                 row.innerHTML = `
@@ -813,15 +701,10 @@
                     </div>
                     <div class="flex items-center space-x-2 flex-shrink-0">
                         <span class="px-2 py-1 rounded-lg font-bold text-[10px] ${isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
-                            ${isActive ? '● ปกติ' : '● ปิดชั่วคราว'}
+                            ${isActive ? '● ปกติ' : '● ปิด'}
                         </span>
-                        <button onclick="editPaymentMethod('${key}')" class="px-2.5 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg transition-all font-medium flex items-center space-x-1 interactive-btn" title="แก้ไข">
-                            <i class="fa-solid fa-pen text-[10px]"></i>
-                            <span>แก้ไข</span>
-                        </button>
-                        <button onclick="deletePaymentMethod('${key}')" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-all interactive-btn" title="ลบ">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        <button onclick="editPaymentMethod('${key}')" class="px-2.5 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-lg"><i class="fa-solid fa-pen text-[10px]"></i> แก้ไข</button>
+                        <button onclick="deletePaymentMethod('${key}')" class="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
                 container.appendChild(row);
@@ -830,20 +713,15 @@
 
         function copyToClipboard(text, label) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => {
-                    showToast(`คัดลอก ${label} สำเร็จแล้วค่ะ! ✨`);
-                });
+                navigator.clipboard.writeText(text).then(() => showToast(`คัดลอก ${label} สำเร็จ! ✨`));
             }
         }
 
         function showToast(message) {
             const toast = document.getElementById('toast');
-            const messageEl = document.getElementById('toast-message');
-            messageEl.innerText = message;
-            
+            document.getElementById('toast-message').innerText = message;
             toast.classList.remove('translate-y-[-200%]');
             toast.classList.add('translate-y-0');
-
             setTimeout(() => {
                 toast.classList.remove('translate-y-0');
                 toast.classList.add('translate-y-[-200%]');
@@ -851,37 +729,29 @@
         }
 
         function handleAdminAccess() {
-            if (sessionStorage.getItem('is_admin_logged_in') === 'true') {
-                toggleAdminModal();
-            } else {
-                toggleLoginModal();
-            }
+            if (sessionStorage.getItem('is_admin_logged_in') === 'true') toggleAdminModal();
+            else toggleLoginModal();
         }
 
         function toggleLoginModal() {
-            const modal = document.getElementById('admin-login-modal');
-            modal.classList.toggle('hidden');
+            document.getElementById('admin-login-modal').classList.toggle('hidden');
             document.getElementById('admin-password').value = '';
         }
 
         function verifyAdminLogin(event) {
             event.preventDefault();
-            const passInput = document.getElementById('admin-password').value;
-
-            if (passInput === ADMIN_PASSWORD) {
+            if (document.getElementById('admin-password').value === ADMIN_PASSWORD) {
                 sessionStorage.setItem('is_admin_logged_in', 'true');
                 toggleLoginModal();
                 toggleAdminModal();
                 showToast("เข้าสู่ระบบหลังบ้านสำเร็จ! 🎉");
             } else {
-                showToast("รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง ❌");
-                document.getElementById('admin-password').value = '';
+                showToast("รหัสผ่านไม่ถูกต้อง ❌");
             }
         }
 
         function toggleAdminModal() {
-            const modal = document.getElementById('admin-modal');
-            modal.classList.toggle('hidden');
+            document.getElementById('admin-modal').classList.toggle('hidden');
         }
 
         function savePaymentMethod() {
@@ -894,7 +764,7 @@
             const editId = document.getElementById('edit-id').value;
 
             if (!name || !accountNumber) {
-                showToast("กรุณากรอกชื่อและเลขบัญชีให้ครบถ้วนด้วยนะคะ 📝");
+                showToast("กรุณากรอกชื่อและเลขบัญชีให้ครบถ้วน 📝");
                 return;
             }
 
@@ -910,19 +780,15 @@
                 closedMessage: closedMessage || "ปิดปรับปรุงระบบชั่วคราว"
             };
 
-            const payItemRef = window.dbRef(window.db, 'paymentMethods/' + paymentId);
-            window.dbSet(payItemRef, newData).then(() => {
-                showToast(editId ? "อัปเดตข้อมูลสำเร็จเรียบร้อยค่ะ! ✅" : "เพิ่มช่องทางใหม่สำเร็จเรียบร้อยค่ะ! 🎉");
+            window.dbSet(window.dbRef(window.db, 'paymentMethods/' + paymentId), newData).then(() => {
+                showToast(editId ? "อัปเดตข้อมูลสำเร็จ! ✅" : "เพิ่มช่องทางใหม่สำเร็จ! 🎉");
                 resetForm();
-            }).catch((error) => {
-                showToast("เกิดข้อผิดพลาดในการบันทึกข้อมูล ❌");
             });
         }
 
         function editPaymentMethod(key) {
             const item = paymentMethods[key];
             if (!item) return;
-
             document.getElementById('pay-name').value = item.name;
             document.getElementById('pay-icon').value = item.icon || '';
             document.getElementById('pay-acc-name').value = item.accountName;
@@ -931,28 +797,16 @@
             document.getElementById('pay-active').dispatchEvent(new Event('change'));
             document.getElementById('pay-closed-message').value = item.closedMessage || "";
             document.getElementById('edit-id').value = key;
-
-            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen-to-square mr-2 text-blue-600"></i> แก้ไขข้อมูล: <span class="text-blue-700 underline">${item.name}</span>`;
-            document.getElementById('save-btn-text').innerText = "บันทึกการแก้ไขข้อมูลนี้";
-            document.getElementById('banner-text').innerText = `สถานะ: กำลังแก้ไขข้อมูล (${item.name})`;
-            document.getElementById('banner-icon').className = "fa-solid fa-pen-to-square text-blue-600 text-sm";
-            document.getElementById('form-status-banner').className = "mb-3 p-2.5 rounded-xl bg-blue-100/90 border border-blue-300 text-blue-900 text-xs flex items-center justify-between";
-            
-            const badge = document.getElementById('status-badge');
-            badge.innerText = "MODE: EDIT";
-            badge.className = "px-2 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-bold";
-
+            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen-to-square mr-2 text-blue-600"></i> แก้ไขข้อมูล: <span class="text-blue-700">${item.name}</span>`;
+            document.getElementById('save-btn-text').innerText = "บันทึกการแก้ไข";
             document.getElementById('form-title').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         function deletePaymentMethod(key) {
             if (confirm("คุณต้องการลบช่องทางนี้ใช่หรือไม่?")) {
-                const payItemRef = window.dbRef(window.db, 'paymentMethods/' + key);
-                window.dbRemove(payItemRef).then(() => {
+                window.dbRemove(window.dbRef(window.db, 'paymentMethods/' + key)).then(() => {
                     showToast("ลบข้อมูลเรียบร้อยแล้วค่ะ");
                     resetForm();
-                }).catch(() => {
-                    showToast("เกิดข้อผิดพลาดในการลบข้อมูล ❌");
                 });
             }
         }
@@ -967,26 +821,15 @@
             document.getElementById('pay-active').dispatchEvent(new Event('change'));
             document.getElementById('pay-closed-message').value = '';
             document.getElementById('edit-id').value = '';
-
             document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-circle-plus mr-2 text-sky-600"></i> เพิ่มช่องทางชำระเงินใหม่`;
             document.getElementById('save-btn-text').innerText = "บันทึกช่องทางนี้";
-            document.getElementById('banner-text').innerText = "สถานะ: กำลังอยู่ในโหมดเพิ่มช่องทางใหม่";
-            document.getElementById('banner-icon').className = "fa-solid fa-circle-plus text-sky-600 text-sm";
-            document.getElementById('form-status-banner').className = "mb-3 p-2.5 rounded-xl bg-sky-100/90 border border-sky-300 text-sky-900 text-xs flex items-center justify-between";
-            
-            const badge = document.getElementById('status-badge');
-            badge.innerText = "MODE: ADD";
-            badge.className = "px-2 py-0.5 rounded-full bg-sky-600 text-white text-[10px] font-bold";
         }
 
         function resetToDefaultData() {
             if (confirm("ต้องการรีเซ็ตข้อมูลทั้งหมดกลับเป็นค่าเริ่มต้นหรือไม่?")) {
-                const storeRef = window.dbRef(window.db, 'storeInfo');
-                const payRef = window.dbRef(window.db, 'paymentMethods');
-                
                 Promise.all([
-                    window.dbSet(storeRef, defaultStoreInfo),
-                    window.dbSet(payRef, defaultPaymentMethods)
+                    window.dbSet(window.dbRef(window.db, 'storeInfo'), defaultStoreInfo),
+                    window.dbSet(window.dbRef(window.db, 'paymentMethods'), defaultPaymentMethods)
                 ]).then(() => {
                     resetForm();
                     showToast("รีเซ็ตข้อมูลเรียบร้อยแล้วค่ะ!");
