@@ -158,8 +158,8 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
             z-index: 1;
             overflow: hidden;
@@ -169,7 +169,7 @@
             position: absolute;
             background: #ffffff;
             clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            animation: sparkleFloat 6s ease-in-out infinite, sparkleTwinkle 2s ease-in-out infinite alternate;
+            animation: sparkleFloat ease-in-out infinite, sparkleTwinkle 2s ease-in-out infinite alternate;
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
         }
 
@@ -538,7 +538,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             setupActiveToggleLabel();
-            createFloatingStars(); // สร้างดวงดาวระยิบระยับลอยไปมา
+            createFloatingStars(); // กระจายดวงดาวทั่วจอ
             const checkFirebaseInterval = setInterval(() => {
                 if (window.db) {
                     clearInterval(checkFirebaseInterval);
@@ -547,19 +547,27 @@
             }, 200);
         });
 
-        // ฟังก์ชันสร้างดวงดาวระยิบระยับลอยไปทั่วพื้นหลัง
+        // ฟังก์ชันสร้างดวงดาวกระจายทั่วพื้นหลังและลอยขึ้นสม่ำเสมอ
         function createFloatingStars() {
             const container = document.getElementById('star-container');
-            const starCount = 25; // จำนวนดวงดาว
+            const starCount = 30; // จำนวนดวงดาว
             for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.className = 'sparkle-star';
+                
                 const size = Math.floor(Math.random() * 10) + 8; // ขนาด 8px - 18px
                 star.style.width = `${size}px`;
                 star.style.height = `${size}px`;
+                
+                // สุ่มตำแหน่งกระจายทั่วความกว้างหน้าจอ (0% ถึง 100%)
                 star.style.left = `${Math.random() * 100}%`;
-                star.style.animationDuration = `${Math.random() * 5 + 4}s`; // ความเร็วในการลอย (4 - 9 วินาที)
-                star.style.animationDelay = `${Math.random() * 5}s`; // ดีเลย์เริ่มต้นไม่พร้อมกัน
+                
+                // สุ่มเวลาเริ่มต้นแอนิเมชัน เพื่อให้ดาวไม่ได้ลอยขึ้นมาพร้อมกันเป็นแถว
+                const animDuration = Math.random() * 5 + 4; // 4 - 9 วินาที
+                const animDelay = Math.random() * 8; // ดีเลย์ 0 - 8 วินาที
+                star.style.animationDuration = `${animDuration}s`;
+                star.style.animationDelay = `${animDelay}s`;
+                
                 container.appendChild(star);
             }
         }
