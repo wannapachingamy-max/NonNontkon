@@ -57,6 +57,84 @@
             from { transform: translateY(15px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
+        
+        /* ลูกเล่นวงกลมพื้นหลังลอยสมูทๆ */
+        @keyframes float-bg-1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, 60px) scale(1.05); }
+            66% { transform: translate(-20px, 40px) scale(0.95); }
+        }
+        @keyframes float-bg-2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-40px, -50px) scale(1.1); }
+            66% { transform: translate(20px, -30px) scale(0.95); }
+        }
+        @keyframes float-bg-3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, -30px) scale(1.1); }
+        }
+
+        /* เอฟเฟกต์แสงเงาวิ่งพาดกล่องชำระเงิน */
+        @keyframes shimmer-sweep {
+            0% { transform: translateX(-150%) skewX(-20deg); }
+            100% { transform: translateX(250%) skewX(-20deg); }
+        }
+
+        /* พื้นหลังสายน้ำ (Liquid Water) ลื่นไหล (ปรับขนาดเล็กลงและเตี้ยลง) */
+        .liquid-water {
+            position: absolute;
+            bottom: -450px; /* กดลงไปต่ำๆ ให้โผล่มาแค่ส่วนปลายคลื่น */
+            left: 50%;
+            width: 600px;   /* กว้างพอดีกับกล่องคอนเทนเนอร์เพื่อให้สมูท */
+            height: 600px;
+            background: rgba(147, 197, 253, 0.25); /* สีน้ำฟ้าอ่อนใสๆ */
+            border-radius: 43%;
+            transform: translateX(-50%);
+            animation: spin-water 12s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .liquid-water:nth-child(2) {
+            bottom: -465px;
+            background: rgba(96, 165, 250, 0.15); 
+            animation: spin-water 16s linear infinite reverse;
+        }
+        .liquid-water:nth-child(3) {
+            bottom: -480px;
+            background: rgba(191, 219, 254, 0.35); 
+            animation: spin-water 10s linear infinite;
+        }
+        @keyframes spin-water { 
+            0% { transform: translateX(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) rotate(360deg); } 
+        }
+
+        /* ลูกเล่นไฟกระพริบ */
+        @keyframes ping-slow {
+            0% { transform: scale(1); opacity: 0.8; }
+            80%, 100% { transform: scale(2.5); opacity: 0; }
+        }
+        .status-indicator {
+            position: relative;
+            display: inline-flex;
+            border-radius: 9999px;
+        }
+        .status-indicator .dot {
+            position: relative;
+            display: inline-flex;
+            border-radius: 9999px;
+            background-color: #10B981;
+        }
+        .status-indicator .ping {
+            position: absolute;
+            display: inline-flex;
+            height: 100%;
+            width: 100%;
+            border-radius: 9999px;
+            background-color: #10B981;
+            animation: ping-slow 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
         .toast-enter {
             animation: slideDown 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
@@ -76,7 +154,6 @@
         .stagger-2 { animation-delay: 0.2s; }
         .stagger-3 { animation-delay: 0.3s; }
         
-        /* ป้องกันการกดปุ่มซ้ำขณะโหลด */
         .btn-disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -90,7 +167,14 @@
         <div class="max-w-md mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 bg-gradient-to-tr from-cute-300 to-cute-100 rounded-full flex items-center justify-center text-cute-700 font-extrabold text-xs shadow-inner ring-2 ring-white">NN</div>
-                <span class="font-bold text-cute-800 tracking-wide text-sm">Nonnon Store</span>
+                <span class="font-bold text-cute-800 tracking-wide text-sm flex items-center space-x-2">
+                    <span>Nonnon Store</span>
+                    <!-- ไฟสถานะออนไลน์ -->
+                    <span class="status-indicator w-2 h-2 mt-0.5">
+                        <span class="ping"></span>
+                        <span class="dot w-full h-full"></span>
+                    </span>
+                </span>
             </div>
             <div class="flex bg-white/60 p-1.5 rounded-full shadow-inner ring-1 ring-cute-200/50 backdrop-blur-sm">
                 <button onclick="switchView('public')" id="btn-view-public" class="px-4 py-1.5 text-[13px] font-semibold rounded-full bg-white text-cute-600 shadow-sm transition-all duration-300">หน้าร้าน</button>
@@ -101,10 +185,23 @@
 
     <main class="w-full min-h-screen pt-16 pb-20 flex justify-center items-start">
         <div id="app-container" class="w-full max-w-md bg-gradient-to-b from-[#eff6ff] via-[#eff6ff] to-[#dbeafe] min-h-screen shadow-2xl relative overflow-hidden transition-all duration-500">
-            <!-- Loading State Initial -->
-            <div class="flex items-center justify-center h-screen flex-col space-y-4">
-                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-cute-500"></div>
-                <span class="text-cute-600 font-medium text-sm">กำลังเชื่อมต่อข้อมูล...</span>
+            
+            <!-- พื้นหลังลูกเล่นวงกลมลอย -->
+            <div class="absolute top-[-5%] left-[-15%] w-64 h-64 bg-cute-200/60 rounded-full animate-[float-bg-1_15s_ease-in-out_infinite] pointer-events-none"></div>
+            <div class="absolute top-[40%] right-[-10%] w-48 h-48 bg-white/50 rounded-full animate-[float-bg-3_12s_ease-in-out_infinite] pointer-events-none"></div>
+
+            <!-- สายน้ำพื้นหลัง (Liquid Water) เล็กลง -->
+            <div class="liquid-water"></div>
+            <div class="liquid-water"></div>
+            <div class="liquid-water"></div>
+
+            <!-- Content Container -->
+            <div id="content-container" class="relative z-10 w-full h-full">
+                <!-- Loading State Initial -->
+                <div class="flex items-center justify-center h-screen flex-col space-y-4">
+                    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-cute-500"></div>
+                    <span class="text-cute-600 font-medium text-sm">กำลังเชื่อมต่อข้อมูล...</span>
+                </div>
             </div>
         </div>
     </main>
@@ -138,10 +235,10 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
             </div>
             <h3 class="text-lg font-bold text-slate-800 mb-2 text-center">ยืนยันการลบ</h3>
-            <p class="text-sm text-slate-500 mb-6 text-center leading-relaxed">แน่ใจหรือไม่ว่าต้องการลบช่องทางนี้? <br> ข้อมูลจะไม่สามารถกู้คืนได้</p>
+            <p class="text-sm text-slate-500 mb-6 text-center leading-relaxed">แน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้? <br> ข้อมูลจะไม่สามารถกู้คืนได้</p>
             <div class="flex space-x-3 justify-center">
                 <button onclick="closeConfirmModal()" class="px-5 py-2.5 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors w-1/2">ยกเลิก</button>
-                <button id="btn-confirm-delete" onclick="executeDeletePayment()" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-red-500 hover:bg-red-600 shadow-md shadow-red-500/20 transition-colors w-1/2">ลบข้อมูล</button>
+                <button id="btn-confirm-delete" onclick="executeDeleteAction()" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-red-500 hover:bg-red-600 shadow-md shadow-red-500/20 transition-colors w-1/2">ลบข้อมูล</button>
             </div>
         </div>
     </div>
@@ -151,7 +248,6 @@
     <input type="file" id="upload-payment-icon" accept="image/*" class="hidden" onchange="handlePaymentIconUpload(event)">
 
     <script>
-        // Supabase Initialization
         const supabaseUrl = 'https://tnjbihieenbvharyoria.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRuamJpaGllZW5idmhhcnlvcmlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NDc2MzUsImV4cCI6MjEwNjQyMzYzNX0.G3W-OY0Q96r4DYwI7GkUnO7_6BPNsmvFRdcaHuMfAgs';
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -172,36 +268,18 @@
             instagram: "https://www.instagram.com/nonnon_store06?stkn=MXV2ZHJhdGF6MHF1aQ=="
         };
 
-        let appData = {
-            store: {
-                logo: "",
-                contentImage: "",
-                tagline: ""
-            },
-            payments: []
-        };
-
+        let appData = { store: { logo: "", contentImage: "", tagline: "" }, payments: [] };
         let currentView = 'public';
-        let itemToDelete = null;
+        let deleteActionPayload = null; // เก็บข้อมูลว่าจะลบอะไร { type: 'payment'/'logo'/'content', id: ... }
         let activePaymentIdForUpload = null;
-        
         let isLoggedIn = false;
         let isFetching = true;
         let fetchError = null;
-        let isProcessing = false; // ป้องกันปุ่มเบิ้ล
+        let isProcessing = false;
 
-        // XSS Protection Helper
         const escapeHTML = (str) => {
             if (str === null || str === undefined) return '';
-            return String(str).replace(/[&<>'"]/g, 
-                tag => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#39;',
-                    '"': '&quot;'
-                }[tag])
-            );
+            return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
         };
 
         const loadDataFromDB = async () => {
@@ -210,37 +288,21 @@
             render();
 
             try {
-                // Fetch Store Settings
-                const { data: storeData, error: storeErr } = await supabaseClient
-                    .from('store_settings')
-                    .select('*')
-                    .eq('id', 1)
-                    .single();
-
-                if (storeErr && storeErr.code !== 'PGRST116') throw storeErr; // Ignored Not Found
+                const { data: storeData, error: storeErr } = await supabaseClient.from('store_settings').select('*').eq('id', 1).single();
+                if (storeErr && storeErr.code !== 'PGRST116') throw storeErr; 
                 
                 if (storeData) {
-                    appData.store.logo = storeData.logo_url || "https://placehold.co/300x300/eff6ff/3b82f6?text=NN";
+                    appData.store.logo = storeData.logo_url || "";
                     appData.store.contentImage = storeData.content_image_url || "";
                     appData.store.tagline = storeData.tagline || "";
                 }
 
-                // Fetch Payments (RLS จะกรองให้อัตโนมัติถ้าไม่ใช่แอดมิน)
-                const { data: payData, error: payErr } = await supabaseClient
-                    .from('payment_methods')
-                    .select('*')
-                    .order('created_at', { ascending: true });
-
+                const { data: payData, error: payErr } = await supabaseClient.from('payment_methods').select('*').order('created_at', { ascending: true });
                 if (payErr) throw payErr;
 
                 appData.payments = payData ? payData.map(p => ({
-                    id: p.id,
-                    bankName: p.bank_name || '',
-                    accountName: p.account_name || '',
-                    accountNo: p.account_no || '',
-                    color: p.color || '#60a5fa',
-                    iconImage: p.icon_image_url || '',
-                    isActive: p.is_active
+                    id: p.id, bankName: p.bank_name || '', accountName: p.account_name || '',
+                    accountNo: p.account_no || '', color: p.color || '#60a5fa', iconImage: p.icon_image_url || '', isActive: p.is_active
                 })) : [];
 
             } catch (err) {
@@ -259,8 +321,6 @@
                     openLoginModal();
                     return;
                 }
-                
-                // ตรวจสอบสิทธิ์ Admin
                 const { data: isAdmin, error } = await supabaseClient.rpc('is_admin');
                 if (error || !isAdmin) {
                     showToast('บัญชีนี้ไม่มีสิทธิ์เข้าถึงระบบแอดมิน', true);
@@ -271,19 +331,17 @@
             }
             
             currentView = view;
-            
             const btnPublic = document.getElementById('btn-view-public');
             const btnAdmin = document.getElementById('btn-view-admin');
             
             if(view === 'public') {
                 btnPublic.className = "px-4 py-1.5 text-[13px] font-semibold rounded-full bg-white text-cute-600 shadow-sm transition-all duration-300";
                 btnAdmin.className = "px-4 py-1.5 text-[13px] font-medium rounded-full text-cute-500 hover:text-cute-700 transition-all duration-300";
-                loadDataFromDB(); // รีเฟรชข้อมูลสำหรับ public
             } else {
                 btnAdmin.className = "px-4 py-1.5 text-[13px] font-semibold rounded-full bg-white text-cute-600 shadow-sm transition-all duration-300";
                 btnPublic.className = "px-4 py-1.5 text-[13px] font-medium rounded-full text-cute-500 hover:text-cute-700 transition-all duration-300";
-                loadDataFromDB(); // รีเฟรชข้อมูลครบถ้วนสำหรับแอดมิน
             }
+            loadDataFromDB(); 
         };
 
         const openLoginModal = () => {
@@ -292,7 +350,7 @@
             document.getElementById('admin-email').value = '';
             document.getElementById('admin-password').value = '';
             modal.classList.remove('hidden');
-            void modal.offsetWidth; 
+            void modal.offsetWidth;
             modal.classList.remove('opacity-0');
             box.classList.remove('scale-95');
             modal.classList.add('flex');
@@ -304,10 +362,7 @@
             const box = document.getElementById('login-box');
             modal.classList.add('opacity-0');
             box.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }, 300);
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
         };
 
         const attemptLogin = async () => {
@@ -325,7 +380,7 @@
             btn.classList.add('btn-disabled');
             btn.innerText = 'กำลังตรวจสอบ...';
 
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
             
             if (error) {
                 showToast('อีเมลหรือรหัสผ่านไม่ถูกต้อง!', true);
@@ -335,9 +390,7 @@
                 return;
             }
 
-            // ตรวจสอบสิทธิ์แอดมินหลังจาก Login สำเร็จ
             const { data: isAdmin } = await supabaseClient.rpc('is_admin');
-            
             isProcessing = false;
             btn.classList.remove('btn-disabled');
             btn.innerText = 'ตกลง';
@@ -365,11 +418,8 @@
             const msgEl = document.getElementById('toast-message');
             msgEl.innerText = message;
             
-            if (isError) {
-                toast.classList.replace('bg-cute-800', 'bg-red-500');
-            } else {
-                toast.classList.replace('bg-red-500', 'bg-cute-800');
-            }
+            if (isError) toast.classList.replace('bg-cute-800', 'bg-red-500');
+            else toast.classList.replace('bg-red-500', 'bg-cute-800');
 
             toast.classList.remove('hidden', 'opacity-0');
             toast.classList.add('toast-enter');
@@ -395,145 +445,6 @@
             document.body.removeChild(textarea);
         };
 
-        window.updateStoreText = async (key, value) => {
-            appData.store[key] = value; // Update UI immediately
-            
-            const updatePayload = {};
-            if(key === 'tagline') updatePayload.tagline = value;
-
-            const { error } = await supabaseClient.from('store_settings').update(updatePayload).eq('id', 1);
-            if (error) showToast('บันทึกข้อความไม่สำเร็จ', true);
-        };
-
-        window.addPaymentMethod = async () => {
-            if(isProcessing) return;
-            isProcessing = true;
-
-            const newPayment = {
-                bank_name: '',
-                account_name: '',
-                account_no: '',
-                color: '#60a5fa', 
-                icon_image_url: '',
-                is_active: true
-            };
-
-            showToast('กำลังเพิ่มช่องทาง...');
-            const { data, error } = await supabaseClient.from('payment_methods').insert([newPayment]).select().single();
-            
-            isProcessing = false;
-
-            if (error) {
-                showToast('เพิ่มช่องทางไม่สำเร็จ', true);
-                console.error(error);
-            } else if (data) {
-                appData.payments.push({
-                    id: data.id,
-                    bankName: data.bank_name,
-                    accountName: data.account_name,
-                    accountNo: data.account_no,
-                    color: data.color,
-                    iconImage: data.icon_image_url,
-                    isActive: data.is_active
-                });
-                render();
-                showToast('เพิ่มช่องทางใหม่แล้ว');
-                setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
-            }
-        };
-
-        // Debounce map สำหรับกันการรัวคีย์
-        let updateTimeoutMap = {};
-
-        window.updatePayment = (id, field, value) => {
-            // อัปเดต UI ทันที
-            const index = appData.payments.findIndex(p => p.id === id);
-            if (index > -1) {
-                appData.payments[index][field] = value;
-                if(field === 'color' || field === 'iconImage') render(); 
-            }
-
-            // หน่วงเวลาเซฟลงฐานข้อมูล (Debounce) 500ms
-            if(updateTimeoutMap[id + field]) clearTimeout(updateTimeoutMap[id + field]);
-            
-            updateTimeoutMap[id + field] = setTimeout(async () => {
-                const dbField = {
-                    'bankName': 'bank_name',
-                    'accountName': 'account_name',
-                    'accountNo': 'account_no',
-                    'color': 'color',
-                    'iconImage': 'icon_image_url'
-                }[field];
-
-                const { error } = await supabaseClient.from('payment_methods').update({ [dbField]: value }).eq('id', id);
-                if (error) showToast('บันทึกข้อมูลไม่สำเร็จ', true);
-            }, 500);
-        };
-
-        window.togglePaymentStatus = async (id) => {
-            const index = appData.payments.findIndex(p => p.id === id);
-            if (index > -1) {
-                const newStatus = !appData.payments[index].isActive;
-                appData.payments[index].isActive = newStatus;
-                render(); // เปลี่ยนหน้าตาทันที
-
-                const { error } = await supabaseClient.from('payment_methods').update({ is_active: newStatus }).eq('id', id);
-                if (error) {
-                    showToast('เปลี่ยนสถานะไม่สำเร็จ', true);
-                    // Revert
-                    appData.payments[index].isActive = !newStatus;
-                    render();
-                }
-            }
-        };
-
-        window.openDeleteModal = (id) => {
-            itemToDelete = id;
-            const modal = document.getElementById('confirm-modal');
-            const box = document.getElementById('confirm-box');
-            modal.classList.remove('hidden');
-            void modal.offsetWidth; 
-            modal.classList.remove('opacity-0');
-            box.classList.remove('scale-95');
-            modal.classList.add('flex');
-        };
-
-        window.closeConfirmModal = () => {
-            const modal = document.getElementById('confirm-modal');
-            const box = document.getElementById('confirm-box');
-            modal.classList.add('opacity-0');
-            box.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }, 300);
-            itemToDelete = null;
-        };
-
-        window.executeDeletePayment = async () => {
-            if(itemToDelete === null || isProcessing) return;
-            isProcessing = true;
-            
-            const btn = document.getElementById('btn-confirm-delete');
-            btn.classList.add('btn-disabled');
-            btn.innerText = 'กำลังลบ...';
-
-            const { error } = await supabaseClient.from('payment_methods').delete().eq('id', itemToDelete);
-            
-            isProcessing = false;
-            btn.classList.remove('btn-disabled');
-            btn.innerText = 'ลบข้อมูล';
-
-            if (error) {
-                showToast('ลบข้อมูลไม่สำเร็จ', true);
-            } else {
-                appData.payments = appData.payments.filter(p => p.id !== itemToDelete);
-                render();
-                showToast('ลบข้อมูลเรียบร้อยแล้ว');
-            }
-            closeConfirmModal();
-        };
-
         const compressImage = (file, maxWidth, maxHeight, quality, callback) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -543,36 +454,21 @@
                 img.onload = function () {
                     let width = img.width;
                     let height = img.height;
-                    
                     if (width > height) {
-                        if (width > maxWidth) {
-                            height = Math.round((height * maxWidth) / width);
-                            width = maxWidth;
-                        }
+                        if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
                     } else {
-                        if (height > maxHeight) {
-                            width = Math.round((width * maxHeight) / height);
-                            height = maxHeight;
-                        }
+                        if (height > maxHeight) { width = Math.round((width * maxHeight) / height); height = maxHeight; }
                     }
-
                     const canvas = document.createElement('canvas');
-                    canvas.width = width;
-                    canvas.height = height;
+                    canvas.width = width; canvas.height = height;
                     const ctx = canvas.getContext('2d');
-                    
                     ctx.drawImage(img, 0, 0, width, height);
-                    // Use WebP for transparency and small size to store directly in DB
-                    const dataUrl = canvas.toDataURL('image/webp', quality);
-                    callback(dataUrl);
+                    callback(canvas.toDataURL('image/webp', quality));
                 };
             };
         };
 
-        window.triggerUpload = (inputId) => {
-            document.getElementById(inputId).click();
-        };
-
+        window.triggerUpload = (inputId) => document.getElementById(inputId).click();
         window.triggerPaymentIconUpload = (id) => {
             activePaymentIdForUpload = id;
             document.getElementById('upload-payment-icon').click();
@@ -584,10 +480,9 @@
 
             const maxWidth = type === 'content' ? 800 : 400;
             const maxHeight = type === 'content' ? 800 : 400;
-            const quality = 0.7; // ลดขนาดเพื่อให้เก็บใน Base64 TEXT ได้สบายๆ
-
+            
             showToast('กำลังประมวลผลรูปภาพ...');
-            compressImage(file, maxWidth, maxHeight, quality, async (compressedDataUrl) => {
+            compressImage(file, maxWidth, maxHeight, 0.7, async (compressedDataUrl) => {
                 if (type === 'logo') {
                     appData.store.logo = compressedDataUrl;
                     const { error } = await supabaseClient.from('store_settings').update({ logo_url: compressedDataUrl }).eq('id', 1);
@@ -597,17 +492,15 @@
                     const { error } = await supabaseClient.from('store_settings').update({ content_image_url: compressedDataUrl }).eq('id', 1);
                     if(error) showToast('บันทึกรูปภาพไม่สำเร็จ', true);
                 }
-                
                 render();
-                if(type === 'logo' || type === 'content') showToast('อัปเดตรูปภาพสำเร็จ 💙');
-                event.target.value = ''; 
+                showToast('อัปเดตรูปภาพสำเร็จ 💙');
+                event.target.value = '';
             });
         };
 
         window.handlePaymentIconUpload = (event) => {
             const file = event.target.files[0];
             if (!file || activePaymentIdForUpload === null) return;
-
             showToast('กำลังประมวลผลไอคอน...');
             compressImage(file, 200, 200, 0.8, (compressedDataUrl) => {
                 updatePayment(activePaymentIdForUpload, 'iconImage', compressedDataUrl);
@@ -615,6 +508,119 @@
                 activePaymentIdForUpload = null;
                 showToast('อัปเดตไอคอนสำเร็จ 💙');
             });
+        };
+
+        window.updateStoreText = async (key, value) => {
+            appData.store[key] = value; 
+            const { error } = await supabaseClient.from('store_settings').update({ tagline: value }).eq('id', 1);
+            if (error) showToast('บันทึกข้อความไม่สำเร็จ', true);
+        };
+
+        window.addPaymentMethod = async () => {
+            if(isProcessing) return;
+            isProcessing = true;
+            const newPayment = { bank_name: '', account_name: '', account_no: '', color: '#60a5fa', icon_image_url: '', is_active: true };
+
+            showToast('กำลังเพิ่มช่องทาง...');
+            const { data, error } = await supabaseClient.from('payment_methods').insert([newPayment]).select().single();
+            isProcessing = false;
+
+            if (error) {
+                showToast('เพิ่มช่องทางไม่สำเร็จ', true);
+            } else if (data) {
+                appData.payments.push({
+                    id: data.id, bankName: data.bank_name, accountName: data.account_name,
+                    accountNo: data.account_no, color: data.color, iconImage: data.icon_image_url, isActive: data.is_active
+                });
+                render();
+                showToast('เพิ่มช่องทางใหม่แล้ว');
+                setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 100);
+            }
+        };
+
+        let updateTimeoutMap = {};
+        window.updatePayment = (id, field, value) => {
+            const index = appData.payments.findIndex(p => p.id === id);
+            if (index > -1) {
+                appData.payments[index][field] = value;
+                if(field === 'color' || field === 'iconImage') render(); 
+            }
+            if(updateTimeoutMap[id + field]) clearTimeout(updateTimeoutMap[id + field]);
+            updateTimeoutMap[id + field] = setTimeout(async () => {
+                const dbField = { 'bankName': 'bank_name', 'accountName': 'account_name', 'accountNo': 'account_no', 'color': 'color', 'iconImage': 'icon_image_url' }[field];
+                const { error } = await supabaseClient.from('payment_methods').update({ [dbField]: value }).eq('id', id);
+                if (error) showToast('บันทึกข้อมูลไม่สำเร็จ', true);
+            }, 500);
+        };
+
+        window.togglePaymentStatus = async (id) => {
+            const index = appData.payments.findIndex(p => p.id === id);
+            if (index > -1) {
+                const newStatus = !appData.payments[index].isActive;
+                appData.payments[index].isActive = newStatus;
+                render(); 
+                const { error } = await supabaseClient.from('payment_methods').update({ is_active: newStatus }).eq('id', id);
+                if (error) {
+                    showToast('เปลี่ยนสถานะไม่สำเร็จ', true);
+                    appData.payments[index].isActive = !newStatus;
+                    render();
+                }
+            }
+        };
+
+        window.openDeleteModal = (type, id = null) => {
+            deleteActionPayload = { type, id };
+            const modal = document.getElementById('confirm-modal');
+            const box = document.getElementById('confirm-box');
+            modal.classList.remove('hidden');
+            void modal.offsetWidth;
+            modal.classList.remove('opacity-0');
+            box.classList.remove('scale-95');
+            modal.classList.add('flex');
+        };
+
+        window.closeConfirmModal = () => {
+            const modal = document.getElementById('confirm-modal');
+            const box = document.getElementById('confirm-box');
+            modal.classList.add('opacity-0');
+            box.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+            deleteActionPayload = null;
+        };
+
+        window.executeDeleteAction = async () => {
+            if(!deleteActionPayload || isProcessing) return;
+            isProcessing = true;
+            const btn = document.getElementById('btn-confirm-delete');
+            btn.classList.add('btn-disabled');
+            btn.innerText = 'กำลังลบ...';
+
+            let error = null;
+            if (deleteActionPayload.type === 'payment') {
+                const res = await supabaseClient.from('payment_methods').delete().eq('id', deleteActionPayload.id);
+                error = res.error;
+                if(!error) appData.payments = appData.payments.filter(p => p.id !== deleteActionPayload.id);
+            } else if (deleteActionPayload.type === 'logo') {
+                const res = await supabaseClient.from('store_settings').update({ logo_url: '' }).eq('id', 1);
+                error = res.error;
+                if(!error) appData.store.logo = '';
+            } else if (deleteActionPayload.type === 'content') {
+                const res = await supabaseClient.from('store_settings').update({ content_image_url: '' }).eq('id', 1);
+                error = res.error;
+                if(!error) appData.store.contentImage = '';
+            }
+
+            isProcessing = false;
+            btn.classList.remove('btn-disabled');
+            btn.innerText = 'ลบข้อมูล';
+
+            if (error) {
+                showToast('ลบข้อมูลไม่สำเร็จ', true);
+            } else {
+                render();
+                showToast('ลบข้อมูลเรียบร้อยแล้ว');
+            }
+            closeConfirmModal();
         };
 
         const renderPublicView = () => {
@@ -627,26 +633,32 @@
             } else {
                 activePayments.forEach((p, index) => {
                     const delay = index * 0.08;
-                    const iconDisplay = p.iconImage 
+                    const iconDisplay = p.iconImage
                         ? `<img src="${escapeHTML(p.iconImage)}" class="w-full h-full object-contain p-[2px] relative z-10" alt="icon">`
                         : `<div class="relative z-10 scale-[1.15] drop-shadow-sm">${icons.bank}</div>`;
 
                     paymentsHTML += `
-                        <div class="bg-white rounded-[24px] p-4 sm:p-5 border-2 border-transparent hover:border-cute-200 shadow-[0_4px_20px_-5px_rgba(59,130,246,0.05)] hover:shadow-[0_12px_30px_-5px_rgba(59,130,246,0.15)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-between group animate-[floatUp_0.4s_ease-out_forwards]" style="animation-delay: ${delay}s; opacity: 0;">
-                            <div class="flex items-center space-x-4 overflow-hidden w-3/4">
-                                <div class="w-14 h-14 rounded-[18px] flex items-center justify-center text-white flex-shrink-0 shadow-inner relative overflow-hidden bg-cute-100" style="${p.color ? `background-color: ${escapeHTML(p.color)};` : ''}">
+                        <div class="bg-white rounded-[24px] p-5 sm:p-6 border-2 border-transparent hover:border-cute-200 shadow-[0_4px_20px_-5px_rgba(59,130,246,0.05)] hover:shadow-[0_12px_40px_-10px_rgba(59,130,246,0.25)] hover:scale-[1.02] transition-all duration-300 flex items-center justify-between group animate-[floatUp_0.4s_ease-out_forwards] relative overflow-hidden" style="animation-delay: ${delay}s; opacity: 0;">
+                            
+                            <!-- เอฟเฟกต์แสง Sweep ตอน Hover -->
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent -translate-x-[150%] skew-x-[-20deg] group-hover:animate-[shimmer-sweep_1s_ease-in-out] z-0 pointer-events-none"></div>
+
+                            <div class="flex items-center space-x-4 sm:space-x-5 overflow-hidden w-[75%] sm:w-[80%] relative z-10">
+                                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-[18px] flex items-center justify-center text-white flex-shrink-0 shadow-inner relative overflow-hidden bg-cute-100" style="${p.color ? `background-color: ${escapeHTML(p.color)};` : ''}">
                                     <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     ${iconDisplay}
                                 </div>
-                                <div class="flex flex-col min-w-0 pr-2 space-y-0.5 w-full">
-                                    <span class="font-bold text-slate-800 text-[15px] truncate block w-full">${escapeHTML(p.bankName) || 'ไม่ได้ระบุชื่อ'}</span>
-                                    <span class="text-[13px] text-slate-500 truncate block w-full">${escapeHTML(p.accountName) || 'ไม่ได้ระบุชื่อบัญชี'}</span>
-                                    <span class="font-mono font-bold text-cute-600 mt-1 text-[15px] tracking-widest bg-cute-50/80 w-fit px-3 py-1 rounded-xl border border-cute-100 truncate max-w-full block">${escapeHTML(p.accountNo) || '-'}</span>
+                                <div class="flex flex-col min-w-0 pr-2 space-y-1 w-full">
+                                    <span class="font-bold text-slate-800 text-[16px] sm:text-[18px] truncate block w-full flex items-center space-x-2">
+                                        <span>${escapeHTML(p.bankName) || 'ไม่ได้ระบุชื่อ'}</span>
+                                    </span>
+                                    <span class="text-[14px] sm:text-[15px] text-slate-500 truncate block w-full">${escapeHTML(p.accountName) || 'ไม่ได้ระบุชื่อบัญชี'}</span>
+                                    <span class="font-mono font-bold text-cute-600 mt-1 text-[16px] sm:text-[18px] tracking-widest bg-cute-50/80 w-fit px-3 py-1 rounded-xl border border-cute-100 truncate max-w-full block shadow-sm">${escapeHTML(p.accountNo) || '-'}</span>
                                 </div>
                             </div>
-                            <button 
+                            <button
                                 onclick="copyText('${escapeHTML(p.accountNo)}')"
-                                class="w-12 h-12 rounded-full bg-cute-50 text-cute-500 flex items-center justify-center hover:bg-cute-500 hover:text-white flex-shrink-0 transition-all duration-300 active:scale-90 shadow-sm border border-cute-100 group-hover:border-transparent"
+                                class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-cute-50 text-cute-500 flex items-center justify-center hover:bg-cute-500 hover:text-white flex-shrink-0 transition-all duration-300 active:scale-90 shadow-sm border border-cute-100 group-hover:border-transparent group-hover:shadow-md relative z-10"
                                 title="คัดลอกเลขบัญชี"
                             >
                                 ${icons.copy}
@@ -661,7 +673,7 @@
                     
                     <div class="relative flex flex-col items-center w-full px-6 stagger-1 animate-[floatUp_0.5s_ease-out_forwards] opacity-0">
                         <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-[6px] border-white shadow-[0_10px_30px_rgba(59,130,246,0.15)] overflow-hidden bg-white z-10 relative">
-                            <img src="${escapeHTML(appData.store.logo)}" alt="Logo" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" onerror="this.src='https://placehold.co/300x300/eff6ff/3b82f6?text=Logo'">
+                            <img src="${escapeHTML(appData.store.logo) || 'https://placehold.co/300x300/eff6ff/3b82f6?text=Logo'}" alt="Logo" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
                         </div>
                         
                         ${appData.store.tagline ? `
@@ -672,23 +684,23 @@
 
                         ${appData.store.contentImage ? `
                         <div class="mt-6 w-full max-w-[95%] rounded-[32px] overflow-hidden shadow-[0_15px_40px_-10px_rgba(59,130,246,0.15)] border-[5px] border-white relative group stagger-2 animate-[floatUp_0.5s_ease-out_forwards] opacity-0" style="animation-delay: 0.15s">
-                            <img src="${escapeHTML(appData.store.contentImage)}" alt="Content" class="w-full h-auto object-cover" onerror="this.src='https://placehold.co/800x600/bfdbfe/2563eb?text=รูปภาพ'">
+                            <img src="${escapeHTML(appData.store.contentImage)}" alt="Content" class="w-full h-auto object-cover">
                         </div>
                         ` : ''}
                     </div>
 
-                    <div class="w-full px-5 mt-10 space-y-5 flex-1 stagger-3">
+                    <div class="w-full px-5 mt-10 space-y-6 flex-1 stagger-3">
                         <div class="flex items-center justify-center mb-6">
                             <div class="h-[2px] bg-gradient-to-r from-transparent to-cute-300 flex-1 rounded-full opacity-50"></div>
-                            <h2 class="px-5 text-center font-bold text-cute-900 text-sm tracking-widest bg-white/40 backdrop-blur-sm py-2 rounded-full border border-white uppercase">ช่องทางการชำระเงิน</h2>
+                            <h2 class="px-5 text-center font-bold text-cute-900 text-[15px] tracking-widest bg-white/40 backdrop-blur-sm py-2 rounded-full border border-white uppercase shadow-sm">ช่องทางการชำระเงิน</h2>
                             <div class="h-[2px] bg-gradient-to-l from-transparent to-cute-300 flex-1 rounded-full opacity-50"></div>
                         </div>
-                        <div class="space-y-4">
+                        <div class="space-y-5">
                             ${paymentsHTML}
                         </div>
                     </div>
 
-                    <div class="mt-12 pt-4 w-full flex justify-center space-x-6">
+                    <div class="mt-12 pt-4 w-full flex justify-center space-x-6 relative z-10">
                         <a href="${escapeHTML(socialLinks.line)}" target="_blank" class="w-14 h-14 bg-white text-[#00B900] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgb(0,185,0,0.15)] hover:shadow-[0_10px_25px_rgb(0,185,0,0.25)] border-2 border-transparent hover:-translate-y-1.5 transition-all duration-300">
                             <div class="scale-125">${icons.line}</div>
                         </a>
@@ -707,7 +719,7 @@
             let paymentsAdminHTML = '';
             
             appData.payments.forEach((p, index) => {
-                const iconPreview = p.iconImage 
+                const iconPreview = p.iconImage
                     ? `<img src="${escapeHTML(p.iconImage)}" class="w-full h-full object-contain p-1 relative z-10" alt="icon">`
                     : `<div class="scale-75 text-white">${icons.bank}</div>`;
 
@@ -715,16 +727,16 @@
                     <div class="bg-white border-[3px] border-cute-50 rounded-[28px] p-5 space-y-4 shadow-sm relative hover:border-cute-200 transition-colors">
                         <div class="flex justify-between items-center border-b border-cute-50 pb-4">
                             <div class="flex items-center space-x-3">
-                                <div class="w-9 h-9 rounded-[10px] flex items-center justify-center text-white shadow-inner bg-cute-100 overflow-hidden relative" style="${p.color ? `background-color: ${escapeHTML(p.color)};` : ''}">
+                                <div class="w-10 h-10 rounded-[12px] flex items-center justify-center text-white shadow-inner bg-cute-100 overflow-hidden relative" style="${p.color ? `background-color: ${escapeHTML(p.color)};` : ''}">
                                     ${iconPreview}
                                 </div>
-                                <span class="font-bold text-slate-800">ช่องทางที่ ${index + 1}</span>
+                                <span class="font-bold text-slate-800 text-[15px]">ช่องทางที่ ${index + 1}</span>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <button onclick="togglePaymentStatus('${p.id}')" class="text-[11px] font-bold px-4 py-2 rounded-xl transition-all duration-200 ${p.isActive ? 'bg-cute-100 text-cute-700 hover:bg-cute-200' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}">
+                                <button onclick="togglePaymentStatus('${p.id}')" class="text-[12px] font-bold px-4 py-2 rounded-xl transition-all duration-200 ${p.isActive ? 'bg-cute-100 text-cute-700 hover:bg-cute-200 shadow-sm' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}">
                                     ${p.isActive ? 'เปิดใช้งาน' : 'ปิด'}
                                 </button>
-                                <button onclick="openDeleteModal('${p.id}')" class="text-slate-300 hover:text-red-500 hover:bg-red-50 p-2 rounded-xl transition-colors">
+                                <button onclick="openDeleteModal('payment', '${p.id}')" class="text-slate-300 hover:text-white hover:bg-red-500 p-2 rounded-xl transition-all shadow-sm border border-transparent hover:border-red-600">
                                     ${icons.trash}
                                 </button>
                             </div>
@@ -732,36 +744,36 @@
 
                         <div class="grid grid-cols-1 gap-3.5 pt-1">
                             <div>
-                                <label class="block text-[12px] font-bold text-slate-500 mb-1.5 ml-1">ชื่อธนาคาร / แอปพลิเคชัน</label>
-                                <input type="text" value="${escapeHTML(p.bankName)}" onchange="updatePayment('${p.id}', 'bankName', this.value)" class="w-full px-4 py-3 text-[14px] bg-cute-50/50 border-2 border-cute-100 rounded-[16px] focus:bg-white focus:border-cute-300 outline-none transition-all text-slate-800 placeholder:text-slate-300" placeholder="เช่น ธนาคารกสิกรไทย">
+                                <label class="block text-[13px] font-bold text-slate-500 mb-1.5 ml-1">ชื่อธนาคาร / แอปพลิเคชัน</label>
+                                <input type="text" value="${escapeHTML(p.bankName)}" onchange="updatePayment('${p.id}', 'bankName', this.value)" class="w-full px-4 py-3 text-[15px] bg-cute-50/50 border-2 border-cute-100 rounded-[16px] focus:bg-white focus:border-cute-300 outline-none transition-all text-slate-800 placeholder:text-slate-300" placeholder="เช่น ธนาคารกสิกรไทย">
                             </div>
                             <div>
-                                <label class="block text-[12px] font-bold text-slate-500 mb-1.5 ml-1">ชื่อบัญชี</label>
-                                <input type="text" value="${escapeHTML(p.accountName)}" onchange="updatePayment('${p.id}', 'accountName', this.value)" class="w-full px-4 py-3 text-[14px] bg-cute-50/50 border-2 border-cute-100 rounded-[16px] focus:bg-white focus:border-cute-300 outline-none transition-all text-slate-800 placeholder:text-slate-300" placeholder="เช่น นายสมชาย ใจดี">
+                                <label class="block text-[13px] font-bold text-slate-500 mb-1.5 ml-1">ชื่อบัญชี</label>
+                                <input type="text" value="${escapeHTML(p.accountName)}" onchange="updatePayment('${p.id}', 'accountName', this.value)" class="w-full px-4 py-3 text-[15px] bg-cute-50/50 border-2 border-cute-100 rounded-[16px] focus:bg-white focus:border-cute-300 outline-none transition-all text-slate-800 placeholder:text-slate-300" placeholder="เช่น นายสมชาย ใจดี">
                             </div>
                             <div>
-                                <label class="block text-[12px] font-bold text-slate-500 mb-1.5 ml-1">เลขบัญชี / เบอร์โทรศัพท์</label>
-                                <input type="text" value="${escapeHTML(p.accountNo)}" onchange="updatePayment('${p.id}', 'accountNo', this.value)" class="w-full px-4 py-3 text-[14px] bg-cute-50/50 border-2 border-cute-100 rounded-[16px] focus:bg-white focus:border-cute-300 outline-none font-mono transition-all text-cute-700 font-bold placeholder:text-slate-300" placeholder="เช่น 123-4-56789-0">
+                                <label class="block text-[13px] font-bold text-slate-500 mb-1.5 ml-1">เลขบัญชี / เบอร์โทรศัพท์</label>
+                                <input type="text" value="${escapeHTML(p.accountNo)}" onchange="updatePayment('${p.id}', 'accountNo', this.value)" class="w-full px-4 py-3 text-[15px] bg-cute-50/50 border-2 border-cute-100 rounded-[16px] focus:bg-white focus:border-cute-300 outline-none font-mono transition-all text-cute-700 font-bold placeholder:text-slate-300" placeholder="เช่น 123-4-56789-0">
                             </div>
                             
                             <div class="flex space-x-4">
                                 <div class="flex-1">
-                                    <label class="block text-[12px] font-bold text-slate-500 mb-1.5 ml-1">รูปไอคอน (รองรับพื้นหลังใส)</label>
+                                    <label class="block text-[13px] font-bold text-slate-500 mb-1.5 ml-1">รูปไอคอน</label>
                                     <div class="flex items-center space-x-3">
-                                        <div class="relative w-12 h-12 rounded-[14px] border-2 border-dashed border-cute-300 overflow-hidden group cursor-pointer hover:border-cute-500 transition-colors flex items-center justify-center bg-cute-50/50" onclick="triggerPaymentIconUpload('${p.id}')">
+                                        <div class="relative w-14 h-14 rounded-[16px] border-2 border-dashed border-cute-300 overflow-hidden group cursor-pointer hover:border-cute-500 transition-colors flex items-center justify-center bg-cute-50/50" onclick="triggerPaymentIconUpload('${p.id}')">
                                             ${p.iconImage ? `<img src="${escapeHTML(p.iconImage)}" class="w-full h-full object-contain p-1">` : `<div class="scale-75 text-cute-400">${icons.camera}</div>`}
                                             <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center upload-overlay">
                                                 <div class="text-white scale-[0.6]">${icons.camera}</div>
                                             </div>
                                         </div>
-                                        <button onclick="updatePayment('${p.id}', 'iconImage', '')" class="text-[11px] text-slate-400 hover:text-red-500 underline decoration-dotted">ลบรูป</button>
+                                        ${p.iconImage ? `<button onclick="updatePayment('${p.id}', 'iconImage', '')" class="text-[12px] text-slate-400 hover:text-red-500 underline decoration-dotted">ลบรูป</button>` : ''}
                                     </div>
                                 </div>
                                 <div class="flex-1">
-                                    <label class="block text-[12px] font-bold text-slate-500 mb-1.5 ml-1">สีพื้นหลังไอคอน</label>
+                                    <label class="block text-[13px] font-bold text-slate-500 mb-1.5 ml-1">สีพื้นหลังไอคอน</label>
                                     <div class="flex items-center space-x-2">
-                                        <input type="color" value="${escapeHTML(p.color)}" onchange="updatePayment('${p.id}', 'color', this.value)" class="w-12 h-12 p-1 border-2 border-cute-100 rounded-[14px] cursor-pointer bg-white overflow-hidden flex-shrink-0">
-                                        <input type="text" value="${escapeHTML(p.color)}" onchange="updatePayment('${p.id}', 'color', this.value)" class="w-full px-3 py-3 text-[12px] bg-cute-50/50 border-2 border-cute-100 rounded-[14px] focus:bg-white focus:border-cute-300 outline-none font-mono uppercase text-slate-700 transition-all">
+                                        <input type="color" value="${escapeHTML(p.color)}" onchange="updatePayment('${p.id}', 'color', this.value)" class="w-14 h-14 p-1 border-2 border-cute-100 rounded-[16px] cursor-pointer bg-white overflow-hidden flex-shrink-0">
+                                        <input type="text" value="${escapeHTML(p.color)}" onchange="updatePayment('${p.id}', 'color', this.value)" class="w-full px-3 py-3 text-[13px] bg-cute-50/50 border-2 border-cute-100 rounded-[16px] focus:bg-white focus:border-cute-300 outline-none font-mono uppercase text-slate-700 transition-all">
                                     </div>
                                 </div>
                             </div>
@@ -771,67 +783,69 @@
             });
 
             return `
-                <div class="p-5 bg-transparent w-full animate-[slideDown_0.3s_ease-out]">
+                <div class="p-5 bg-transparent w-full animate-[slideDown_0.3s_ease-out] relative z-10">
                     <div class="mb-8 pt-4 px-2 flex justify-between items-start">
                         <div>
-                            <h1 class="text-[22px] font-bold text-slate-800 flex items-center space-x-2">
+                            <h1 class="text-[24px] font-bold text-slate-800 flex items-center space-x-2">
                                 <span class="text-cute-500">⚙️</span>
                                 <span>ตั้งค่าร้านค้า</span>
                             </h1>
-                            <p class="text-sm text-slate-500 mt-2">จัดการข้อมูลและรูปภาพ บันทึกอัตโนมัติ 💙</p>
+                            <p class="text-[14px] text-slate-500 mt-2">จัดการข้อมูลและรูปภาพ บันทึกอัตโนมัติ 💙</p>
                         </div>
-                        <button onclick="logout()" class="px-4 py-2 bg-red-50 text-red-500 rounded-xl text-xs font-bold hover:bg-red-100 hover:text-red-600 transition-colors flex items-center space-x-1 shadow-sm border border-red-100">
+                        <button onclick="logout()" class="px-4 py-2.5 bg-red-50 text-red-500 rounded-xl text-[13px] font-bold hover:bg-red-100 hover:text-red-600 transition-colors flex items-center space-x-1 shadow-sm border border-red-100">
                             <span>ออกจากระบบ</span>
                         </button>
                     </div>
 
                     <div class="mb-10 space-y-5">
                         <div class="flex items-center space-x-2 px-2">
-                            <div class="w-2 h-5 bg-cute-400 rounded-full"></div>
-                            <h2 class="text-[15px] font-bold text-slate-700">รูปภาพและข้อความ</h2>
+                            <div class="w-2.5 h-6 bg-cute-400 rounded-full"></div>
+                            <h2 class="text-[16px] font-bold text-slate-700">รูปภาพและข้อความ</h2>
                         </div>
                         
                         <div class="grid grid-cols-2 gap-4">
-                            <div class="flex flex-col items-center space-y-3 p-5 bg-white rounded-[28px] shadow-sm border-[3px] border-cute-50 hover:border-cute-100 transition-colors">
-                                <label class="block text-[11px] font-bold text-slate-400 w-full text-center">โลโก้ร้าน (รองรับ PNG)</label>
-                                <div class="relative w-[84px] h-[84px] rounded-full border-[3px] border-dashed border-cute-300 overflow-hidden group cursor-pointer hover:border-cute-500 transition-colors" onclick="triggerUpload('upload-logo')">
-                                    <img src="${escapeHTML(appData.store.logo)}" alt="Logo Preview" class="w-full h-full object-cover">
+                            <div class="flex flex-col items-center space-y-3 p-5 bg-white/90 backdrop-blur-sm rounded-[28px] shadow-sm border-[3px] border-cute-50 hover:border-cute-100 transition-colors">
+                                <label class="block text-[12px] font-bold text-slate-500 w-full text-center">โลโก้ร้าน (PNG/JPG)</label>
+                                <div class="relative w-[90px] h-[90px] rounded-full border-[3px] border-dashed border-cute-300 overflow-hidden group cursor-pointer hover:border-cute-500 transition-colors bg-cute-50/50" onclick="triggerUpload('upload-logo')">
+                                    ${appData.store.logo ? `<img src="${escapeHTML(appData.store.logo)}" alt="Logo Preview" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center scale-75 text-cute-300">${icons.camera}</div>`}
                                     <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center upload-overlay">
                                         <div class="text-white scale-75">${icons.camera}</div>
                                     </div>
                                 </div>
+                                ${appData.store.logo ? `<button onclick="openDeleteModal('logo')" class="text-[12px] text-slate-400 hover:text-red-500 underline decoration-dotted mt-1">ลบรูปนี้</button>` : ''}
                             </div>
 
-                            <div class="flex flex-col items-center space-y-3 p-5 bg-white rounded-[28px] shadow-sm border-[3px] border-cute-50 hover:border-cute-100 transition-colors">
-                                <label class="block text-[11px] font-bold text-slate-400 w-full text-center">รูปใต้คำโปรย</label>
-                                <div class="relative w-full h-[84px] rounded-[20px] border-[3px] border-dashed border-cute-300 overflow-hidden group cursor-pointer hover:border-cute-500 transition-colors" onclick="triggerUpload('upload-content')">
-                                    <img src="${escapeHTML(appData.store.contentImage)}" alt="Content Preview" class="w-full h-full object-cover">
+                            <div class="flex flex-col items-center space-y-3 p-5 bg-white/90 backdrop-blur-sm rounded-[28px] shadow-sm border-[3px] border-cute-50 hover:border-cute-100 transition-colors">
+                                <label class="block text-[12px] font-bold text-slate-500 w-full text-center">รูปใต้คำโปรย</label>
+                                <div class="relative w-full h-[90px] rounded-[20px] border-[3px] border-dashed border-cute-300 overflow-hidden group cursor-pointer hover:border-cute-500 transition-colors bg-cute-50/50" onclick="triggerUpload('upload-content')">
+                                    ${appData.store.contentImage ? `<img src="${escapeHTML(appData.store.contentImage)}" alt="Content Preview" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center scale-75 text-cute-300">${icons.camera}</div>`}
                                     <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center upload-overlay">
                                         <div class="text-white scale-75">${icons.camera}</div>
                                     </div>
                                 </div>
+                                ${appData.store.contentImage ? `<button onclick="openDeleteModal('content')" class="text-[12px] text-slate-400 hover:text-red-500 underline decoration-dotted mt-1">ลบรูปนี้</button>` : ''}
                             </div>
                         </div>
 
-                        <div class="bg-white p-2 rounded-[28px] shadow-sm border-[3px] border-cute-50">
-                            <textarea rows="3" onchange="updateStoreText('tagline', this.value)" placeholder="คำโปรย หรือข้อความต้อนรับ..." class="w-full px-4 py-3 text-[14px] bg-transparent rounded-xl focus:bg-cute-50/30 outline-none resize-none transition-colors text-slate-700 leading-relaxed">${escapeHTML(appData.store.tagline)}</textarea>
+                        <div class="bg-white/90 backdrop-blur-sm p-2 rounded-[28px] shadow-sm border-[3px] border-cute-50">
+                            <textarea rows="3" onchange="updateStoreText('tagline', this.value)" placeholder="คำโปรย หรือข้อความต้อนรับ..." class="w-full px-5 py-4 text-[15px] bg-transparent rounded-xl focus:bg-cute-50/30 outline-none resize-none transition-colors text-slate-700 leading-relaxed">${escapeHTML(appData.store.tagline)}</textarea>
                         </div>
                     </div>
 
-                    <div class="space-y-5">
+                    <div class="space-y-5 pb-8">
                         <div class="flex justify-between items-center px-2">
                             <div class="flex items-center space-x-2">
-                                <div class="w-2 h-5 bg-cute-400 rounded-full"></div>
-                                <h2 class="text-[15px] font-bold text-slate-700">ช่องทางรับเงิน</h2>
+                                <div class="w-2.5 h-6 bg-cute-400 rounded-full"></div>
+                                <h2 class="text-[16px] font-bold text-slate-700">ช่องทางรับเงิน</h2>
                             </div>
-                            <button onclick="addPaymentMethod()" class="text-[12px] font-bold bg-cute-500 hover:bg-cute-600 text-white px-4 py-2.5 rounded-xl transition-all shadow-[0_4px_14px_0_rgba(59,130,246,0.4)] hover:shadow-[0_6px_20px_rgba(59,130,246,0.25)] hover:-translate-y-0.5 active:translate-y-0 flex items-center space-x-1">
+                            <button onclick="addPaymentMethod()" class="text-[13px] font-bold bg-cute-500 hover:bg-cute-600 text-white px-5 py-2.5 rounded-[14px] transition-all shadow-[0_4px_14px_0_rgba(59,130,246,0.4)] hover:shadow-[0_6px_20px_rgba(59,130,246,0.25)] hover:-translate-y-0.5 active:translate-y-0 flex items-center space-x-1">
                                 <span>+ เพิ่มช่องทาง</span>
                             </button>
                         </div>
 
-                        <div class="space-y-4">
+                        <div class="space-y-5">
                             ${paymentsAdminHTML}
-                            ${appData.payments.length === 0 ? '<div class="text-center text-slate-400 py-10 bg-white rounded-[28px] border-[3px] border-dashed border-cute-100 font-medium text-sm">ยังไม่มีข้อมูล กรุณาเพิ่มช่องทาง</div>' : ''}
+                            ${appData.payments.length === 0 ? '<div class="text-center text-slate-400 py-10 bg-white/80 backdrop-blur-sm rounded-[28px] border-[3px] border-dashed border-cute-200 font-medium text-[15px]">ยังไม่มีข้อมูล กรุณาเพิ่มช่องทาง</div>' : ''}
                         </div>
                     </div>
                 </div>
@@ -839,50 +853,41 @@
         };
 
         const render = () => {
-            const container = document.getElementById('app-container');
+            const container = document.getElementById('content-container');
             
-            // Handle Loading State
             if (isFetching) {
                 container.innerHTML = `
                     <div class="flex flex-col items-center justify-center h-screen space-y-4 animate-[floatUp_0.3s_ease-out]">
                         <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-cute-500"></div>
-                        <span class="text-cute-600 font-medium text-sm">กำลังโหลดข้อมูล...</span>
+                        <span class="text-cute-600 font-medium text-[15px]">กำลังโหลดข้อมูล...</span>
                     </div>
                 `;
                 return;
             }
 
-            // Handle Error State
             if (fetchError) {
                 container.innerHTML = `
                     <div class="flex flex-col items-center justify-center h-screen space-y-4 text-center px-6 animate-[floatUp_0.3s_ease-out]">
-                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-red-500 mb-2">
+                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-red-500 mb-2 shadow-sm">
                             <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
-                        <span class="text-red-500 font-bold text-lg">เกิดข้อผิดพลาด</span>
-                        <span class="text-slate-500 text-sm leading-relaxed">${escapeHTML(fetchError)}</span>
-                        <button onclick="loadDataFromDB()" class="mt-4 px-8 py-2.5 bg-cute-500 hover:bg-cute-600 text-white font-bold rounded-full shadow-md transition-colors">ลองใหม่อีกครั้ง</button>
+                        <span class="text-red-500 font-bold text-[18px]">เกิดข้อผิดพลาด</span>
+                        <span class="text-slate-500 text-[14px] leading-relaxed">${escapeHTML(fetchError)}</span>
+                        <button onclick="loadDataFromDB()" class="mt-4 px-8 py-3 bg-cute-500 hover:bg-cute-600 text-white font-bold text-[15px] rounded-full shadow-md transition-colors">ลองใหม่อีกครั้ง</button>
                     </div>
                 `;
                 return;
             }
 
-            // Normal Rendering
-            if (currentView === 'public') {
-                container.innerHTML = renderPublicView();
-            } else {
-                container.innerHTML = renderAdminView();
-            }
+            if (currentView === 'public') container.innerHTML = renderPublicView();
+            else container.innerHTML = renderAdminView();
         };
 
-        // เริ่มต้นการทำงาน (ตรวจสอบ Session แล้วโหลดข้อมูล)
         window.onload = async () => {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
                 const { data: isAdmin } = await supabaseClient.rpc('is_admin');
-                if (isAdmin) {
-                    isLoggedIn = true;
-                }
+                if (isAdmin) isLoggedIn = true;
             }
             loadDataFromDB();
         };
