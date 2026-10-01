@@ -463,7 +463,15 @@
         // -----------------------
         // STATE
         // -----------------------
-        let appSettings = {};
+        let appSettings = {
+            storeName: "Minimal Store",
+            storeTagline: "ยินดีต้อนรับสู่ช่องทางการชำระเงินของร้าน",
+            storeAvatar: "https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP",
+            featuredImage: "",
+            lineUrl: "#",
+            facebookUrl: "#",
+            instagramUrl: "#"
+        };
         let appChannels = [];
         let isAdminLoggedIn = false;
 
@@ -493,61 +501,61 @@
         }
 
         // -----------------------
-        // DATA FETCHING
+        // DATA FETCHING (WITH TIMEOUT SAFETY)
         // -----------------------
         async function fetchInitialData() {
             try {
-                // Fetch Settings
-                const { data: settingsData, error: settingsError } = await supabase
-                    .from('store_settings')
-                    .select('*')
-                    .limit(1)
-                    .single();
+                // สร้างระบบ Timeout ป้องกันค้างนานเกิน 3 วินาที
+                const timeoutPromise = new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('Timeout')), 3000)
+                );
 
-                if (settingsError && settingsError.code !== 'PGRST116') throw settingsError;
-                if (settingsData) {
-                    appSettings = {
-                        storeName: settingsData.store_name || "ชื่อร้านค้า",
-                        storeTagline: settingsData.store_tagline || "",
-                        storeAvatar: settingsData.store_avatar_url || "https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP",
-                        featuredImage: settingsData.featured_image_url || "",
-                        lineUrl: settingsData.line_url || "#",
-                        facebookUrl: settingsData.facebook_url || "#",
-                        instagramUrl: settingsData.instagram_url || "#"
-                    };
-                }
+                const fetchPromise = (async () => {
+                    // Fetch Settings
+                    const { data: settingsData, error: settingsError } = await supabase
+                        .from('store_settings')
+                        .select('*')
+                        .limit(1)
+                        .maybeSingle();
 
-                // Fetch Channels
-                const { data: channelsData, error: channelsError } = await supabase
-                    .from('payment_channels')
-                    .select('*')
-                    .order('created_at', { ascending: true });
+                    if (settingsData) {
+                        appSettings = {
+                            storeName: settingsData.store_name || "ชื่อร้านค้า",
+                            storeTagline: settingsData.store_tagline || "",
+                            storeAvatar: settingsData.store_avatar_url || "https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP",
+                            featuredImage: settingsData.featured_image_url || "",
+                            lineUrl: settingsData.line_url || "#",
+                            facebookUrl: settingsData.facebook_url || "#",
+                            instagramUrl: settingsData.instagram_url || "#"
+                        };
+                    }
 
-                if (channelsError) throw channelsError;
-                
-                appChannels = channelsData.map(c => ({
-                    id: c.id,
-                    type: c.type,
-                    name: c.name,
-                    accNo: c.acc_no,
-                    accName: c.acc_name,
-                    active: c.active,
-                    iconType: c.icon_type,
-                    icon: c.icon,
-                    iconImg: c.icon_img
-                }));
+                    // Fetch Channels
+                    const { data: channelsData, error: channelsError } = await supabase
+                        .from('payment_channels')
+                        .select('*')
+                        .order('created_at', { ascending: true });
 
+                    if (channelsData) {
+                        appChannels = channelsData.map(c => ({
+                            id: c.id,
+                            type: c.type,
+                            name: c.name,
+                            accNo: c.acc_no,
+                            accName: c.acc_name,
+                            active: c.active,
+                            iconType: c.icon_type,
+                            icon: c.icon,
+                            iconImg: c.icon_img
+                        }));
+                    }
+                })();
+
+                await Promise.race([fetchPromise, timeoutPromise]);
                 renderCustomerView();
             } catch (error) {
-                console.error("Error fetching data:", error);
-                showToast("ข้อผิดพลาด", "ไม่สามารถโหลดข้อมูลได้", "error");
-                document.getElementById('paymentMethodsList').innerHTML = `
-                    <div class="glass-panel rounded-3xl p-10 text-center shadow-sm">
-                        <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto text-2xl mb-4">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                        </div>
-                        <h4 class="text-slate-800 font-bold text-lg">เกิดข้อผิดพลาดในการโหลดข้อมูล</h4>
-                    </div>`;
+                console.warn("Using fallback/default data due to network or timeout:", error);
+                renderCustomerView(); // แสดงผลหน้าเว็บทันทีแม้เชื่อมต่อช้า
             }
         }
 
@@ -685,13 +693,11 @@
         // ADMIN AUTHENTICATION
         // -----------------------
         async function handleAdminAccess() {
-            // Check session from Supabase
             const { data: { session } } = await supabase.auth.getSession();
             
             if (session) {
-                // Verify if is Admin (using RPC or just assume yes if logged in)
                 const { data: isAdmin } = await supabase.rpc('is_admin');
-                if (isAdmin || isAdmin === null) { // If RPC not set up, rely on Auth Session
+                if (isAdmin || isAdmin === null) {
                     isAdminLoggedIn = true;
                     toggleAdminModal(true);
                     return;
@@ -834,7 +840,7 @@
         }
 
         // -----------------------
-        // IMAGE UPLOAD SYSTEM (Base64 for direct DB text column)
+        // IMAGE UPLOAD SYSTEM
         // -----------------------
         function handleImageUpload(event, type) {
             const file = event.target.files[0];
@@ -1030,7 +1036,7 @@
             if (error) {
                 showToast("ข้อผิดพลาด", error.message, "error");
             } else {
-                await fetchInitialData(); // Reload all data
+                await fetchInitialData();
                 renderAdminChannelsList();
                 closeChannelFormModal();
                 showToast("สำเร็จ", id ? "อัปเดตข้อมูลช่องทางแล้ว" : "เพิ่มช่องทางใหม่แล้ว");
