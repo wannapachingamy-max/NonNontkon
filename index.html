@@ -46,8 +46,6 @@
             color: #334155;
             -webkit-tap-highlight-color: transparent;
         }
-        
-        /* Premium Animated Background */
         .bg-container {
             position: fixed;
             inset: 0;
@@ -65,32 +63,23 @@
         .orb-1 { width: 50vw; height: 50vw; background: #bae6fd; top: -10%; left: -10%; animation-duration: 25s; }
         .orb-2 { width: 40vw; height: 40vw; background: #e0e7ff; bottom: 10%; right: -5%; animation-duration: 20s; animation-delay: -5s; }
         .orb-3 { width: 45vw; height: 45vw; background: #dcfce7; top: 40%; left: 20%; animation-duration: 30s; animation-delay: -10s; }
-
         @keyframes float {
             0% { transform: translate(0, 0) scale(1); }
             33% { transform: translate(5vw, 5vh) scale(1.1); }
             66% { transform: translate(-5vw, 10vh) scale(0.9); }
             100% { transform: translate(0, 0) scale(1); }
         }
-
-        /* Glassmorphism Classes */
         .glass-panel {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 1);
         }
-
-        /* Smooth Animations */
         @keyframes slideUpFade {
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        .animate-enter {
-            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        /* Toast Animations */
+        .animate-enter { animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes toastEnter {
             from { transform: translateY(100%) scale(0.9); opacity: 0; }
             to { transform: translateY(0) scale(1); opacity: 1; }
@@ -101,8 +90,6 @@
         }
         .toast-show { animation: toastEnter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         .toast-hide { animation: toastExit 0.3s ease-in forwards; }
-
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -111,14 +98,12 @@
 </head>
 <body class="flex flex-col min-h-screen relative">
 
-    <!-- Animated Background -->
     <div class="bg-container">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
     </div>
 
-    <!-- Header (Admin Access) -->
     <header class="w-full sticky top-0 z-40 px-4 py-3">
         <div class="max-w-xl mx-auto flex justify-end">
             <button onclick="handleAdminAccess()" class="bg-white/80 backdrop-blur-md shadow-sm hover:shadow-md text-slate-600 text-xs font-semibold px-4 py-2 rounded-full transition-all flex items-center space-x-2 border border-slate-100">
@@ -128,26 +113,20 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="flex-grow max-w-xl w-full mx-auto px-4 pb-12 space-y-6">
         
-        <!-- Profile Section -->
         <section class="animate-enter" style="animation-delay: 0.1s;">
             <div class="glass-panel rounded-[2.5rem] shadow-soft p-8 text-center relative overflow-hidden">
-                <!-- Decorative Top Gradient -->
                 <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-brand-50 to-transparent"></div>
-                
                 <div class="relative z-10">
-                    <!-- Avatar with Glow -->
                     <div class="relative inline-block mb-4">
                         <div class="absolute inset-0 bg-brand-400 rounded-full blur-xl opacity-30"></div>
                         <img id="storeAvatar" src="https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP" alt="Store Profile" class="relative w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg mx-auto bg-white transition-transform hover:scale-105 duration-300">
                     </div>
                     
                     <h1 id="storeName" class="text-3xl font-bold text-slate-800 tracking-tight mb-2">Payment Hub</h1>
-                    <p id="storeTagline" class="text-sm font-medium text-slate-500 max-w-sm mx-auto leading-relaxed">ยินดีต้อนรับสู่ช่องทางการชำระเงินของร้าน</p>
+                    <p id="storeTagline" class="text-sm font-medium text-slate-500 max-w-sm mx-auto leading-relaxed">ช่องทางการชำระเงิน</p>
                     
-                    <!-- Social Links -->
                     <div class="flex justify-center items-center space-x-4 mt-6">
                         <a id="socialLine" href="#" target="_blank" class="group flex items-center justify-center w-12 h-12 rounded-2xl bg-[#00B900]/10 hover:bg-[#00B900]/20 text-[#00B900] transition-all duration-300" title="LINE">
                             <i class="fa-brands fa-line text-2xl group-hover:scale-110 transition-transform"></i>
@@ -163,14 +142,12 @@
             </div>
         </section>
 
-        <!-- Featured Image Section -->
         <section id="featuredSectionContainer" class="animate-enter hidden" style="animation-delay: 0.2s;">
             <div class="glass-panel rounded-3xl p-2 shadow-soft">
                 <img id="featuredImageDisplay" src="" alt="Banner" class="w-full h-auto max-h-64 object-cover rounded-[1.25rem]">
             </div>
         </section>
 
-        <!-- Payment Channels Header -->
         <div class="flex items-center justify-between px-2 pt-2 animate-enter" style="animation-delay: 0.3s;">
             <h3 class="font-bold text-slate-800 text-lg flex items-center space-x-2">
                 <span class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-sm">
@@ -180,9 +157,7 @@
             </h3>
         </div>
 
-        <!-- Payment Methods List -->
         <section id="paymentMethodsList" class="space-y-4 animate-enter" style="animation-delay: 0.4s;">
-            <!-- Default Empty State -->
             <div class="glass-panel rounded-3xl p-10 text-center shadow-sm">
                 <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto text-2xl mb-4">
                     <i class="fa-solid fa-ghost"></i>
@@ -198,7 +173,7 @@
         <p class="text-xs font-medium text-slate-400">© 2026 Payment Hub. All rights reserved.</p>
     </footer>
 
-    <!-- Premium Toast Notification -->
+    <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] hidden min-w-[300px] bg-slate-900/90 backdrop-blur-xl border border-white/10 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3">
         <div id="toastIconContainer" class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0">
             <i id="toastIcon" class="fa-solid fa-check text-sm"></i>
@@ -210,8 +185,6 @@
     </div>
 
     <!-- Modals -->
-    
-    <!-- Delete Confirmation Modal -->
     <div id="deleteConfirmModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-[2rem] max-w-sm w-full shadow-2xl p-8 text-center animate-enter">
             <div class="w-20 h-20 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-5 text-3xl">
@@ -226,7 +199,6 @@
         </div>
     </div>
 
-    <!-- Admin Login Modal -->
     <div id="adminLoginModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-[2rem] max-w-sm w-full shadow-2xl p-8 animate-enter">
             <div class="text-center mb-6">
@@ -234,7 +206,7 @@
                     <i class="fa-solid fa-lock"></i>
                 </div>
                 <h3 class="font-bold text-slate-800 text-xl">เข้าสู่ระบบแอดมิน</h3>
-                <p class="text-sm text-slate-500 mt-1">กรุณายืนยันรหัสผ่านเพื่อเข้าจัดการระบบ</p>
+                <p class="text-sm text-slate-500 mt-1">กรุณากรอกรหัสผ่าน (เข้าสู่ระบบด้วย Email แอดมิน)</p>
             </div>
             
             <form id="adminLoginForm" onsubmit="verifyAdminLogin(event)" class="space-y-4">
@@ -243,11 +215,9 @@
                         <input type="password" id="adminPasswordInput" class="w-full bg-slate-50 px-4 py-3.5 rounded-2xl border border-slate-200 focus:bg-white focus:outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all text-center text-lg tracking-widest font-number font-bold" placeholder="••••••••" required>
                     </div>
                 </div>
-
                 <div id="loginErrorMsg" class="text-rose-500 text-sm text-center hidden font-medium">
-                    <i class="fa-solid fa-circle-exclamation mr-1"></i> รหัสผ่านไม่ถูกต้อง หรือไม่มีสิทธิ์แอดมิน
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i> รหัสผ่านไม่ถูกต้อง หรืออีเมลแอดมินไม่ถูกต้อง
                 </div>
-
                 <div class="pt-4 flex flex-col space-y-3">
                     <button type="submit" id="btnLoginSubmit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-2xl shadow-lg transition flex items-center justify-center">เข้าสู่ระบบ</button>
                     <button type="button" onclick="toggleAdminLoginModal(false)" class="w-full bg-transparent hover:bg-slate-50 text-slate-500 font-bold py-3.5 rounded-2xl transition">ยกเลิก</button>
@@ -256,11 +226,8 @@
         </div>
     </div>
 
-    <!-- Admin Panel Dashboard -->
     <div id="adminModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-[2rem] max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl animate-enter overflow-hidden">
-            
-            <!-- Header -->
             <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white z-10">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center text-lg">
@@ -280,16 +247,12 @@
                 </div>
             </div>
 
-            <!-- Tabs -->
             <div class="flex border-b border-slate-100 px-6 pt-2 bg-white z-10">
                 <button onclick="switchAdminTab('channels')" id="tabBtnChannels" class="px-4 py-3 font-bold text-sm border-b-2 border-slate-900 text-slate-900 transition">ช่องทางชำระเงิน</button>
                 <button onclick="switchAdminTab('settings')" id="tabBtnSettings" class="px-4 py-3 font-bold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-700 transition">ตั้งค่าร้านค้า</button>
             </div>
 
-            <!-- Scrollable Content Area -->
             <div class="overflow-y-auto p-6 flex-grow bg-slate-50/50">
-                
-                <!-- TAB: Channels -->
                 <div id="adminTabChannels" class="space-y-4">
                     <button onclick="openChannelFormModal()" class="w-full bg-white border-2 border-dashed border-slate-300 hover:border-brand-500 text-slate-600 hover:text-brand-600 font-bold py-4 rounded-2xl transition flex items-center justify-center space-x-2 group">
                         <div class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-brand-50 flex items-center justify-center transition">
@@ -297,14 +260,11 @@
                         </div>
                         <span>เพิ่มช่องทางชำระเงินใหม่</span>
                     </button>
-
                     <div id="adminChannelList" class="space-y-3">
-                        <!-- JS populated -->
                         <div class="text-center py-6"><i class="fa-solid fa-spinner fa-spin text-brand-500 text-2xl"></i></div>
                     </div>
                 </div>
 
-                <!-- TAB: Settings -->
                 <div id="adminTabSettings" class="hidden">
                     <form id="siteSettingsForm" onsubmit="saveSiteSettings(event)" class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-5">
                         <div class="space-y-4">
@@ -317,7 +277,6 @@
                                 <label class="block font-semibold text-slate-700 text-sm mb-1.5">คำโปรย / สโลแกน</label>
                                 <textarea id="inputStoreTagline" rows="2" class="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:bg-white focus:outline-none focus:border-brand-500 font-medium" required></textarea>
                             </div>
-                            <!-- เพิ่ม Social Links -->
                             <div>
                                 <label class="block font-semibold text-slate-700 text-sm mb-1.5">ลิงก์ LINE</label>
                                 <input type="url" id="inputLineUrl" class="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:bg-white focus:outline-none focus:border-brand-500 font-medium">
@@ -365,7 +324,6 @@
         </div>
     </div>
 
-    <!-- Channel Form Modal (Add/Edit) -->
     <div id="channelFormModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-[2rem] max-w-md w-full shadow-2xl p-6 md:p-8 animate-enter max-h-[95vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
@@ -377,7 +335,6 @@
 
             <form id="channelForm" onsubmit="saveChannel(event)" class="space-y-5">
                 <input type="hidden" id="channelEditId">
-                
                 <div>
                     <label class="block font-semibold text-slate-700 text-sm mb-1.5">ประเภทช่องทาง</label>
                     <select id="channelType" class="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:bg-white focus:outline-none focus:border-brand-500 font-medium" onchange="onChannelTypeChange()">
@@ -386,40 +343,31 @@
                         <option value="other">พร้อมเพย์ / คิวอาร์โค้ด / อื่นๆ</option>
                     </select>
                 </div>
-
                 <div>
                     <label class="block font-semibold text-slate-700 text-sm mb-1.5">ชื่อธนาคาร / บริการ</label>
                     <input type="text" id="channelName" class="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:bg-white focus:outline-none focus:border-brand-500 font-medium" placeholder="เช่น กสิกรไทย, TrueMoney" required>
                 </div>
-
                 <div>
                     <label class="block font-semibold text-slate-700 text-sm mb-1.5">เลขบัญชี / เบอร์โทร</label>
                     <input type="text" id="channelAccNo" class="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:bg-white focus:outline-none focus:border-brand-500 font-number font-bold tracking-wider text-lg" placeholder="012-3-45678-9" required>
                 </div>
-                
                 <div>
                     <label class="block font-semibold text-slate-700 text-sm mb-1.5">ชื่อบัญชี</label>
                     <input type="text" id="channelAccName" class="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:bg-white focus:outline-none focus:border-brand-500 font-medium" placeholder="ชื่อ - นามสกุล" required>
                 </div>
 
-                <!-- Icon/Logo Management -->
                 <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
                     <label class="block font-semibold text-slate-800 text-sm mb-3">ไอคอน / โลโก้ช่องทาง</label>
-                    
                     <div class="flex space-x-2 bg-slate-200/50 p-1 rounded-xl font-semibold text-sm mb-4">
                         <button type="button" id="iconTabFa" onclick="switchIconInputMode('fa')" class="w-1/2 py-2 rounded-lg bg-white shadow-sm text-slate-800 transition">ไอคอนระบบ</button>
                         <button type="button" id="iconTabImg" onclick="switchIconInputMode('img')" class="w-1/2 py-2 rounded-lg text-slate-500 hover:text-slate-700 transition">อัปโหลดรูปภาพ</button>
                     </div>
-
-                    <!-- FA Mode -->
                     <div id="faInputContainer" class="flex items-center space-x-3">
                         <div id="iconPreview" class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-slate-700 text-xl border border-slate-100 shrink-0">
                             <i class="fa-solid fa-building-columns"></i>
                         </div>
                         <input type="text" id="channelIcon" class="w-full bg-white px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-500 text-sm" placeholder="fa-solid fa-wallet">
                     </div>
-
-                    <!-- Image Mode -->
                     <div id="imgInputContainer" class="hidden space-y-3">
                         <div class="flex items-center space-x-3">
                             <img id="previewChannelIconImg" src="" class="w-12 h-12 rounded-xl object-cover shadow-sm bg-white border border-slate-100 hidden shrink-0">
@@ -438,7 +386,6 @@
                 </div>
                 
                 <style>
-                    /* Custom Toggle Switch CSS */
                     .toggle-checkbox:checked { right: 0; border-color: #0ea5e9; }
                     .toggle-checkbox:checked + .toggle-label { background-color: #0ea5e9; }
                     .toggle-checkbox { right: 24px; border-color: #d1d5db; z-index: 1; }
@@ -451,56 +398,35 @@
         </div>
     </div>
 
-    <!-- Application Logic (Supabase Integration) -->
+    <!-- Application Logic -->
     <script>
-        // -----------------------
-        // SUPABASE CONFIGURATION
-        // -----------------------
         const SUPABASE_URL = 'https://qwlokwprfneowgvekraj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3bG9rd3ByZm5lb3dndmVrcmFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4MTg2NzMsImV4cCI6MjEwNjM5NDY3M30.eGEnTSACLxj_Ykpdun-VPfgtu-y_D81xHrCsJRDLYhk';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // กำหนดอีเมลของ Admin ไว้ที่นี่ เพื่อใช้คู่กับรหัสผ่านในหน้า Login
+        // ⚠️ สำคัญ: ใส่ Email ของคุณที่สมัครใน Supabase Auth ตรงนี้
         const ADMIN_EMAIL = 'admin@yourdomain.com';
 
-        // -----------------------
-        // STATE (DEFAULT FALLBACK)
-        // -----------------------
         let appSettings = {
             storeName: "Payment Hub",
-            storeTagline: "ยินดีต้อนรับสู่ช่องทางการชำระเงินของร้าน",
+            storeTagline: "ยินดีต้อนรับสู่ช่องทางการชำระเงิน",
             storeAvatar: "https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP",
             featuredImage: "",
             lineUrl: "#",
             facebookUrl: "#",
             instagramUrl: "#"
         };
-        let appChannels = [
-            {
-                id: "1",
-                type: "bank",
-                name: "ธนาคารกสิกรไทย",
-                accNo: "123-4-56789-0",
-                accName: "ชื่อบัญชี ตัวอย่าง",
-                active: true,
-                iconType: "fa",
-                icon: "fa-solid fa-building-columns"
-            }
-        ];
-        let isAdminLoggedIn = false;
+        let appChannels = [];
 
-        // Initialize App on DOM Load (เรนเดอร์หน้าจอทันที ไม่รอโหลด)
         document.addEventListener('DOMContentLoaded', () => {
-            renderCustomerView(); // แสดงผลทันที
-            fetchInitialDataFromSupabase(); // ดึงข้อมูลจริงเบื้องหลังแบบเงียบๆ
-            
-            // Icon live preview
+            renderCustomerView();
+            fetchDataNonBlocking();
+
             document.getElementById('channelIcon').addEventListener('input', (e) => {
                 document.getElementById('iconPreview').innerHTML = `<i class="${e.target.value.trim() || 'fa-solid fa-star'}"></i>`;
             });
         });
 
-        // Toggle Button Loading State (ป้องกันกดซ้ำ)
         function toggleButtonLoading(btnId, isLoading, defaultText = 'บันทึกข้อมูล') {
             const btn = document.getElementById(btnId);
             if (!btn) return;
@@ -515,38 +441,27 @@
             }
         }
 
-        // -----------------------
-        // BACKGROUND DATA FETCHING
-        // -----------------------
-        async function fetchInitialDataFromSupabase() {
+        async function fetchDataNonBlocking() {
             try {
-                // Fetch Settings
-                const { data: settingsData } = await supabase
-                    .from('store_settings')
-                    .select('*')
-                    .limit(1)
-                    .maybeSingle();
+                const settingsPromise = supabase.from('store_settings').select('*').limit(1).maybeSingle();
+                const channelsPromise = supabase.from('payment_channels').select('*').order('created_at', { ascending: true });
 
-                if (settingsData) {
+                const [settingsRes, channelsRes] = await Promise.all([settingsPromise, channelsPromise]);
+
+                if (settingsRes.data) {
                     appSettings = {
-                        storeName: settingsData.store_name || appSettings.storeName,
-                        storeTagline: settingsData.store_tagline || appSettings.storeTagline,
-                        storeAvatar: settingsData.store_avatar_url || appSettings.storeAvatar,
-                        featuredImage: settingsData.featured_image_url || appSettings.featuredImage,
-                        lineUrl: settingsData.line_url || appSettings.lineUrl,
-                        facebookUrl: settingsData.facebook_url || appSettings.facebookUrl,
-                        instagramUrl: settingsData.instagram_url || appSettings.instagramUrl
+                        storeName: settingsRes.data.store_name || appSettings.storeName,
+                        storeTagline: settingsRes.data.store_tagline || appSettings.storeTagline,
+                        storeAvatar: settingsRes.data.store_avatar_url || appSettings.storeAvatar,
+                        featuredImage: settingsRes.data.featured_image_url || appSettings.featuredImage,
+                        lineUrl: settingsRes.data.line_url || appSettings.lineUrl,
+                        facebookUrl: settingsRes.data.facebook_url || appSettings.facebookUrl,
+                        instagramUrl: settingsRes.data.instagram_url || appSettings.instagramUrl
                     };
                 }
 
-                // Fetch Channels
-                const { data: channelsData } = await supabase
-                    .from('payment_channels')
-                    .select('*')
-                    .order('created_at', { ascending: true });
-
-                if (channelsData && channelsData.length > 0) {
-                    appChannels = channelsData.map(c => ({
+                if (channelsRes.data) {
+                    appChannels = channelsRes.data.map(c => ({
                         id: c.id,
                         type: c.type,
                         name: c.name,
@@ -559,27 +474,21 @@
                     }));
                 }
 
-                renderCustomerView(); // อัปเดตหน้าจอด้วยข้อมูลจริงจาก DB
-            } catch (error) {
-                console.warn("Background fetch warning (using fallback data):", error);
+                renderCustomerView();
+            } catch (err) {
+                console.error("Supabase fetch failed:", err);
             }
         }
 
-        // -----------------------
-        // CUSTOMER VIEW RENDERING
-        // -----------------------
         function renderCustomerView() {
-            // Update Profile
-            if(appSettings.storeAvatar) document.getElementById('storeAvatar').src = appSettings.storeAvatar;
-            document.getElementById('storeName').textContent = appSettings.storeName || "ชื่อร้านค้า";
+            if (appSettings.storeAvatar) document.getElementById('storeAvatar').src = appSettings.storeAvatar;
+            document.getElementById('storeName').textContent = appSettings.storeName || "Payment Hub";
             document.getElementById('storeTagline').textContent = appSettings.storeTagline || "";
 
-            // Update Social
             document.getElementById('socialLine').href = appSettings.lineUrl || "#";
             document.getElementById('socialFb').href = appSettings.facebookUrl || "#";
             document.getElementById('socialIg').href = appSettings.instagramUrl || "#";
 
-            // Update Featured Banner
             const featContainer = document.getElementById('featuredSectionContainer');
             if (appSettings.featuredImage) {
                 document.getElementById('featuredImageDisplay').src = appSettings.featuredImage;
@@ -588,7 +497,6 @@
                 featContainer.classList.add('hidden');
             }
 
-            // Render Payment List
             const activeChannels = appChannels.filter(c => c.active);
             const listContainer = document.getElementById('paymentMethodsList');
             
@@ -607,13 +515,7 @@
             let html = '';
             activeChannels.forEach((c, index) => {
                 let badgeTxt = c.type === 'bank' ? 'บัญชีธนาคาร' : (c.type === 'wallet' ? 'อีวอลเล็ท' : 'พร้อมเพย์ / อื่นๆ');
-                
-                let iconHtml = '';
-                if (c.iconType === 'img' && c.iconImg) {
-                    iconHtml = `<img src="${escapeHtml(c.iconImg)}" class="w-full h-full object-cover">`;
-                } else {
-                    iconHtml = `<i class="${escapeHtml(c.icon || 'fa-solid fa-wallet')}"></i>`;
-                }
+                let iconHtml = (c.iconType === 'img' && c.iconImg) ? `<img src="${escapeHtml(c.iconImg)}" class="w-full h-full object-cover">` : `<i class="${escapeHtml(c.icon || 'fa-solid fa-wallet')}"></i>`;
 
                 html += `
                 <div class="glass-panel rounded-[2rem] p-5 shadow-sm hover:shadow-md hover:border-brand-100 transition-all duration-300 transform animate-enter" style="animation-delay: ${0.4 + (index * 0.1)}s">
@@ -626,7 +528,6 @@
                             <span class="inline-block mt-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500 tracking-wide">${escapeHtml(badgeTxt)}</span>
                         </div>
                     </div>
-                    
                     <div class="bg-slate-50/80 rounded-2xl p-4 border border-slate-100/80 flex items-center justify-between gap-3 group">
                         <div class="overflow-hidden flex-grow">
                             <p class="text-xs font-semibold text-slate-400 mb-0.5 uppercase tracking-wide">เลขบัญชี / รหัส</p>
@@ -642,9 +543,6 @@
             listContainer.innerHTML = html;
         }
 
-        // -----------------------
-        // COPY & TOAST
-        // -----------------------
         function copyData(text, name) {
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(text).then(() => {
@@ -672,18 +570,16 @@
             const icon = document.getElementById('toastIcon');
 
             iconWrap.className = 'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-white shadow-inner';
-            
             if (type === 'success') {
                 iconWrap.classList.add('bg-[#10B981]');
                 icon.className = 'fa-solid fa-check text-base';
-            } else if (type === 'error') {
+            } else {
                 iconWrap.classList.add('bg-[#EF4444]');
                 icon.className = 'fa-solid fa-xmark text-base';
             }
 
             document.getElementById('toastTitle').textContent = title;
             document.getElementById('toastMessage').textContent = message;
-            
             toast.classList.remove('hidden', 'toast-hide');
             toast.classList.add('toast-show');
             
@@ -695,24 +591,22 @@
             }, 3000);
         }
 
-        // -----------------------
-        // ADMIN AUTHENTICATION
-        // -----------------------
+        // Admin Auth & Modal Logic (แก้ไขให้เช็ค session และเปิด Modal ได้จริง 100%)
         async function handleAdminAccess() {
-            const { data: { session } } = await supabase.auth.getSession();
-            
-            if (session) {
-                const { data: isAdmin } = await supabase.rpc('is_admin');
-                if (isAdmin || isAdmin === null) {
-                    isAdminLoggedIn = true;
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (session && session.user) {
+                    // ถ้าเคยล็อกอินไว้แล้ว ให้เปิดหน้าแอดมินทันที
                     toggleAdminModal(true);
-                    return;
                 } else {
-                    await supabase.auth.signOut();
-                    showToast("ปฏิเสธการเข้าถึง", "คุณไม่มีสิทธิ์ผู้ดูแลระบบ", "error");
+                    // ถ้ายังไม่ล็อกอิน ให้เปิดกล่องใส่รหัสผ่าน
+                    toggleAdminLoginModal(true);
                 }
+            } catch (err) {
+                console.error("Session check error:", err);
+                toggleAdminLoginModal(true);
             }
-            toggleAdminLoginModal(true);
         }
 
         function toggleAdminLoginModal(show) {
@@ -743,22 +637,18 @@
             if (error) {
                 document.getElementById('loginErrorMsg').classList.remove('hidden');
             } else {
-                isAdminLoggedIn = true;
                 toggleAdminLoginModal(false);
                 toggleAdminModal(true);
+                showToast("สำเร็จ", "เข้าสู่ระบบแอดมินแล้ว", "success");
             }
         }
 
         async function adminLogout() {
             await supabase.auth.signOut();
-            isAdminLoggedIn = false;
             toggleAdminModal(false);
             showToast("ออกจากระบบ", "กลับสู่หน้าลูกค้าปกติ", "success");
         }
 
-        // -----------------------
-        // ADMIN DASHBOARD
-        // -----------------------
         function toggleAdminModal(show) {
             const m = document.getElementById('adminModal');
             if (show) {
@@ -792,7 +682,6 @@
             document.getElementById('inputStoreTagline').value = appSettings.storeTagline || "";
             document.getElementById('inputStoreAvatar').value = appSettings.storeAvatar || "";
             document.getElementById('inputFeaturedImage').value = appSettings.featuredImage || "";
-            
             document.getElementById('inputLineUrl').value = appSettings.lineUrl || "";
             document.getElementById('inputFacebookUrl').value = appSettings.facebookUrl || "";
             document.getElementById('inputInstagramUrl').value = appSettings.instagramUrl || "";
@@ -812,7 +701,7 @@
             toggleButtonLoading('btnSaveSettings', true, 'บันทึกการตั้งค่าร้านค้า');
 
             const newSettings = {
-                id: 1, // Fix ID for single row settings
+                id: 1,
                 store_name: document.getElementById('inputStoreName').value.trim(),
                 store_tagline: document.getElementById('inputStoreTagline').value.trim(),
                 store_avatar_url: document.getElementById('inputStoreAvatar').value || null,
@@ -822,10 +711,7 @@
                 instagram_url: document.getElementById('inputInstagramUrl').value.trim() || null
             };
 
-            const { error } = await supabase
-                .from('store_settings')
-                .upsert(newSettings);
-
+            const { error } = await supabase.from('store_settings').upsert(newSettings);
             toggleButtonLoading('btnSaveSettings', false, 'บันทึกการตั้งค่าร้านค้า');
 
             if (error) {
@@ -845,9 +731,6 @@
             }
         }
 
-        // -----------------------
-        // IMAGE UPLOAD SYSTEM
-        // -----------------------
         function handleImageUpload(event, type) {
             const file = event.target.files[0];
             if (!file) return;
@@ -858,7 +741,6 @@
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
-                    
                     let maxW = 400, maxH = 400;
                     if(type === 'featured') { maxW = 1200; maxH = 800; }
                     if(type === 'channelIcon') { maxW = 200; maxH = 200; }
@@ -896,9 +778,6 @@
             document.getElementById('previewFeaturedImg').classList.add('hidden');
         }
 
-        // -----------------------
-        // CHANNEL MANAGEMENT
-        // -----------------------
         function renderAdminChannelsList() {
             const list = document.getElementById('adminChannelList');
             if (appChannels.length === 0) {
@@ -908,13 +787,8 @@
 
             let html = '';
             appChannels.forEach(c => {
-                const statusHtml = c.active 
-                    ? `<span class="bg-[#10B981]/10 text-[#10B981] text-[10px] font-bold px-2 py-0.5 rounded-md">เปิดใช้งาน</span>`
-                    : `<span class="bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-md">ปิดใช้งาน</span>`;
-                
-                let iconHtml = c.iconType === 'img' && c.iconImg 
-                    ? `<img src="${escapeHtml(c.iconImg)}" class="w-full h-full object-cover">`
-                    : `<i class="${escapeHtml(c.icon)}"></i>`;
+                const statusHtml = c.active ? `<span class="bg-[#10B981]/10 text-[#10B981] text-[10px] font-bold px-2 py-0.5 rounded-md">เปิดใช้งาน</span>` : `<span class="bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-md">ปิดใช้งาน</span>`;
+                let iconHtml = (c.iconType === 'img' && c.iconImg) ? `<img src="${escapeHtml(c.iconImg)}" class="w-full h-full object-cover">` : `<i class="${escapeHtml(c.icon)}"></i>`;
 
                 html += `
                 <div class="bg-white border border-slate-100 p-4 rounded-2xl flex items-center justify-between gap-3 shadow-sm hover:shadow-md transition">
@@ -1028,21 +902,15 @@
                 icon_img: document.getElementById('channelIconImgData').value || null
             };
 
-            if (id) {
-                dbPayload.id = id;
-            }
+            if (id) dbPayload.id = id;
 
-            const { data, error } = await supabase
-                .from('payment_channels')
-                .upsert(dbPayload)
-                .select();
-
+            const { error } = await supabase.from('payment_channels').upsert(dbPayload).select();
             toggleButtonLoading('btnSaveChannel', false, 'บันทึกข้อมูล');
 
             if (error) {
                 showToast("ข้อผิดพลาด", error.message, "error");
             } else {
-                await fetchInitialDataFromSupabase();
+                await fetchDataNonBlocking();
                 renderAdminChannelsList();
                 closeChannelFormModal();
                 showToast("สำเร็จ", id ? "อัปเดตข้อมูลช่องทางแล้ว" : "เพิ่มช่องทางใหม่แล้ว");
@@ -1054,23 +922,16 @@
             delId = id;
             document.getElementById('deleteConfirmModal').classList.remove('hidden');
         }
-        
         function closeDeleteConfirmModal() {
             delId = null;
             document.getElementById('deleteConfirmModal').classList.add('hidden');
         }
-        
         async function executeDeleteChannel() {
             if (!delId) return;
-            
             toggleButtonLoading('btnConfirmDelete', true, 'ลบทิ้งเลย');
             document.getElementById('btnCancelDelete').disabled = true;
 
-            const { error } = await supabase
-                .from('payment_channels')
-                .delete()
-                .eq('id', delId);
-
+            const { error } = await supabase.from('payment_channels').delete().eq('id', delId);
             toggleButtonLoading('btnConfirmDelete', false, 'ลบทิ้งเลย');
             document.getElementById('btnCancelDelete').disabled = false;
 
@@ -1086,7 +947,6 @@
             }
         }
 
-        // Utils (เพื่อความปลอดภัยในการป้องกัน XSS)
         function escapeHtml(str) { return String(str).replace(/[&<>"']/g, m => ({'&': '&amp;','<': '&lt;','>': '&gt;','"': '&quot;',"'": '&#39;'}[m])); }
         function escapeJs(str) { return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n'); }
     </script>
