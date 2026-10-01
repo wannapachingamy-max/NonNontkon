@@ -144,8 +144,8 @@
                         <img id="storeAvatar" src="https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP" alt="Store Profile" class="relative w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg mx-auto bg-white transition-transform hover:scale-105 duration-300">
                     </div>
                     
-                    <h1 id="storeName" class="text-3xl font-bold text-slate-800 tracking-tight mb-2">กำลังโหลด...</h1>
-                    <p id="storeTagline" class="text-sm font-medium text-slate-500 max-w-sm mx-auto leading-relaxed">กรุณารอสักครู่</p>
+                    <h1 id="storeName" class="text-3xl font-bold text-slate-800 tracking-tight mb-2">Payment Hub</h1>
+                    <p id="storeTagline" class="text-sm font-medium text-slate-500 max-w-sm mx-auto leading-relaxed">ยินดีต้อนรับสู่ช่องทางการชำระเงินของร้าน</p>
                     
                     <!-- Social Links -->
                     <div class="flex justify-center items-center space-x-4 mt-6">
@@ -182,10 +182,13 @@
 
         <!-- Payment Methods List -->
         <section id="paymentMethodsList" class="space-y-4 animate-enter" style="animation-delay: 0.4s;">
-            <!-- Loading State -->
+            <!-- Default Empty State -->
             <div class="glass-panel rounded-3xl p-10 text-center shadow-sm">
-                <i class="fa-solid fa-circle-notch fa-spin text-3xl text-brand-500 mb-3"></i>
-                <h4 class="text-slate-800 font-bold text-lg">กำลังโหลดข้อมูล</h4>
+                <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto text-2xl mb-4">
+                    <i class="fa-solid fa-ghost"></i>
+                </div>
+                <h4 class="text-slate-800 font-bold text-lg">ยังไม่มีช่องทางชำระเงิน</h4>
+                <p class="text-sm text-slate-500 mt-1">แอดมินสามารถเพิ่มและเปิดใช้งานได้ที่เมนูจัดการระบบ</p>
             </div>
         </section>
 
@@ -461,10 +464,10 @@
         const ADMIN_EMAIL = 'admin@yourdomain.com';
 
         // -----------------------
-        // STATE
+        // STATE (DEFAULT FALLBACK)
         // -----------------------
         let appSettings = {
-            storeName: "Minimal Store",
+            storeName: "Payment Hub",
             storeTagline: "ยินดีต้อนรับสู่ช่องทางการชำระเงินของร้าน",
             storeAvatar: "https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP",
             featuredImage: "",
@@ -472,12 +475,24 @@
             facebookUrl: "#",
             instagramUrl: "#"
         };
-        let appChannels = [];
+        let appChannels = [
+            {
+                id: "1",
+                type: "bank",
+                name: "ธนาคารกสิกรไทย",
+                accNo: "123-4-56789-0",
+                accName: "ชื่อบัญชี ตัวอย่าง",
+                active: true,
+                iconType: "fa",
+                icon: "fa-solid fa-building-columns"
+            }
+        ];
         let isAdminLoggedIn = false;
 
-        // Initialize App on DOM Load
+        // Initialize App on DOM Load (เรนเดอร์หน้าจอทันที ไม่รอโหลด)
         document.addEventListener('DOMContentLoaded', () => {
-            fetchInitialData();
+            renderCustomerView(); // แสดงผลทันที
+            fetchInitialDataFromSupabase(); // ดึงข้อมูลจริงเบื้องหลังแบบเงียบๆ
             
             // Icon live preview
             document.getElementById('channelIcon').addEventListener('input', (e) => {
@@ -501,61 +516,52 @@
         }
 
         // -----------------------
-        // DATA FETCHING (WITH TIMEOUT SAFETY)
+        // BACKGROUND DATA FETCHING
         // -----------------------
-        async function fetchInitialData() {
+        async function fetchInitialDataFromSupabase() {
             try {
-                // สร้างระบบ Timeout ป้องกันค้างนานเกิน 3 วินาที
-                const timeoutPromise = new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error('Timeout')), 3000)
-                );
+                // Fetch Settings
+                const { data: settingsData } = await supabase
+                    .from('store_settings')
+                    .select('*')
+                    .limit(1)
+                    .maybeSingle();
 
-                const fetchPromise = (async () => {
-                    // Fetch Settings
-                    const { data: settingsData, error: settingsError } = await supabase
-                        .from('store_settings')
-                        .select('*')
-                        .limit(1)
-                        .maybeSingle();
+                if (settingsData) {
+                    appSettings = {
+                        storeName: settingsData.store_name || appSettings.storeName,
+                        storeTagline: settingsData.store_tagline || appSettings.storeTagline,
+                        storeAvatar: settingsData.store_avatar_url || appSettings.storeAvatar,
+                        featuredImage: settingsData.featured_image_url || appSettings.featuredImage,
+                        lineUrl: settingsData.line_url || appSettings.lineUrl,
+                        facebookUrl: settingsData.facebook_url || appSettings.facebookUrl,
+                        instagramUrl: settingsData.instagram_url || appSettings.instagramUrl
+                    };
+                }
 
-                    if (settingsData) {
-                        appSettings = {
-                            storeName: settingsData.store_name || "ชื่อร้านค้า",
-                            storeTagline: settingsData.store_tagline || "",
-                            storeAvatar: settingsData.store_avatar_url || "https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP",
-                            featuredImage: settingsData.featured_image_url || "",
-                            lineUrl: settingsData.line_url || "#",
-                            facebookUrl: settingsData.facebook_url || "#",
-                            instagramUrl: settingsData.instagram_url || "#"
-                        };
-                    }
+                // Fetch Channels
+                const { data: channelsData } = await supabase
+                    .from('payment_channels')
+                    .select('*')
+                    .order('created_at', { ascending: true });
 
-                    // Fetch Channels
-                    const { data: channelsData, error: channelsError } = await supabase
-                        .from('payment_channels')
-                        .select('*')
-                        .order('created_at', { ascending: true });
+                if (channelsData && channelsData.length > 0) {
+                    appChannels = channelsData.map(c => ({
+                        id: c.id,
+                        type: c.type,
+                        name: c.name,
+                        accNo: c.acc_no,
+                        accName: c.acc_name,
+                        active: c.active,
+                        iconType: c.icon_type,
+                        icon: c.icon,
+                        iconImg: c.icon_img
+                    }));
+                }
 
-                    if (channelsData) {
-                        appChannels = channelsData.map(c => ({
-                            id: c.id,
-                            type: c.type,
-                            name: c.name,
-                            accNo: c.acc_no,
-                            accName: c.acc_name,
-                            active: c.active,
-                            iconType: c.icon_type,
-                            icon: c.icon,
-                            iconImg: c.icon_img
-                        }));
-                    }
-                })();
-
-                await Promise.race([fetchPromise, timeoutPromise]);
-                renderCustomerView();
+                renderCustomerView(); // อัปเดตหน้าจอด้วยข้อมูลจริงจาก DB
             } catch (error) {
-                console.warn("Using fallback/default data due to network or timeout:", error);
-                renderCustomerView(); // แสดงผลหน้าเว็บทันทีแม้เชื่อมต่อช้า
+                console.warn("Background fetch warning (using fallback data):", error);
             }
         }
 
@@ -563,9 +569,9 @@
         // CUSTOMER VIEW RENDERING
         // -----------------------
         function renderCustomerView() {
-            // Update Profile (ใช้ DOM API textContent ป้องกัน XSS)
+            // Update Profile
             if(appSettings.storeAvatar) document.getElementById('storeAvatar').src = appSettings.storeAvatar;
-            document.getElementById('storeName').textContent = appSettings.storeName || "ไม่ได้ตั้งชื่อร้าน";
+            document.getElementById('storeName').textContent = appSettings.storeName || "ชื่อร้านค้า";
             document.getElementById('storeTagline').textContent = appSettings.storeTagline || "";
 
             // Update Social
@@ -1036,7 +1042,7 @@
             if (error) {
                 showToast("ข้อผิดพลาด", error.message, "error");
             } else {
-                await fetchInitialData();
+                await fetchInitialDataFromSupabase();
                 renderAdminChannelsList();
                 closeChannelFormModal();
                 showToast("สำเร็จ", id ? "อัปเดตข้อมูลช่องทางแล้ว" : "เพิ่มช่องทางใหม่แล้ว");
