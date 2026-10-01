@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts: Kanit (Thai) & Outfit (Numbers/English) -->
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -139,11 +141,11 @@
                     <!-- Avatar with Glow -->
                     <div class="relative inline-block mb-4">
                         <div class="absolute inset-0 bg-brand-400 rounded-full blur-xl opacity-30"></div>
-                        <img id="storeAvatar" src="" alt="Store Profile" class="relative w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg mx-auto bg-white transition-transform hover:scale-105 duration-300" onerror="this.src='https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP'">
+                        <img id="storeAvatar" src="https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP" alt="Store Profile" class="relative w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg mx-auto bg-white transition-transform hover:scale-105 duration-300">
                     </div>
                     
-                    <h1 id="storeName" class="text-3xl font-bold text-slate-800 tracking-tight mb-2">ชื่อร้านค้า</h1>
-                    <p id="storeTagline" class="text-sm font-medium text-slate-500 max-w-sm mx-auto leading-relaxed">คำโปรยร้านค้า จะแสดงผลที่นี่</p>
+                    <h1 id="storeName" class="text-3xl font-bold text-slate-800 tracking-tight mb-2">กำลังโหลด...</h1>
+                    <p id="storeTagline" class="text-sm font-medium text-slate-500 max-w-sm mx-auto leading-relaxed">กรุณารอสักครู่</p>
                     
                     <!-- Social Links -->
                     <div class="flex justify-center items-center space-x-4 mt-6">
@@ -180,7 +182,11 @@
 
         <!-- Payment Methods List -->
         <section id="paymentMethodsList" class="space-y-4 animate-enter" style="animation-delay: 0.4s;">
-            <!-- Populated by JS -->
+            <!-- Loading State -->
+            <div class="glass-panel rounded-3xl p-10 text-center shadow-sm">
+                <i class="fa-solid fa-circle-notch fa-spin text-3xl text-brand-500 mb-3"></i>
+                <h4 class="text-slate-800 font-bold text-lg">กำลังโหลดข้อมูล</h4>
+            </div>
         </section>
 
     </main>
@@ -200,8 +206,7 @@
         </div>
     </div>
 
-    <!-- Modals (Admin Login, Dashboard, Channel Edit, Delete Confirm) -->
-    <!-- [The Modals are hidden by default and styled to match the new minimalist theme] -->
+    <!-- Modals -->
     
     <!-- Delete Confirmation Modal -->
     <div id="deleteConfirmModal" class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
@@ -212,8 +217,8 @@
             <h3 class="font-bold text-slate-800 text-xl mb-2">ลบช่องทางนี้?</h3>
             <p class="text-slate-500 text-sm mb-8 font-medium">คุณจะไม่สามารถกู้คืนข้อมูลช่องทางนี้ได้อีก</p>
             <div class="flex space-x-3">
-                <button onclick="closeDeleteConfirmModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-2xl transition">ยกเลิก</button>
-                <button onclick="executeDeleteChannel()" class="w-1/2 bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 rounded-2xl shadow-lg shadow-rose-500/30 transition">ลบทิ้งเลย</button>
+                <button onclick="closeDeleteConfirmModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-2xl transition" id="btnCancelDelete">ยกเลิก</button>
+                <button onclick="executeDeleteChannel()" class="w-1/2 bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 rounded-2xl shadow-lg shadow-rose-500/30 transition flex items-center justify-center" id="btnConfirmDelete">ลบทิ้งเลย</button>
             </div>
         </div>
     </div>
@@ -237,11 +242,11 @@
                 </div>
 
                 <div id="loginErrorMsg" class="text-rose-500 text-sm text-center hidden font-medium">
-                    <i class="fa-solid fa-circle-exclamation mr-1"></i> รหัสผ่านไม่ถูกต้อง
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i> รหัสผ่านไม่ถูกต้อง หรือไม่มีสิทธิ์แอดมิน
                 </div>
 
                 <div class="pt-4 flex flex-col space-y-3">
-                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-2xl shadow-lg transition">เข้าสู่ระบบ</button>
+                    <button type="submit" id="btnLoginSubmit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-2xl shadow-lg transition flex items-center justify-center">เข้าสู่ระบบ</button>
                     <button type="button" onclick="toggleAdminLoginModal(false)" class="w-full bg-transparent hover:bg-slate-50 text-slate-500 font-bold py-3.5 rounded-2xl transition">ยกเลิก</button>
                 </div>
             </form>
@@ -292,13 +297,13 @@
 
                     <div id="adminChannelList" class="space-y-3">
                         <!-- JS populated -->
+                        <div class="text-center py-6"><i class="fa-solid fa-spinner fa-spin text-brand-500 text-2xl"></i></div>
                     </div>
                 </div>
 
                 <!-- TAB: Settings -->
                 <div id="adminTabSettings" class="hidden">
                     <form id="siteSettingsForm" onsubmit="saveSiteSettings(event)" class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm space-y-5">
-                        
                         <div class="space-y-4">
                             <h4 class="font-bold text-slate-800 border-b border-slate-100 pb-2">ข้อมูลร้านค้า</h4>
                             <div>
@@ -308,6 +313,19 @@
                             <div>
                                 <label class="block font-semibold text-slate-700 text-sm mb-1.5">คำโปรย / สโลแกน</label>
                                 <textarea id="inputStoreTagline" rows="2" class="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:bg-white focus:outline-none focus:border-brand-500 font-medium" required></textarea>
+                            </div>
+                            <!-- เพิ่ม Social Links -->
+                            <div>
+                                <label class="block font-semibold text-slate-700 text-sm mb-1.5">ลิงก์ LINE</label>
+                                <input type="url" id="inputLineUrl" class="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:bg-white focus:outline-none focus:border-brand-500 font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 text-sm mb-1.5">ลิงก์ Facebook</label>
+                                <input type="url" id="inputFacebookUrl" class="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:bg-white focus:outline-none focus:border-brand-500 font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 text-sm mb-1.5">ลิงก์ Instagram</label>
+                                <input type="url" id="inputInstagramUrl" class="w-full bg-slate-50 px-4 py-3 rounded-xl border border-slate-200 focus:bg-white focus:outline-none focus:border-brand-500 font-medium">
                             </div>
                         </div>
 
@@ -336,7 +354,7 @@
                         </div>
 
                         <div class="pt-4">
-                            <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-base">บันทึกการตั้งค่าร้านค้า</button>
+                            <button type="submit" id="btnSaveSettings" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-base flex items-center justify-center">บันทึกการตั้งค่าร้านค้า</button>
                         </div>
                     </form>
                 </div>
@@ -349,7 +367,7 @@
         <div class="bg-white rounded-[2rem] max-w-md w-full shadow-2xl p-6 md:p-8 animate-enter max-h-[95vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
                 <h4 id="channelModalTitle" class="font-bold text-slate-800 text-xl">เพิ่มช่องทางชำระเงิน</h4>
-                <button onclick="closeChannelFormModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center transition">
+                <button type="button" onclick="closeChannelFormModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center transition">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -424,80 +442,34 @@
                 </style>
 
                 <div class="pt-4 flex space-x-3">
-                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-base">บันทึกข้อมูล</button>
+                    <button type="submit" id="btnSaveChannel" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl shadow-lg transition text-base flex items-center justify-center">บันทึกข้อมูล</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Application Logic -->
+    <!-- Application Logic (Supabase Integration) -->
     <script>
         // -----------------------
-        // STATE & MOCK DATA
+        // SUPABASE CONFIGURATION
         // -----------------------
-        const defaultSettings = {
-            storeName: "Minimal Store",
-            storeTagline: "ยินดีต้อนรับสู่ช่องทางการชำระเงินของร้าน โอนเงินแล้วแนบสลิปทางแชทได้เลยค่ะ 🤍",
-            storeAvatar: "https://images.unsplash.com/photo-1512413914595-fd84566270fb?auto=format&fit=crop&q=80&w=300",
-            featuredImage: "",
-            lineUrl: "https://lin.ee/NNKqu9g",
-            facebookUrl: "https://www.facebook.com/share/19fLAacTiP/",
-            instagramUrl: "https://www.instagram.com/nonnon_store06?stkn=MXV2ZHJhdGF6MHF1aQ=="
-        };
+        const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
+        const SUPABASE_KEY = 'YOUR_SUPABASE_PUBLISHABLE_KEY';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        const defaultChannels = [
-            {
-                id: "1",
-                type: "bank",
-                name: "ธนาคารกสิกรไทย (KBANK)",
-                data: "123-4-56789-0\nชื่อบัญชี: นนท์นันท์ สโตร์",
-                icon: "fa-solid fa-building-columns",
-                iconType: "fa",
-                active: true
-            },
-            {
-                id: "2",
-                type: "bank",
-                name: "ธนาคารไทยพาณิชย์ (SCB)",
-                data: "987-6-54321-0\nชื่อบัญชี: นนท์นันท์ สโตร์",
-                icon: "fa-solid fa-building-columns",
-                iconType: "fa",
-                active: true
-            },
-            {
-                id: "3",
-                type: "wallet",
-                name: "TrueMoney Wallet",
-                data: "089-123-4567\nชื่อบัญชี: นนท์นันท์ ส.",
-                icon: "fa-solid fa-wallet",
-                iconType: "fa",
-                active: true
-            },
-            {
-                id: "4",
-                type: "other",
-                name: "PromptPay (พร้อมเพย์ QR)",
-                data: "089-123-4567 (เบอร์พร้อมเพย์)\nชื่อบัญชี: นนท์นันท์ สโตร์",
-                icon: "fa-solid fa-qrcode",
-                iconType: "fa",
-                active: true
-            }
-        ];
+        // กำหนดอีเมลของ Admin ไว้ที่นี่ เพื่อใช้คู่กับรหัสผ่านในหน้า Login
+        const ADMIN_EMAIL = 'admin@yourdomain.com';
 
-        // Load State from localStorage or defaults
-        let appSettings = JSON.parse(localStorage.getItem('payment_hub_settings')) || defaultSettings;
-        let appChannels = JSON.parse(localStorage.getItem('payment_hub_channels')) || defaultChannels;
-        
-        // บังคับรีเซ็ตรหัสผ่านและเคลียร์รหัสเก่าที่ค้างในเบราว์เซอร์
-        localStorage.removeItem('payment_hub_admin_pwd');
-        let adminPassword = 'admin123';
-        
-        let isAdminLoggedIn = sessionStorage.getItem('payment_hub_is_logged_in') === 'true';
+        // -----------------------
+        // STATE
+        // -----------------------
+        let appSettings = {};
+        let appChannels = [];
+        let isAdminLoggedIn = false;
 
         // Initialize App on DOM Load
         document.addEventListener('DOMContentLoaded', () => {
-            renderCustomerView();
-            renderAdminSettingsForm();
+            fetchInitialData();
             
             // Icon live preview
             document.getElementById('channelIcon').addEventListener('input', (e) => {
@@ -505,19 +477,93 @@
             });
         });
 
+        // Toggle Button Loading State (ป้องกันกดซ้ำ)
+        function toggleButtonLoading(btnId, isLoading, defaultText = 'บันทึกข้อมูล') {
+            const btn = document.getElementById(btnId);
+            if (!btn) return;
+            if (isLoading) {
+                btn.disabled = true;
+                btn.classList.add('opacity-70', 'cursor-not-allowed');
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> กำลังดำเนินการ...`;
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-70', 'cursor-not-allowed');
+                btn.innerHTML = defaultText;
+            }
+        }
+
+        // -----------------------
+        // DATA FETCHING
+        // -----------------------
+        async function fetchInitialData() {
+            try {
+                // Fetch Settings
+                const { data: settingsData, error: settingsError } = await supabase
+                    .from('store_settings')
+                    .select('*')
+                    .limit(1)
+                    .single();
+
+                if (settingsError && settingsError.code !== 'PGRST116') throw settingsError;
+                if (settingsData) {
+                    appSettings = {
+                        storeName: settingsData.store_name || "ชื่อร้านค้า",
+                        storeTagline: settingsData.store_tagline || "",
+                        storeAvatar: settingsData.store_avatar || "https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP",
+                        featuredImage: settingsData.featured_image || "",
+                        lineUrl: settingsData.line_url || "#",
+                        facebookUrl: settingsData.facebook_url || "#",
+                        instagramUrl: settingsData.instagram_url || "#"
+                    };
+                }
+
+                // Fetch Channels
+                const { data: channelsData, error: channelsError } = await supabase
+                    .from('payment_channels')
+                    .select('*')
+                    .order('created_at', { ascending: true });
+
+                if (channelsError) throw channelsError;
+                
+                appChannels = channelsData.map(c => ({
+                    id: c.id,
+                    type: c.type,
+                    name: c.name,
+                    accNo: c.acc_no,
+                    accName: c.acc_name,
+                    active: c.active,
+                    iconType: c.icon_type,
+                    icon: c.icon,
+                    iconImg: c.icon_img
+                }));
+
+                renderCustomerView();
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                showToast("ข้อผิดพลาด", "ไม่สามารถโหลดข้อมูลได้", "error");
+                document.getElementById('paymentMethodsList').innerHTML = `
+                    <div class="glass-panel rounded-3xl p-10 text-center shadow-sm">
+                        <div class="w-16 h-16 bg-rose-50 text-rose-500 rounded-full flex items-center justify-center mx-auto text-2xl mb-4">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h4 class="text-slate-800 font-bold text-lg">เกิดข้อผิดพลาดในการโหลดข้อมูล</h4>
+                    </div>`;
+            }
+        }
+
         // -----------------------
         // CUSTOMER VIEW RENDERING
         // -----------------------
         function renderCustomerView() {
-            // Update Profile
-            document.getElementById('storeAvatar').src = appSettings.storeAvatar;
-            document.getElementById('storeName').textContent = appSettings.storeName;
-            document.getElementById('storeTagline').textContent = appSettings.storeTagline;
+            // Update Profile (ใช้ DOM API textContent ป้องกัน XSS)
+            if(appSettings.storeAvatar) document.getElementById('storeAvatar').src = appSettings.storeAvatar;
+            document.getElementById('storeName').textContent = appSettings.storeName || "ไม่ได้ตั้งชื่อร้าน";
+            document.getElementById('storeTagline').textContent = appSettings.storeTagline || "";
 
             // Update Social
-            document.getElementById('socialLine').href = appSettings.lineUrl;
-            document.getElementById('socialFb').href = appSettings.facebookUrl;
-            document.getElementById('socialIg').href = appSettings.instagramUrl;
+            document.getElementById('socialLine').href = appSettings.lineUrl || "#";
+            document.getElementById('socialFb').href = appSettings.facebookUrl || "#";
+            document.getElementById('socialIg').href = appSettings.instagramUrl || "#";
 
             // Update Featured Banner
             const featContainer = document.getElementById('featuredSectionContainer');
@@ -550,13 +596,10 @@
                 
                 let iconHtml = '';
                 if (c.iconType === 'img' && c.iconImg) {
-                    iconHtml = `<img src="${c.iconImg}" class="w-full h-full object-cover">`;
+                    iconHtml = `<img src="${escapeHtml(c.iconImg)}" class="w-full h-full object-cover">`;
                 } else {
-                    iconHtml = `<i class="${c.icon || 'fa-solid fa-wallet'}"></i>`;
+                    iconHtml = `<i class="${escapeHtml(c.icon || 'fa-solid fa-wallet')}"></i>`;
                 }
-
-                // Combine data for copying
-                const textToCopy = `${c.accNo}\n${c.name}\n${c.accName}`;
 
                 html += `
                 <div class="glass-panel rounded-[2rem] p-5 shadow-sm hover:shadow-md hover:border-brand-100 transition-all duration-300 transform animate-enter" style="animation-delay: ${0.4 + (index * 0.1)}s">
@@ -566,7 +609,7 @@
                         </div>
                         <div class="ml-4 flex-grow">
                             <h4 class="font-bold text-slate-800 text-lg leading-tight">${escapeHtml(c.name)}</h4>
-                            <span class="inline-block mt-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500 tracking-wide">${badgeTxt}</span>
+                            <span class="inline-block mt-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500 tracking-wide">${escapeHtml(badgeTxt)}</span>
                         </div>
                     </div>
                     
@@ -582,7 +625,6 @@
                     </div>
                 </div>`;
             });
-
             listContainer.innerHTML = html;
         }
 
@@ -642,12 +684,23 @@
         // -----------------------
         // ADMIN AUTHENTICATION
         // -----------------------
-        function handleAdminAccess() {
-            if (isAdminLoggedIn) {
-                toggleAdminModal(true);
-            } else {
-                toggleAdminLoginModal(true);
+        async function handleAdminAccess() {
+            // Check session from Supabase
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (session) {
+                // Verify if is Admin (using RPC or just assume yes if logged in)
+                const { data: isAdmin } = await supabase.rpc('is_admin');
+                if (isAdmin || isAdmin === null) { // If RPC not set up, rely on Auth Session
+                    isAdminLoggedIn = true;
+                    toggleAdminModal(true);
+                    return;
+                } else {
+                    await supabase.auth.signOut();
+                    showToast("ปฏิเสธการเข้าถึง", "คุณไม่มีสิทธิ์ผู้ดูแลระบบ", "error");
+                }
             }
+            toggleAdminLoginModal(true);
         }
 
         function toggleAdminLoginModal(show) {
@@ -661,22 +714,32 @@
             }
         }
 
-        function verifyAdminLogin(e) {
+        async function verifyAdminLogin(e) {
             e.preventDefault();
             const pwd = document.getElementById('adminPasswordInput').value;
-            if (pwd === adminPassword) {
+            
+            toggleButtonLoading('btnLoginSubmit', true, 'เข้าสู่ระบบ');
+            document.getElementById('loginErrorMsg').classList.add('hidden');
+
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: ADMIN_EMAIL,
+                password: pwd,
+            });
+
+            toggleButtonLoading('btnLoginSubmit', false, 'เข้าสู่ระบบ');
+
+            if (error) {
+                document.getElementById('loginErrorMsg').classList.remove('hidden');
+            } else {
                 isAdminLoggedIn = true;
-                sessionStorage.setItem('phub_v2_logged_in', 'true');
                 toggleAdminLoginModal(false);
                 toggleAdminModal(true);
-            } else {
-                document.getElementById('loginErrorMsg').classList.remove('hidden');
             }
         }
 
-        function adminLogout() {
+        async function adminLogout() {
+            await supabase.auth.signOut();
             isAdminLoggedIn = false;
-            sessionStorage.removeItem('phub_v2_logged_in');
             toggleAdminModal(false);
             showToast("ออกจากระบบ", "กลับสู่หน้าลูกค้าปกติ", "success");
         }
@@ -688,6 +751,7 @@
             const m = document.getElementById('adminModal');
             if (show) {
                 m.classList.remove('hidden');
+                renderAdminSettingsForm();
                 renderAdminChannelsList();
             } else {
                 m.classList.add('hidden');
@@ -712,10 +776,14 @@
         }
 
         function renderAdminSettingsForm() {
-            document.getElementById('inputStoreName').value = appSettings.storeName;
-            document.getElementById('inputStoreTagline').value = appSettings.storeTagline;
-            document.getElementById('inputStoreAvatar').value = appSettings.storeAvatar;
+            document.getElementById('inputStoreName').value = appSettings.storeName || "";
+            document.getElementById('inputStoreTagline').value = appSettings.storeTagline || "";
+            document.getElementById('inputStoreAvatar').value = appSettings.storeAvatar || "";
             document.getElementById('inputFeaturedImage').value = appSettings.featuredImage || "";
+            
+            document.getElementById('inputLineUrl').value = appSettings.lineUrl || "";
+            document.getElementById('inputFacebookUrl').value = appSettings.facebookUrl || "";
+            document.getElementById('inputInstagramUrl').value = appSettings.instagramUrl || "";
 
             if (appSettings.storeAvatar) {
                 document.getElementById('previewAvatarImg').src = appSettings.storeAvatar;
@@ -727,20 +795,46 @@
             }
         }
 
-        function saveSiteSettings(e) {
+        async function saveSiteSettings(e) {
             e.preventDefault();
-            appSettings.storeName = document.getElementById('inputStoreName').value.trim();
-            appSettings.storeTagline = document.getElementById('inputStoreTagline').value.trim();
-            appSettings.storeAvatar = document.getElementById('inputStoreAvatar').value || appSettings.storeAvatar;
-            appSettings.featuredImage = document.getElementById('inputFeaturedImage').value;
+            toggleButtonLoading('btnSaveSettings', true, 'บันทึกการตั้งค่าร้านค้า');
 
-            localStorage.setItem('phub_v2_settings', JSON.stringify(appSettings));
-            renderCustomerView();
-            showToast("บันทึกข้อมูลร้านค้า", "อัปเดตข้อมูลเรียบร้อยแล้ว");
+            const newSettings = {
+                id: 1, // Fix ID for single row settings
+                store_name: document.getElementById('inputStoreName').value.trim(),
+                store_tagline: document.getElementById('inputStoreTagline').value.trim(),
+                store_avatar: document.getElementById('inputStoreAvatar').value || null,
+                featured_image: document.getElementById('inputFeaturedImage').value || null,
+                line_url: document.getElementById('inputLineUrl').value.trim() || null,
+                facebook_url: document.getElementById('inputFacebookUrl').value.trim() || null,
+                instagram_url: document.getElementById('inputInstagramUrl').value.trim() || null
+            };
+
+            const { error } = await supabase
+                .from('store_settings')
+                .upsert(newSettings);
+
+            toggleButtonLoading('btnSaveSettings', false, 'บันทึกการตั้งค่าร้านค้า');
+
+            if (error) {
+                showToast("เกิดข้อผิดพลาด", error.message, "error");
+            } else {
+                appSettings = {
+                    storeName: newSettings.store_name,
+                    storeTagline: newSettings.store_tagline,
+                    storeAvatar: newSettings.store_avatar,
+                    featuredImage: newSettings.featured_image,
+                    lineUrl: newSettings.line_url,
+                    facebookUrl: newSettings.facebook_url,
+                    instagramUrl: newSettings.instagram_url
+                };
+                renderCustomerView();
+                showToast("บันทึกข้อมูลร้านค้า", "อัปเดตข้อมูลบนฐานข้อมูลเรียบร้อยแล้ว");
+            }
         }
 
         // -----------------------
-        // IMAGE UPLOAD SYSTEM
+        // IMAGE UPLOAD SYSTEM (Base64 for direct DB text column)
         // -----------------------
         function handleImageUpload(event, type) {
             const file = event.target.files[0];
@@ -807,8 +901,8 @@
                     : `<span class="bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-md">ปิดใช้งาน</span>`;
                 
                 let iconHtml = c.iconType === 'img' && c.iconImg 
-                    ? `<img src="${c.iconImg}" class="w-full h-full object-cover">`
-                    : `<i class="${c.icon}"></i>`;
+                    ? `<img src="${escapeHtml(c.iconImg)}" class="w-full h-full object-cover">`
+                    : `<i class="${escapeHtml(c.icon)}"></i>`;
 
                 html += `
                 <div class="bg-white border border-slate-100 p-4 rounded-2xl flex items-center justify-between gap-3 shadow-sm hover:shadow-md transition">
@@ -859,7 +953,7 @@
                 } else {
                     switchIconInputMode('fa');
                     document.getElementById('channelIcon').value = c.icon;
-                    document.getElementById('iconPreview').innerHTML = `<i class="${c.icon}"></i>`;
+                    document.getElementById('iconPreview').innerHTML = `<i class="${escapeHtml(c.icon)}"></i>`;
                 }
             } else {
                 document.getElementById('channelModalTitle').textContent = "เพิ่มช่องทางใหม่";
@@ -904,35 +998,43 @@
             document.getElementById('iconPreview').innerHTML = `<i class="${icon}"></i>`;
         }
 
-        function saveChannel(e) {
+        async function saveChannel(e) {
             e.preventDefault();
-            const id = document.getElementById('channelEditId').value;
+            toggleButtonLoading('btnSaveChannel', true, 'บันทึกข้อมูล');
             
+            const id = document.getElementById('channelEditId').value;
             const isImg = !document.getElementById('imgInputContainer').classList.contains('hidden');
-            const newChan = {
-                id: id || Date.now().toString(),
+            
+            const dbPayload = {
                 type: document.getElementById('channelType').value,
                 name: document.getElementById('channelName').value.trim(),
-                accNo: document.getElementById('channelAccNo').value.trim(),
-                accName: document.getElementById('channelAccName').value.trim(),
+                acc_no: document.getElementById('channelAccNo').value.trim(),
+                acc_name: document.getElementById('channelAccName').value.trim(),
                 active: document.getElementById('channelActive').checked,
-                iconType: isImg ? 'img' : 'fa',
-                icon: document.getElementById('channelIcon').value.trim(),
-                iconImg: document.getElementById('channelIconImgData').value
+                icon_type: isImg ? 'img' : 'fa',
+                icon: document.getElementById('channelIcon').value.trim() || null,
+                icon_img: document.getElementById('channelIconImgData').value || null
             };
 
             if (id) {
-                const idx = appChannels.findIndex(x => x.id === id);
-                if (idx > -1) appChannels[idx] = newChan;
-            } else {
-                appChannels.push(newChan);
+                dbPayload.id = id;
             }
 
-            localStorage.setItem('phub_v2_channels', JSON.stringify(appChannels));
-            renderCustomerView();
-            renderAdminChannelsList();
-            closeChannelFormModal();
-            showToast("สำเร็จ", id ? "อัปเดตข้อมูลช่องทางแล้ว" : "เพิ่มช่องทางใหม่แล้ว");
+            const { data, error } = await supabase
+                .from('payment_channels')
+                .upsert(dbPayload)
+                .select();
+
+            toggleButtonLoading('btnSaveChannel', false, 'บันทึกข้อมูล');
+
+            if (error) {
+                showToast("ข้อผิดพลาด", error.message, "error");
+            } else {
+                await fetchInitialData(); // Reload all data
+                renderAdminChannelsList();
+                closeChannelFormModal();
+                showToast("สำเร็จ", id ? "อัปเดตข้อมูลช่องทางแล้ว" : "เพิ่มช่องทางใหม่แล้ว");
+            }
         }
 
         let delId = null;
@@ -940,14 +1042,31 @@
             delId = id;
             document.getElementById('deleteConfirmModal').classList.remove('hidden');
         }
+        
         function closeDeleteConfirmModal() {
             delId = null;
             document.getElementById('deleteConfirmModal').classList.add('hidden');
         }
-        function executeDeleteChannel() {
-            if (delId) {
+        
+        async function executeDeleteChannel() {
+            if (!delId) return;
+            
+            toggleButtonLoading('btnConfirmDelete', true, 'ลบทิ้งเลย');
+            document.getElementById('btnCancelDelete').disabled = true;
+
+            const { error } = await supabase
+                .from('payment_channels')
+                .delete()
+                .eq('id', delId);
+
+            toggleButtonLoading('btnConfirmDelete', false, 'ลบทิ้งเลย');
+            document.getElementById('btnCancelDelete').disabled = false;
+
+            if (error) {
+                showToast("ข้อผิดพลาด", error.message, "error");
+                closeDeleteConfirmModal();
+            } else {
                 appChannels = appChannels.filter(c => c.id !== delId);
-                localStorage.setItem('phub_v2_channels', JSON.stringify(appChannels));
                 renderCustomerView();
                 renderAdminChannelsList();
                 closeDeleteConfirmModal();
@@ -955,7 +1074,7 @@
             }
         }
 
-        // Utils
+        // Utils (เพื่อความปลอดภัยในการป้องกัน XSS)
         function escapeHtml(str) { return String(str).replace(/[&<>"']/g, m => ({'&': '&amp;','<': '&lt;','>': '&gt;','"': '&quot;',"'": '&#39;'}[m])); }
         function escapeJs(str) { return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, '\\n'); }
     </script>
