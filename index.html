@@ -453,8 +453,8 @@
         // -----------------------
         // SUPABASE CONFIGURATION
         // -----------------------
-        const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
-        const SUPABASE_KEY = 'YOUR_SUPABASE_PUBLISHABLE_KEY';
+        const SUPABASE_URL = 'https://qwlokwprfneowgvekraj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF3bG9rd3ByZm5lb3dndmVrcmFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4MTg2NzMsImV4cCI6MjEwNjM5NDY3M30.eGEnTSACLxj_Ykpdun-VPfgtu-y_D81xHrCsJRDLYhk';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // กำหนดอีเมลของ Admin ไว้ที่นี่ เพื่อใช้คู่กับรหัสผ่านในหน้า Login
@@ -509,8 +509,8 @@
                     appSettings = {
                         storeName: settingsData.store_name || "ชื่อร้านค้า",
                         storeTagline: settingsData.store_tagline || "",
-                        storeAvatar: settingsData.store_avatar || "https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP",
-                        featuredImage: settingsData.featured_image || "",
+                        storeAvatar: settingsData.store_avatar_url || "https://placehold.co/150x150/0ea5e9/ffffff?text=SHOP",
+                        featuredImage: settingsData.featured_image_url || "",
                         lineUrl: settingsData.line_url || "#",
                         facebookUrl: settingsData.facebook_url || "#",
                         instagramUrl: settingsData.instagram_url || "#"
@@ -803,8 +803,8 @@
                 id: 1, // Fix ID for single row settings
                 store_name: document.getElementById('inputStoreName').value.trim(),
                 store_tagline: document.getElementById('inputStoreTagline').value.trim(),
-                store_avatar: document.getElementById('inputStoreAvatar').value || null,
-                featured_image: document.getElementById('inputFeaturedImage').value || null,
+                store_avatar_url: document.getElementById('inputStoreAvatar').value || null,
+                featured_image_url: document.getElementById('inputFeaturedImage').value || null,
                 line_url: document.getElementById('inputLineUrl').value.trim() || null,
                 facebook_url: document.getElementById('inputFacebookUrl').value.trim() || null,
                 instagram_url: document.getElementById('inputInstagramUrl').value.trim() || null
@@ -822,8 +822,8 @@
                 appSettings = {
                     storeName: newSettings.store_name,
                     storeTagline: newSettings.store_tagline,
-                    storeAvatar: newSettings.store_avatar,
-                    featuredImage: newSettings.featured_image,
+                    storeAvatar: newSettings.store_avatar_url,
+                    featuredImage: newSettings.featured_image_url,
                     lineUrl: newSettings.line_url,
                     facebookUrl: newSettings.facebook_url,
                     instagramUrl: newSettings.instagram_url
