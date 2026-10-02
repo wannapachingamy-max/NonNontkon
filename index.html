@@ -508,20 +508,54 @@
             document.body.removeChild(textarea);
         };
 
-        // ฟังก์ชันดาวน์โหลดรูปภาพลงเครื่องจริงโดยใช้ Dynamic Anchor
-        window.downloadContentImage = () => {
+        // ฟังก์ชันดาวน์โหลดรูปภาพผ่าน Blob รองรับมือถือและทุกเบราว์เซอร์
+        window.downloadContentImage = async () => {
             const imgUrl = appData.store.contentImage;
             if(!imgUrl) {
                 showToast('ไม่พบรูปภาพสำหรับดาวน์โหลด', true);
                 return;
             }
-            const a = document.createElement('a');
-            a.href = imgUrl;
-            a.download = 'NonnonStore-QR-Payment.webp';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            showToast('ดาวน์โหลดรูปภาพสำเร็จ 📥');
+            
+            showToast('กำลังดาวน์โหลดรูปภาพ...');
+            try {
+                // ถ้าเป็น dataURL แปลงเป็น blob ตรงๆ
+                let blob;
+                if (imgUrl.startsWith('data:')) {
+                    const arr = imgUrl.split(',');
+                    const mime = arr[0].match(/:(.*?);/)[1];
+                    const bstr = atob(arr[1]);
+                    let n = bstr.length;
+                    const u8arr = new Uint8Array(n);
+                    while (n--) {
+                        u8arr[n] = bstr.charCodeAt(n);
+                    }
+                    blob = new Blob([u8arr], { type: mime });
+                } else {
+                    const response = await fetch(imgUrl);
+                    blob = await response.blob();
+                }
+
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = 'NonnonStore-QR-Payment.webp';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(blobUrl);
+                showToast('ดาวน์โหลดรูปภาพสำเร็จ 📥');
+            } catch (err) {
+                console.error("Download error:", err);
+                // Fallback direct open/download
+                const a = document.createElement('a');
+                a.href = imgUrl;
+                a.download = 'NonnonStore-QR-Payment.webp';
+                a.target = '_blank';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                showToast('เปิดรูปภาพสำหรับบันทึก 📥');
+            }
         };
 
         const compressImage = (file, maxWidth, maxHeight, quality, callback) => {
