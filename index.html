@@ -80,6 +80,38 @@
             100% { transform: translateX(250%) skewX(-20deg); }
         }
 
+        /* อนิเมชันเด้งดึ๋ง (Bounce In) สำหรับบล็อก */
+        @keyframes bounceIn {
+            0% { transform: translateY(30px) scale(0.9); opacity: 0; }
+            50% { transform: translateY(-5px) scale(1.02); opacity: 1; }
+            75% { transform: translateY(2px) scale(0.98); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .animate-bounce-in {
+            animation: bounceIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* อนิเมชันอีโมจิลอยฟุ้ง (Floating Emojis) */
+        @keyframes float-emoji-1 {
+            0% { transform: translateY(100vh) translateX(0px) rotate(0deg) scale(0.8); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-20vh) translateX(40px) rotate(45deg) scale(1.1); opacity: 0; }
+        }
+        @keyframes float-emoji-2 {
+            0% { transform: translateY(100vh) translateX(0px) rotate(0deg) scale(1); opacity: 0; }
+            20% { opacity: 0.5; transform: translateY(60vh) translateX(-30px) rotate(-15deg); }
+            80% { opacity: 0.5; }
+            100% { transform: translateY(-20vh) translateX(20px) rotate(20deg) scale(0.9); opacity: 0; }
+        }
+        .floating-emoji {
+            position: absolute;
+            pointer-events: none; /* ป้องกันไม่ให้บังการกดปุ่ม */
+            z-index: 1;
+            user-select: none;
+            filter: drop-shadow(0 4px 6px rgba(59,130,246,0.1));
+        }
+
         /* พื้นหลังสายน้ำ (Liquid Water) ลื่นไหล (ปรับขนาดเล็กลงและเตี้ยลง) */
         .liquid-water {
             position: absolute;
@@ -107,6 +139,12 @@
         @keyframes spin-water { 
             0% { transform: translateX(-50%) rotate(0deg); }
             100% { transform: translateX(-50%) rotate(360deg); } 
+        }
+
+        /* อนิเมชันโลโก้ขยับขึ้นลงเบาๆ */
+        @keyframes floatUpAndDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         /* ลูกเล่นไฟกระพริบ */
@@ -190,6 +228,14 @@
             <div class="absolute top-[-5%] left-[-15%] w-64 h-64 bg-cute-200/60 rounded-full animate-[float-bg-1_15s_ease-in-out_infinite] pointer-events-none"></div>
             <div class="absolute top-[40%] right-[-10%] w-48 h-48 bg-white/50 rounded-full animate-[float-bg-3_12s_ease-in-out_infinite] pointer-events-none"></div>
 
+            <!-- อีโมจิลอยฟุ้ง 🦋☁️🩵 -->
+            <div class="floating-emoji text-3xl" style="left: 12%; animation: float-emoji-1 12s linear infinite; animation-delay: 0s;">🦋</div>
+            <div class="floating-emoji text-2xl" style="left: 75%; animation: float-emoji-2 15s linear infinite; animation-delay: 2s;">☁️</div>
+            <div class="floating-emoji text-[40px]" style="left: 45%; animation: float-emoji-1 14s linear infinite; animation-delay: 5s;">🩵</div>
+            <div class="floating-emoji text-2xl" style="left: 85%; animation: float-emoji-2 13s linear infinite; animation-delay: 7s;">🦋</div>
+            <div class="floating-emoji text-3xl" style="left: 25%; animation: float-emoji-1 16s linear infinite; animation-delay: 9s;">☁️</div>
+            <div class="floating-emoji text-xl" style="left: 60%; animation: float-emoji-2 11s linear infinite; animation-delay: 4s;">🩵</div>
+
             <!-- สายน้ำพื้นหลัง (Liquid Water) เล็กลง -->
             <div class="liquid-water"></div>
             <div class="liquid-water"></div>
@@ -257,9 +303,10 @@
             bank: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>`,
             trash: `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`,
             camera: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>`,
-            facebook: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
-            line: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 3.961 8.924 9.539 9.605.372.078.878.243 1.002.585.111.309.071.791.034 1.139-.043.415-.276 1.62-.338 1.953-.1.541-.497 2.456 2.148 1.341 2.645-1.115 7.159-4.218 9.387-6.938 1.503-1.841 2.228-3.791 2.228-5.748l-.001-.002zM7.552 13.064c-.318 0-.575-.257-.575-.575v-4.526c0-.318.257-.575.575-.575s.575.257.575.575v3.951h2.502c.318 0 .575.257.575.575s-.257.575-.575.575H7.552zm6.182-1.229c0 .318-.257.575-.575.575s-.575-.257-.575-.575V8.539c0-.318.257-.575.575-.575s.575.257.575.575v3.296h-1.15v-2.067h1.15v2.067zm2.396.575c-.318 0-.575-.257-.575-.575V8.539c0-.318.257-.575.575-.575s.575.257.575.575v4.526c0 .318-.257.575-.575.575zm3.899-4.526v3.297l-2.029-3.21c-.089-.133-.232-.218-.386-.226-.013-.001-.027-.001-.04-.001-.157 0-.306.064-.413.176-.118.125-.175.297-.156.467v4.526c0 .318.257.575.575.575s.575-.257.575-.575V9.767l2.029 3.21c.089.133.232.218.386.226.013.001.027.001.04.001.157 0 .306-.064.413-.176.118-.125.175-.297.156-.467V8.539c0-.318-.257-.575-.575-.575s-.575.257-.575.575z"/></svg>`,
-            instagram: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`
+            facebook: `<svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
+            line: `<svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 3.961 8.924 9.539 9.605.372.078.878.243 1.002.585.111.309.071.791.034 1.139-.043.415-.276 1.62-.338 1.953-.1.541-.497 2.456 2.148 1.341 2.645-1.115 7.159-4.218 9.387-6.938 1.503-1.841 2.228-3.791 2.228-5.748l-.001-.002zM7.552 13.064c-.318 0-.575-.257-.575-.575v-4.526c0-.318.257-.575.575-.575s.575.257.575.575v3.951h2.502c.318 0 .575.257.575.575s-.257.575-.575.575H7.552zm6.182-1.229c0 .318-.257.575-.575.575s-.575-.257-.575-.575V8.539c0-.318.257-.575.575-.575s.575.257.575.575v3.296h-1.15v-2.067h1.15v2.067zm2.396.575c-.318 0-.575-.257-.575-.575V8.539c0-.318.257-.575.575-.575s.575.257.575.575v4.526c0 .318-.257.575-.575.575zm3.899-4.526v3.297l-2.029-3.21c-.089-.133-.232-.218-.386-.226-.013-.001-.027-.001-.04-.001-.157 0-.306.064-.413.176-.118.125-.175-.297-.156.467v4.526c0 .318.257.575.575.575s.575-.257.575-.575V9.767l2.029 3.21c.089.133.232.218.386.226.013.001.027.001.04.001.157 0 .306-.064.413-.176.118-.125.175-.297.156-.467V8.539c0-.318-.257-.575-.575-.575s-.575.257-.575.575z"/></svg>`,
+            instagram: `<svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`,
+            sparkle: `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg>`
         };
 
         const socialLinks = {
@@ -270,7 +317,7 @@
 
         let appData = { store: { logo: "", contentImage: "", tagline: "" }, payments: [] };
         let currentView = 'public';
-        let deleteActionPayload = null; // เก็บข้อมูลว่าจะลบอะไร { type: 'payment'/'logo'/'content', id: ... }
+        let deleteActionPayload = null;
         let activePaymentIdForUpload = null;
         let isLoggedIn = false;
         let isFetching = true;
@@ -638,31 +685,46 @@
                         : `<div class="relative z-10 scale-[1.15] drop-shadow-sm">${icons.bank}</div>`;
 
                     paymentsHTML += `
-                        <div class="bg-white rounded-[24px] p-5 sm:p-6 border-2 border-transparent hover:border-cute-200 shadow-[0_4px_20px_-5px_rgba(59,130,246,0.05)] hover:shadow-[0_12px_40px_-10px_rgba(59,130,246,0.25)] hover:scale-[1.02] transition-all duration-300 flex items-center justify-between group animate-[floatUp_0.4s_ease-out_forwards] relative overflow-hidden" style="animation-delay: ${delay}s; opacity: 0;">
-                            
-                            <!-- เอฟเฟกต์แสง Sweep ตอน Hover -->
-                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent -translate-x-[150%] skew-x-[-20deg] group-hover:animate-[shimmer-sweep_1s_ease-in-out] z-0 pointer-events-none"></div>
+                        <div class="relative group animate-[bounceIn_0.7s_cubic-bezier(0.34,1.56,0.64,1)_forwards] drop-shadow-sm hover:drop-shadow-xl transition-all duration-500 hover:-translate-y-2" style="animation-delay: ${delay}s; opacity: 0;">
+                            <!-- กล่องชำระเงินหลัก -->
+                            <div class="bg-white rounded-[24px] p-4 sm:p-5 border-[3px] border-transparent group-hover:border-cute-200 flex items-center justify-between relative overflow-hidden h-full z-10 transition-colors duration-500">
+                                
+                                <!-- เอฟเฟกต์แสง Sweep ตอน Hover -->
+                                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent -translate-x-[150%] skew-x-[-20deg] group-hover:animate-[shimmer-sweep_1s_ease-in-out] z-0 pointer-events-none"></div>
 
-                            <div class="flex items-center space-x-4 sm:space-x-5 overflow-hidden w-[75%] sm:w-[80%] relative z-10">
-                                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-[18px] flex items-center justify-center text-white flex-shrink-0 shadow-inner relative overflow-hidden bg-cute-100" style="${p.color ? `background-color: ${escapeHTML(p.color)};` : ''}">
-                                    <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    ${iconDisplay}
+                                <div class="flex items-center space-x-4 sm:space-x-5 overflow-hidden w-[75%] sm:w-[80%] relative z-10">
+                                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-[18px] flex items-center justify-center text-white flex-shrink-0 shadow-inner relative overflow-hidden bg-cute-100" style="${p.color ? `background-color: ${escapeHTML(p.color)};` : ''}">
+                                        <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                        ${iconDisplay}
+                                    </div>
+                                    <div class="flex flex-col min-w-0 pr-2 space-y-1 w-full">
+                                        <span class="font-bold text-slate-800 text-[16px] sm:text-[18px] truncate block w-full flex items-center space-x-2">
+                                            <span>${escapeHTML(p.bankName) || 'ไม่ได้ระบุชื่อ'}</span>
+                                        </span>
+                                        <span class="text-[14px] sm:text-[15px] text-slate-500 truncate block w-full">${escapeHTML(p.accountName) || 'ไม่ได้ระบุชื่อบัญชี'}</span>
+                                        <span class="font-mono font-bold text-cute-600 mt-1 text-[16px] sm:text-[18px] tracking-widest bg-cute-50/80 w-fit px-3 py-1 rounded-xl border border-cute-100 truncate max-w-full block shadow-sm">${escapeHTML(p.accountNo) || '-'}</span>
+                                    </div>
                                 </div>
-                                <div class="flex flex-col min-w-0 pr-2 space-y-1 w-full">
-                                    <span class="font-bold text-slate-800 text-[16px] sm:text-[18px] truncate block w-full flex items-center space-x-2">
-                                        <span>${escapeHTML(p.bankName) || 'ไม่ได้ระบุชื่อ'}</span>
-                                    </span>
-                                    <span class="text-[14px] sm:text-[15px] text-slate-500 truncate block w-full">${escapeHTML(p.accountName) || 'ไม่ได้ระบุชื่อบัญชี'}</span>
-                                    <span class="font-mono font-bold text-cute-600 mt-1 text-[16px] sm:text-[18px] tracking-widest bg-cute-50/80 w-fit px-3 py-1 rounded-xl border border-cute-100 truncate max-w-full block shadow-sm">${escapeHTML(p.accountNo) || '-'}</span>
-                                </div>
+                                <button
+                                    onclick="copyText('${escapeHTML(p.accountNo)}')"
+                                    class="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-cute-50 text-cute-500 flex items-center justify-center hover:bg-cute-500 hover:text-white flex-shrink-0 transition-all duration-300 active:scale-90 shadow-sm border border-cute-100 group-hover:border-transparent z-10 group/btn"
+                                    title="คัดลอกเลขบัญชี"
+                                >
+                                    <!-- เอฟเฟกต์วงแหวนกระจายตอน hover ปุ่มคัดลอก -->
+                                    <div class="absolute inset-0 rounded-full bg-cute-400 opacity-0 group-hover/btn:animate-ping z-[-1]"></div>
+                                    ${icons.copy}
+                                </button>
                             </div>
-                            <button
-                                onclick="copyText('${escapeHTML(p.accountNo)}')"
-                                class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-cute-50 text-cute-500 flex items-center justify-center hover:bg-cute-500 hover:text-white flex-shrink-0 transition-all duration-300 active:scale-90 shadow-sm border border-cute-100 group-hover:border-transparent group-hover:shadow-md relative z-10"
-                                title="คัดลอกเลขบัญชี"
-                            >
-                                ${icons.copy}
-                            </button>
+
+                            <!-- ไอคอนวิ้งๆ (Sparkle) ประดับมุมขวาบน -->
+                            <div class="absolute -top-3 -right-3 text-cute-400 opacity-0 group-hover:opacity-100 group-hover:rotate-180 transition-all duration-700 z-20 pointer-events-none w-8 h-8 drop-shadow-md">
+                                ${icons.sparkle}
+                            </div>
+                            
+                            <!-- ไอคอนวิ้งๆ (Sparkle) ประดับมุมซ้ายล่าง -->
+                            <div class="absolute -bottom-2 -left-2 text-cute-300 opacity-0 group-hover:opacity-100 group-hover:-rotate-90 transition-all duration-500 z-20 pointer-events-none w-6 h-6 delay-100 drop-shadow-sm">
+                                ${icons.sparkle}
+                            </div>
                         </div>
                     `;
                 });
@@ -671,19 +733,21 @@
             return `
                 <div class="flex flex-col w-full items-center pt-8 pb-10 animate-[slideDown_0.4s_ease-out]">
                     
-                    <div class="relative flex flex-col items-center w-full px-6 stagger-1 animate-[floatUp_0.5s_ease-out_forwards] opacity-0">
-                        <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-[6px] border-white shadow-[0_10px_30px_rgba(59,130,246,0.15)] overflow-hidden bg-white z-10 relative">
+                    <div class="relative flex flex-col items-center w-full px-6 stagger-1 animate-[bounceIn_0.7s_cubic-bezier(0.34,1.56,0.64,1)_forwards] opacity-0">
+                        <!-- โลโก้ที่มีอนิเมชันขยับขึ้นลงเบาๆ -->
+                        <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-[6px] border-white shadow-[0_10px_30px_rgba(59,130,246,0.2)] overflow-hidden bg-white z-10 relative animate-[floatUpAndDown_4s_ease-in-out_infinite]">
                             <img src="${escapeHTML(appData.store.logo) || 'https://placehold.co/300x300/eff6ff/3b82f6?text=Logo'}" alt="Logo" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
                         </div>
                         
                         ${appData.store.tagline ? `
-                        <div class="mt-6 text-center px-8 py-4 bg-white/60 backdrop-blur-md rounded-3xl shadow-[0_4px_20px_-5px_rgba(59,130,246,0.05)] border border-white text-slate-700 text-sm sm:text-base font-medium leading-relaxed max-w-[95%] relative break-words">
+                        <div class="mt-6 text-center px-8 py-4 bg-white/60 backdrop-blur-md rounded-3xl shadow-[0_4px_20px_-5px_rgba(59,130,246,0.05)] border border-white text-slate-700 text-sm sm:text-base font-medium leading-relaxed max-w-[95%] relative break-words group">
+                            <div class="absolute -top-2 -left-2 text-cute-300 w-5 h-5 animate-pulse opacity-70">${icons.sparkle}</div>
                             ${formattedTagline}
                         </div>
                         ` : ''}
 
                         ${appData.store.contentImage ? `
-                        <div class="mt-6 w-full max-w-[95%] rounded-[32px] overflow-hidden shadow-[0_15px_40px_-10px_rgba(59,130,246,0.15)] border-[5px] border-white relative group stagger-2 animate-[floatUp_0.5s_ease-out_forwards] opacity-0" style="animation-delay: 0.15s">
+                        <div class="mt-6 w-full max-w-[95%] rounded-[32px] overflow-hidden shadow-[0_15px_40px_-10px_rgba(59,130,246,0.15)] border-[5px] border-white relative group stagger-2 animate-[bounceIn_0.7s_cubic-bezier(0.34,1.56,0.64,1)_forwards] opacity-0" style="animation-delay: 0.15s">
                             <img src="${escapeHTML(appData.store.contentImage)}" alt="Content" class="w-full h-auto object-cover">
                         </div>
                         ` : ''}
@@ -701,14 +765,14 @@
                     </div>
 
                     <div class="mt-12 pt-4 w-full flex justify-center space-x-6 relative z-10">
-                        <a href="${escapeHTML(socialLinks.line)}" target="_blank" class="w-14 h-14 bg-white text-[#00B900] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgb(0,185,0,0.15)] hover:shadow-[0_10px_25px_rgb(0,185,0,0.25)] border-2 border-transparent hover:-translate-y-1.5 transition-all duration-300">
-                            <div class="scale-125">${icons.line}</div>
+                        <a href="${escapeHTML(socialLinks.line)}" target="_blank" class="w-14 h-14 bg-white text-[#00B900] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgb(0,185,0,0.15)] hover:shadow-[0_12px_25px_rgb(0,185,0,0.3)] border-2 border-transparent hover:-translate-y-2 transition-all duration-300">
+                            ${icons.line}
                         </a>
-                        <a href="${escapeHTML(socialLinks.facebook)}" target="_blank" class="w-14 h-14 bg-white text-[#1877F2] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgb(24,119,242,0.15)] hover:shadow-[0_10px_25px_rgb(24,119,242,0.25)] border-2 border-transparent hover:-translate-y-1.5 transition-all duration-300">
-                            <div class="scale-125">${icons.facebook}</div>
+                        <a href="${escapeHTML(socialLinks.facebook)}" target="_blank" class="w-14 h-14 bg-white text-[#1877F2] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgb(24,119,242,0.15)] hover:shadow-[0_12px_25px_rgb(24,119,242,0.3)] border-2 border-transparent hover:-translate-y-2 transition-all duration-300">
+                            ${icons.facebook}
                         </a>
-                        <a href="${escapeHTML(socialLinks.instagram)}" target="_blank" class="w-14 h-14 bg-white text-[#E1306C] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgb(225,48,108,0.15)] hover:shadow-[0_10px_25px_rgb(225,48,108,0.25)] border-2 border-transparent hover:-translate-y-1.5 transition-all duration-300">
-                            <div class="scale-125">${icons.instagram}</div>
+                        <a href="${escapeHTML(socialLinks.instagram)}" target="_blank" class="w-14 h-14 bg-white text-[#E1306C] rounded-full flex items-center justify-center shadow-[0_8px_20px_rgb(225,48,108,0.15)] hover:shadow-[0_12px_25px_rgb(225,48,108,0.3)] border-2 border-transparent hover:-translate-y-2 transition-all duration-300">
+                            ${icons.instagram}
                         </a>
                     </div>
                 </div>
